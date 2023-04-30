@@ -3,7 +3,7 @@
 const scene = new THREE.Scene();
 
 // Geometry
-const geometry = new THREE.BoxGeometry(1, 1, 1);
+const geometry = new THREE.ConeGeometry(2,1, 200, 20);
 
 // Material
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000 });
@@ -20,7 +20,8 @@ const sizes = {
 
 //  Camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width/sizes.heigth);
-camera.position.z = 3; 
+camera.position.z = 5; 
+// camera.position.z = 5; 
 scene.add(camera)
 
 // Renderer
