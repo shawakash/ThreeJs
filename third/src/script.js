@@ -12,80 +12,62 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
-/**
- * Objects
- */
-const geometry = new THREE.BoxGeometry(1, 2, 1)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
-const mesh = new THREE.Mesh(geometry, material);
-mesh.position.x = 0.7       // unit can be anything
-mesh.position.y = -0.6;
-mesh.position.z = -1;
+const group1 = new THREE.Group();
+scene.add(group1);
 
-// Place of position matters ---- It works only anywhere before renderer
-// Best way is to put before the scene
+const cube = new THREE.Mesh(
+    new THREE.BoxGeometry(1, 1, 1),
+    new THREE.MeshBasicMaterial({ color: 'cyan' })
+);
+group1.add(cube);
+const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(0.7, 100, 100),
+    new THREE.MeshBasicMaterial({ color: 'red' })
+);
+group1.add(sphere);
 
-console.log(mesh.position.length)     // to get distance between the center of the scene and the geometry i.e. a vector
+group1.position.set(3, 0, 0);
+group1.rotation.z = pi / 4;
+group1.scale.set(0.5, 0.5, 0.5)
 
-scene.add(mesh)
+const group2 = new THREE.Group();
+scene.add(group2);
+
+const cone = new THREE.Mesh(
+    new THREE.ConeGeometry(1, 5, 200, 200),
+    new THREE.MeshBasicMaterial({ color: 'white' })
+);
+const torus = new THREE.Mesh(
+    new THREE.TorusGeometry(1, 0.5, 200, 200),
+    new THREE.MeshBasicMaterial({ color: 'purple' })
+);
+torus.rotation.x = pi/2;
+group2.add(cone);
+group2.add(torus);
+group2.scale.set(0.5, 0.5, 0.5)
+group2.rotation.x = pi/2;
+
 
 /**
  * Sizes
 */
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
 
 /**
  * Camera
 */
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height)
-camera.position.z = 3
 scene.add(camera)
-console.log(mesh.position.distanceTo(camera.position))   // to get the distance from another verctor
-// think it like a film set
-// Where camera and scene and mesh and objects is placed and your are trying to connect then with vectors
-// distance to helps to get distance between any two of those vestors
 
-console.log(mesh.position.normalize())     // this reduces the disance between vectors to one;
-console.log(mesh.position.length())
-
-// to update all together
-mesh.position.set(5, 2, 0)
+camera.position.set(5, 1, 2)
+camera.lookAt(group1.position)
 
 // To display the axess
 const axes = new THREE.AxesHelper(100);    // takes paramerter as the length of displaying axes
 scene.add(axes)
-camera.position.set(5,4,11)
-
-// Scale
-
-mesh.scale.x = 2
-mesh.scale.y = 2
-// mesh.scale.z = 2
-
-//  || 
-mesh.scale.set(4,3)
-
-
-// Rotation 
-// Takes value in radian
-// Rotation not only changes the angle but also the axes
-// to avoid meshing up use reorder before rotation 
-// It rotate the mesh in the order provided
-mesh.rotation.reorder('XYZ')
-mesh.rotation.z = pi/6
-mesh.rotation.x = pi/3
-mesh.rotation.y = pi/5
-
-
-// lookAt ===>>>> to shift the camera focus to different origin
-camera.lookAt(mesh.position)
-
-// To group objects so that a whole set of transformation applies to them without indiviual applying to each one
-
-
 
 
 /**
