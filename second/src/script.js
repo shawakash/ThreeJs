@@ -2,12 +2,13 @@ import './style.css'
 import {camelCase, upperCase} from 'lodash'
 import * as THREE from 'three'
 
+
 const scene = new THREE.Scene();
 
-const geometry = new THREE.SphereGeometry(1, 1000, 1000, 0, Math.PI, 0, Math.PI/2);
+const geometry = new THREE.BoxGeometry(1, 1, 1);
 const material = new THREE.MeshBasicMaterial({ color: 'blue' });
 const mess = new THREE.Mesh(geometry, material);
-
+Mesh.position.y = 2;
 scene.add(mess);
 
 const sizes = {
