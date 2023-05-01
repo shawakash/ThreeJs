@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
+import gsap  from 'gsap'
 
 const pi = Math.PI
 // Canvas
@@ -38,20 +39,22 @@ renderer.setSize(sizes.width, sizes.height)
 
 const clock = new THREE.Clock();
 
+gsap.to(mesh.position, { duration: 1, delay: 1, x: 1})  // gsap has its own tick
 
 // Animation
 const tick = () => {
-
+    
     // let currentTime = Date.now();
     // let delta = currentTime - initialTime;
     // initialTime = currentTime;  // update the time
     let elapsedTime = clock.getElapsedTime();
-
+    // Don't use get Delta
+    
     // transform the group once
     mesh.rotation.x = pi * elapsedTime;          // radians you want to rotate per second * elapsedTime
     mesh.rotation.y = pi * elapsedTime;
     mesh.rotation.z = pi * elapsedTime;
-
+    
     // mesh.position.x = Math.sin(elapsedTime*5)
     // mesh.position.y = 2*Math.cos(elapsedTime*5)
     // camera.position.x = Math.sin(elapsedTime*5)
