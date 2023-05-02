@@ -23,8 +23,8 @@ const cursor = {
     y: 0
 }
 window.addEventListener('mousemove', (ev) => {
-    cursor.x = ((ev.clientX / sizes.width) - 0.5) ;
-    cursor.y = ((ev.clientY / sizes.height) - 0.5);
+    cursor.x = -((ev.clientX / sizes.width) - 0.5) ;
+    cursor.y = -((ev.clientY / sizes.height) - 0.5);
     // console.log(cursor);
 });
 
@@ -83,9 +83,12 @@ const tick = () =>
     // mesh.rotation.x = elapsedTime;
 
     // Update Camera
-    camera.position.x = cursor.x * 11
+    // camera.position.x = cursor.x * 11
+    // camera.position.y = cursor.y * 11
+    camera.position.x = 2 * Math.sin(2 * Math.PI * cursor.x);
+    camera.position.z = 2 * Math.cos(2 * Math.PI * cursor.x);
     camera.position.y = cursor.y * 11
-    camera.lookAt(new THREE.Vector3());
+    camera.lookAt(mesh.position);
 
     // Render
     renderer.render(scene, camera)
