@@ -1,5 +1,6 @@
 import './style.css'
 import * as THREE from 'three'
+
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 
@@ -11,6 +12,7 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Sizes
 const sizes = {
+
     width: window.innerWidth,
     height: window.innerHeight
 }
@@ -30,11 +32,13 @@ window.addEventListener('mousemove', (ev) => {
 });
 
 
+
 // Scene
 const scene = new THREE.Scene()
 
 // Object
 const mesh = new THREE.Mesh(
+
     new THREE.BoxGeometry(1, 1, 1, 1000, 1000, 1000),
     new THREE.MeshBasicMaterial({ color: 'white' })
 )
@@ -76,6 +80,7 @@ const control = new OrbitControls(camera, canvas)
 control.enableDamping = true;
 
 
+
 // Renderer
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
@@ -90,6 +95,7 @@ const tick = () =>
     const elapsedTime = clock.getElapsedTime()
 
     // Update objects
+
     // mesh.rotation.y = elapsedTime;
     // mesh.rotation.z = elapsedTime;
     // mesh.rotation.x = elapsedTime;
@@ -107,6 +113,8 @@ const tick = () =>
     
     // Render
     renderer.render(scene, camera)
+
+
     // Call tick again on the next frame
     window.requestAnimationFrame(tick)
 }
