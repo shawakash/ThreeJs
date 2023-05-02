@@ -111,6 +111,8 @@ const tick = () =>
     //Update Controls
     control.update()
     
+    //Checkout The Transform Control
+
     // Render
     renderer.render(scene, camera)
 
