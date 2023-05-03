@@ -23,9 +23,47 @@ scene.add(mesh)
  * Sizes
  */
 const sizes = {
-    width: 800,
-    height: 600
+    width: window.innerWidth,
+    height: window.innerHeight
 }
+
+window.addEventListener('resize', (ev) => {
+    sizes.width = window.innerWidth;
+    sizes.height = window.innerHeight;
+
+    //update Camera
+    camera.aspect = sizes.width / sizes.height;
+    camera.updateProjectionMatrix();
+
+    //Update Renderer
+    renderer.setSize(sizes.width, sizes.height);
+    // Good Practise
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // as the window can be transfered from screen to screen
+
+});
+
+// Doesn't Work on Safari
+window.addEventListener('dblclick', (ev) => {
+
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;     // For Safari
+
+
+    // All this for safari
+
+    if (!fullscreenElement) {
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        } else if (canvas.webkitRequestFullscreen) {
+            canvas.webkitRequestFullscreen()
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen()
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen()
+        }
+    }
+})
 
 /**
  * Camera
@@ -37,6 +75,7 @@ scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
+// controls.enabled = false
 controls.enableDamping = true
 
 /**
@@ -45,15 +84,16 @@ controls.enableDamping = true
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
-renderer.setSize(sizes.width, sizes.height)
+renderer.setSize(sizes.width, sizes.height);
+// Good Practise
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // for different devices we want to be max of 2
 
 /**
  * Animate
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update controls
