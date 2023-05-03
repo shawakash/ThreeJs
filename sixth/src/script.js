@@ -36,7 +36,9 @@ window.addEventListener('resize', (ev) => {
     camera.updateProjectionMatrix();
 
     //Update Renderer
-    renderer.setSize(sizes.width, sizes.height)
+    renderer.setSize(sizes.width, sizes.height);
+    // Good Practise
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // as the window can be transfered from screen to screen
 
 });
 
@@ -59,7 +61,9 @@ controls.enableDamping = true
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
-renderer.setSize(sizes.width, sizes.height)
+renderer.setSize(sizes.width, sizes.height);
+// Good Practise
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // for different devices we want to be max of 2
 
 /**
  * Animate
