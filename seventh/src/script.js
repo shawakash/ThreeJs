@@ -26,16 +26,28 @@ const scene = new THREE.Scene()
 // const geometry = new THREE.CircleGeometry(2, 10000, 0, 2)
 
 
-const positionsArray = new Float32Array([
-    0,0,0,
-    0,1,0,
-    1,0,0
-]);
+// const positionsArray = new Float32Array([
+//     0,0,0,
+//     0,1,0,
+//     1,0,0
+// ]);
 
-const positionAttributes = new THREE.BufferAttribute(positionsArray, 3, true)
+// const positionAttributes = new THREE.BufferAttribute(positionsArray, 3, true)
 
-const geometry = new THREE.BufferGeometry()
-geometry.setAttribute('position', positionAttributes);    // More On Shaders
+// const geometry = new THREE.BufferGeometry()
+// geometry.setAttribute('position', positionAttributes);    // More On Shaders
+
+
+const geometry = new THREE.BufferGeometry();
+
+const count = 5000;
+const positionsArray2 = new Float32Array(count * 3 * 3);
+for (let i = 0; i < count * 3* 3; i++) {
+    positionsArray2[i] = (Math.random() - 0.5);
+}
+const positionAttributes2 = new THREE.BufferAttribute(positionsArray2, 3);
+geometry.setAttribute('position', positionAttributes2)
+
 
 const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
 const mesh = new THREE.Mesh(geometry, material)
