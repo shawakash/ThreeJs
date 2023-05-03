@@ -42,6 +42,29 @@ window.addEventListener('resize', (ev) => {
 
 });
 
+// Doesn't Work on Safari
+window.addEventListener('dblclick', (ev) => {
+
+    const fullscreenElement = document.fullscreenElement || document.webkitFullscreenElement;     // For Safari
+
+
+    // All this for safari
+
+    if (!fullscreenElement) {
+        if (canvas.requestFullscreen) {
+            canvas.requestFullscreen();
+        } else if (canvas.webkitRequestFullscreen) {
+            canvas.webkitRequestFullscreen()
+        }
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen()
+        } else if (document.webkitExitFullscreen) {
+            document.webkitExitFullscreen()
+        }
+    }
+})
+
 /**
  * Camera
  */
@@ -70,8 +93,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));   // for different
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update controls
