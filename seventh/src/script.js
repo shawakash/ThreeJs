@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-
+import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry';
 /**
  * Base
  */
@@ -12,7 +12,10 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 // Object
-const geometry = new THREE.CapsuleGeometry(1, 2, 1000, 1000);
+// LatheGeometry --> this is used to generate a surface from a curve by revolution
+
+// const geometry = new THREE.CapsuleGeometry(1, 2, 1000, 1000);
+// const geometry = new THREE.BoxGeometry(1, 1, 1, 100, 100, 100)
 // const geometry = new THREE.SphereGeometry(1, 1000, 1000);
 // const geometry = new THREE.ConeGeometry(1, 2, 1000, 1000, false);
 // const geometry = new THREE.DodecahedronGeometry(1)
@@ -21,7 +24,20 @@ const geometry = new THREE.CapsuleGeometry(1, 2, 1000, 1000);
 // const geometry = new THREE.RingGeometry(.5, 1, 1000, 1000, 0)
 // const geometry = new THREE.CylinderGeometry(1, 2, 2, 1000, 1000)
 // const geometry = new THREE.CircleGeometry(2, 10000, 0, 2)
-const material = new THREE.MeshBasicMaterial({ color: 0xff0000 })
+
+
+const positionsArray = new Float32Array([
+    0,0,0,
+    0,1,0,
+    1,0,0
+]);
+
+const positionAttributes = new THREE.BufferAttribute(positionsArray, 3, true)
+
+const geometry = new THREE.BufferGeometry()
+geometry.setAttribute('position', positionAttributes);    // More On Shaders
+
+const material = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true })
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
