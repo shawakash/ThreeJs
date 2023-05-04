@@ -67,6 +67,21 @@ const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
 const ambientTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
 
 
+// To Repeat a single texture over a geometry
+// colorTexture.repeat  --> A Vector2
+colorTexture.repeat.x = 2;      //  -->>>> Repeating x Start
+colorTexture.repeat.y = 2;     //   --->>> Repeating y Start
+colorTexture.wrapS = THREE.RepeatWrapping;
+colorTexture.wrapT = THREE.RepeatWrapping;
+
+// For Miror Repeating
+colorTexture.wrapS = THREE.MirroredRepeatWrapping
+colorTexture.wrapT = THREE.MirroredRepeatWrapping
+
+// to Wrap Around Edges
+colorTexture.offset.x = 0.5;
+colorTexture.offset.y = 0.5;
+
 /**
  * Base
  */
@@ -79,8 +94,14 @@ const scene = new THREE.Scene()
 /**
  * Object
  */
-const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ map:ambientTexture });
+const geometry = new THREE.BoxGeometry(1, 1, 1)        
+
+// You can change geometry , different geometry wraps texture differently
+// This depends on the uv coordinates
+// When you unWrap the geometry then you are going to have 2D coordinates that are uv coordinates
+// console.log(geometry.attributes.uv)
+
+const material = new THREE.MeshBasicMaterial({ map: colorTexture });
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
