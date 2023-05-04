@@ -26,20 +26,45 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 // console.log(image)
 
 // Using Texture Loader
-const textureLoader = new THREE.TextureLoader();
-//One texture loader can load multiple texture
-const texture = textureLoader.load(
-    '/textures/door/color.jpg',
-    () => {
-        console.log('Loaded');
-    },
-    () => {
-        console.log('progress');     // Usually never Works
-    },
-    (e) => {
-        console.log(e.message)
-    }
-);
+// const textureLoader = new THREE.TextureLoader();
+// //One texture loader can load multiple texture
+// const texture = textureLoader.load(
+//     '/textures/door/color.jpg',
+//     () => {
+//         console.log('Loaded');
+//     },
+//     () => {
+//         console.log('progress');     // Usually never Works
+//     },
+//     (e) => {
+//         console.log(e.message)
+//     }
+// );
+
+// Writing The functions inside Load can be cumbersome
+
+const loadingManager = new THREE.LoadingManager();
+// Be carefull to load all the loader before the textLoader
+loadingManager.onStart = () => {
+    console.log('Manger Is Starting');
+}
+loadingManager.onLoad = () => {
+    console.log('Manger Is Loaded');
+}
+loadingManager.onProgress = () => {
+    console.log('Manger Is Progressing');
+}
+loadingManager.onError = (e) => {
+    console.log(e);
+}
+const textureLoader = new THREE.TextureLoader(loadingManager);
+const colorTexture = textureLoader.load('/textures/door/color.jpg');
+const alphaTexture = textureLoader.load('/textures/door/alpha.jpg');
+const heightTexture = textureLoader.load('/textures/door/height.jpg');
+const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
+const normalTexture = textureLoader.load('/textures/door/normal.jpg');
+const roughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
+const ambientTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg');
 
 
 /**
@@ -55,7 +80,7 @@ const scene = new THREE.Scene()
  * Object
  */
 const geometry = new THREE.BoxGeometry(1, 1, 1)
-const material = new THREE.MeshBasicMaterial({ map: texture });
+const material = new THREE.MeshBasicMaterial({ map:ambientTexture });
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
 
