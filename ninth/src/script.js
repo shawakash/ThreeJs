@@ -3,6 +3,19 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 
 /**
+ * Texture
+ */
+
+const image = new Image();
+image.onload = () => {
+    console.log('image Loaded');
+}
+
+image.src = '/textures/door/color.jpg';
+// console.log(image)
+
+
+/**
  * Base
  */
 // Canvas
