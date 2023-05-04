@@ -6,24 +6,40 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
  * Texture
  */
 
-const image = new Image();
-// image.onload = () => {
+// const image = new Image();
+// // image.onload = () => {
 
-//     const texture = new THREE.Texture(image);
-//     console.log(texture)
+// //     const texture = new THREE.Texture(image);
+// //     console.log(texture)
 
-// }
+// // }
 
-const texture = new THREE.Texture(image);
+// const texture = new THREE.Texture(image);
 
-image.addEventListener('load', () => {          // As we need to use textue outside the function
+// image.addEventListener('load', () => {          // As we need to use textue outside the function
 
-    texture.needsUpdate = true;
+//     texture.needsUpdate = true;
     
-})
+// })
 
-image.src = '/textures/door/color.jpg';
+// image.src = '/textures/door/color.jpg';
 // console.log(image)
+
+// Using Texture Loader
+const textureLoader = new THREE.TextureLoader();
+//One texture loader can load multiple texture
+const texture = textureLoader.load(
+    '/textures/door/color.jpg',
+    () => {
+        console.log('Loaded');
+    },
+    () => {
+        console.log('progress');     // Usually never Works
+    },
+    (e) => {
+        console.log(e.message)
+    }
+);
 
 
 /**
