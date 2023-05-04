@@ -58,7 +58,7 @@ loadingManager.onError = (e) => {
     console.log(e);
 }
 const textureLoader = new THREE.TextureLoader(loadingManager);
-const colorTexture = textureLoader.load('/textures/door/color.jpg');
+const colorTexture = textureLoader.load('/textures/minecraft.png');
 const alphaTexture = textureLoader.load('/textures/door/alpha.jpg');
 const heightTexture = textureLoader.load('/textures/door/height.jpg');
 const metalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
@@ -69,18 +69,33 @@ const ambientTexture = textureLoader.load('/textures/door/ambientOcclusion.jpg')
 
 // To Repeat a single texture over a geometry
 // colorTexture.repeat  --> A Vector2
-colorTexture.repeat.x = 2;      //  -->>>> Repeating x Start
-colorTexture.repeat.y = 2;     //   --->>> Repeating y Start
-colorTexture.wrapS = THREE.RepeatWrapping;
-colorTexture.wrapT = THREE.RepeatWrapping;
+// colorTexture.repeat.x = 2;      //  -->>>> Repeating x Start
+// colorTexture.repeat.y = 2;     //   --->>> Repeating y Start
+// colorTexture.wrapS = THREE.RepeatWrapping;
+// colorTexture.wrapT = THREE.RepeatWrapping;
 
-// For Miror Repeating
-colorTexture.wrapS = THREE.MirroredRepeatWrapping
-colorTexture.wrapT = THREE.MirroredRepeatWrapping
+// // For Miror Repeating
+// colorTexture.wrapS = THREE.MirroredRepeatWrapping
+// colorTexture.wrapT = THREE.MirroredRepeatWrapping
 
-// to Wrap Around Edges
-colorTexture.offset.x = 0.5;
-colorTexture.offset.y = 0.5;
+// // to Wrap Around Edges
+// colorTexture.offset.x = 0.5;
+// colorTexture.offset.y = 0.5;
+
+// Wrap Rotated Textures
+// colorTexture.rotation = Math.PI / 3;
+// // Changing the coordinates of center
+// colorTexture.center.x =0.5;
+// colorTexture.center.y =0.5;
+
+// When You Zoom out the texture minifies itself and compress the same pixel to a smaller size which blurs the overall image
+colorTexture.generateMipmaps = false;     // For not to compress the image while magnifying or minifying
+colorTexture.minFilter = THREE.NearestFilter;    // Changing the Minfying Filter
+colorTexture.magFilter = THREE.NearestFilter;    //  For Magnification
+// Gpu is all what we need to care in Three Js
+// It's like we don't want the texture to blow off as we magnify or minify
+// Nearest filter is best among all
+// .JPG usually compress before sending for normals try to use .PNG
 
 /**
  * Base
