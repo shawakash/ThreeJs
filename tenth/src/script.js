@@ -40,11 +40,39 @@ const gradient3Texture = textureLoader.load('/textures/gradients/3.jpg')
  *  Object
  */
 
-const material = new THREE.MeshBasicMaterial();
-material.map = doorRoughnessTexture    // remember to assign the correct dataType
+// const material = new THREE.MeshBasicMaterial();
+
+// Setting the texture
+doorColorTexture.generateMipmaps = false;
+doorColorTexture.minFilter = THREE.NearestFilter
+doorColorTexture.magFilter = THREE.NearestFilter
+
+// material.map = doorColorTexture    // remember to assign the correct dataType
 // like material.color = 'red'    doesn't works as material.color is a THREE.Color Object
 // material.color.set('yellow')
-material.color = new THREE.Color('red');   // Value is any valid color code
+// material.color = new THREE.Color('red');   // Value is any valid color code
+// material.wireframe = true;     // For Triangles
+
+// Opacity and Transparent Bhai Bhai
+// material.opacity = 0.5;
+// material.transparent = true;
+
+// For alpha map add transparent = true
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
+
+// To maintain the side visibilty for orbit controlls
+// material.side = THREE.FrontSide
+// material.side = THREE.BackSide
+// material.side = THREE.DoubleSide   // Not Preferrable For Gpu
+
+// MeshNormalMaterial
+// Normal are the information that stores value for outside of the geometry or Textures
+// Noramls are used for Lightning, Reflection, Refraction
+const material = new THREE.MeshNormalMaterial();            //   ---->>>> Just Beautifull  // Used to debug normals
+material.wireframe = true;
+// material.flatShading = true;     // to flaten the surface, means normal won't be interpolated between the surface;  means you can see the faces
+
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
