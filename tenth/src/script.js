@@ -73,9 +73,10 @@ doorColorTexture.magFilter = THREE.NearestFilter
 // material.wireframe = true;
 // material.flatShading = true;     // to flaten the surface, means normal won't be interpolated between the surface;  means you can see the faces
 
-const material = new THREE.MeshMatcapMaterial();   // To use normal perfectly
-material.matcap = matcap8Texture ;
+// const material = new THREE.MeshMatcapMaterial();   // To use normal perfectly
+// material.matcap = matcap8Texture ;
 
+const material = new THREE.MeshDepthMaterial()    // Turns white when looked from close and dims when moved far. Usefull for fogs
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
