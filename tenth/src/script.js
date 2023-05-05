@@ -1,6 +1,9 @@
 import './style.css'
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import * as dat from 'dat.gui';
+
+const gui = new dat.GUI();
 
 /**
  * Base
@@ -25,9 +28,9 @@ const doorHeightTexture = textureLoader.load('/textures/door/height.jpg');
 const doorMetalnessTexture = textureLoader.load('/textures/door/metalness.jpg');
 const doorNormalTexture = textureLoader.load('/textures/door/normal.jpg');
 const doorRoughnessTexture = textureLoader.load('/textures/door/roughness.jpg');
-const matcap1Texture= textureLoader.load('/textures/matcaps/1.png');
+const matcap1Texture = textureLoader.load('/textures/matcaps/1.png');
 const matcap2Texture = textureLoader.load('/textures/matcaps/2.png');
-const matcap3Texture= textureLoader.load('/textures/matcaps/3.png');
+const matcap3Texture = textureLoader.load('/textures/matcaps/3.png');
 const matcap4Texture = textureLoader.load('/textures/matcaps/4.png');
 const matcap5Texture = textureLoader.load('/textures/matcaps/5.png');
 const matcap6Texture = textureLoader.load('/textures/matcaps/6.png');
@@ -95,13 +98,41 @@ gradient5Texture.generateMipmaps = false;
 // material.specular = new THREE.Color('red')
 
 // A cartoon Type material; mainly used for gradients
-const material = new THREE.MeshToonMaterial();
-material.gradientMap = gradient5Texture
+// const material = new THREE.MeshToonMaterial();
+// material.gradientMap = gradient5Texture
+
+// Best of PHONG AND LAMBER
+// Mesh Standard Material Uses PBR (Physcially based Render), i.e. it uses algorithms that are derived to depect the exact way the material would respond once in real world
+
+const material = new THREE.MeshStandardMaterial();
+// For the ambient to apply we need to add its coordinates itself as threejs itself doesn't provides coordinatesfor abient;
+material.map = doorColorTexture
+material.aoMap = doorAmbientOcclusionTexture;
+
+gui
+    .add(material, 'roughness')
+    .min(0)
+    .max(1)
+    .step(0.0001)
+    .name('Roughness');
+
+gui
+    .add(material, 'metalness')
+    .min(0)
+    .max(1)
+    .step(0.0001)
+    .name('Metalness');
+
 
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
     material
+);
+
+// For the ambient to apply we need to add its coordinates itself as threejs itself doesn't provides coordinatesfor abient;
+sphere.geometry.setAttribute('uv2',
+    new THREE.BufferAttribute(sphere.geometry.attributes.uv.array, 2)
 );
 
 sphere.position.x = -1.5
@@ -111,10 +142,19 @@ const plane = new THREE.Mesh(
     material
 );
 
+plane.geometry.setAttribute('uv2',
+    new THREE.BufferAttribute(plane.geometry.attributes.uv.array, 2)
+);
+
 const torus = new THREE.Mesh(
     new THREE.TorusGeometry(0.3, 0.2, 16, 32),
     material
 );
+
+torus.geometry.setAttribute('uv2',
+    new THREE.BufferAttribute(torus.geometry.attributes.uv.array, 2)
+);
+
 torus.position.x = 1.5;
 
 scene.add(torus, plane, sphere)
@@ -127,9 +167,25 @@ const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
 scene.add(ambientLight);
 
 const pointerLight = new THREE.PointLight(0xffffff);
-pointerLight.position.x = 2;
-pointerLight.position.y = 3;
-pointerLight.position.z = 4;
+
+gui
+    .add(pointerLight.position, 'x')
+    .min(0)
+    .max(6)
+    .step(0.00001)
+    .name("X's Lights");
+gui
+    .add(pointerLight.position, 'y')
+    .min(0)
+    .max(6)
+    .step(0.00001)
+    .name("Y's Lights");
+gui
+    .add(pointerLight.position, 'z')
+    .min(0)
+    .max(6)
+    .step(0.00001)
+    .name("Z's Lights");
 
 scene.add(pointerLight);
 
@@ -141,8 +197,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -184,8 +239,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update Objects
