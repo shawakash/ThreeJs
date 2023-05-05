@@ -76,7 +76,18 @@ doorColorTexture.magFilter = THREE.NearestFilter
 // const material = new THREE.MeshMatcapMaterial();   // To use normal perfectly
 // material.matcap = matcap8Texture ;
 
-const material = new THREE.MeshDepthMaterial()    // Turns white when looked from close and dims when moved far. Usefull for fogs
+// const material = new THREE.MeshDepthMaterial()    // Turns white when looked from close and dims when moved far. Usefull for fogs
+
+// Material that respones to Lights
+// Doesn't Provides Reflection instead provides a unwanted line pattern
+// const material = new THREE.MeshLambertMaterial();
+
+// Alternative to MeshLamber
+// Provides Reflection to light falling on it
+const material = new THREE.MeshPhongMaterial();
+material.shininess = 100;   // To shine Mas'
+
+material.specular = new THREE.Color('red')
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
@@ -98,6 +109,19 @@ torus.position.x = 1.5;
 
 scene.add(torus, plane, sphere)
 
+/**
+ * Lights
+ */
+
+const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+scene.add(ambientLight);
+
+const pointerLight = new THREE.PointLight(0xffffff);
+pointerLight.position.x = 2;
+pointerLight.position.y = 3;
+pointerLight.position.z = 4;
+
+scene.add(pointerLight);
 
 /**
  * Sizes
