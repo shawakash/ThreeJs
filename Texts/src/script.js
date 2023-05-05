@@ -17,11 +17,16 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+// const AxesHelper = new THREE.AxesHelper(5);
+// scene.add(AxesHelper)
+
 
 /**
  * Textures
 */
 const textureLoader = new THREE.TextureLoader()
+const matCapTexture = textureLoader.load('textures/matcaps/8.png');
+const mat2CapTexture = textureLoader.load('textures/matcaps/3.png');
 
 
 /**
@@ -33,23 +38,71 @@ fontLoader.load(
     '/fonts/helvetiker_regular.typeface.json',
     (font) => {
         const textGeometry = new TextGeometry(
-            'Hola! :)',
+            'Muy Feliz! :)',
             {
                 font,
                 size: 0.5,
                 height: 0.2,
-                curveSegments: 1,
+                curveSegments: 102,
                 bevelEnabled: true,
                 bevelThickness: 0.001,
                 bevelSize: 0.02,
                 bevelOffset: 0,
-                bevelSegments: 2
+                bevelSegments: 10
             }
         );
-        const textMaterial = new THREE.MeshBasicMaterial();
-        textMaterial.wireframe = true;
+
+        // textGeometry.computeBoundingBox();
+        // textGeometry.translate(
+        //     -(textGeometry.boundingBox.max.x - 0.02) * 0.5,
+        //     -(textGeometry.boundingBox.max.y - 0.02) * 0.5,
+        //     -(textGeometry.boundingBox.max.z - 0.001) * 0.5
+        // );
+
+        textGeometry.center()
+
+        const textMaterial = new THREE.MeshMatcapMaterial({ matcap: matCapTexture });
+        // textMaterial.wireframe = true;
         const text = new THREE.Mesh(textGeometry, textMaterial);
-        scene.add(text)
+        scene.add(text);
+
+        // Creating Geometry and Material Outside the Loop reduces the rendering time by one- enth
+        const dognutGeometry = new THREE.TorusGeometry(0.3, 0.2, 100, 100);
+        const cubeGeometry = new THREE.BoxGeometry(1, 1, 1, 100, 100, 100);
+        const material = new THREE.MeshMatcapMaterial({ matcap: mat2CapTexture })
+        console.time('f');
+
+        for (let i = 0; i < 700; i++) {
+            const dognut = new THREE.Mesh(
+                dognutGeometry,
+                material
+            );
+            dognut.position.set(
+                (Math.random() * 10 - Math.random() * 10) * 8,
+                (Math.random() * 10 - Math.random() * 10) * 8,
+                (Math.random() * 10 - Math.random() * 10) * 8
+            );
+
+            dognut.rotation.x = Math.PI * Math.random();
+            dognut.rotation.y = Math.PI * Math.random();
+            dognut.rotation.z = Math.PI * Math.random();
+
+            const cube = new THREE.Mesh(
+                cubeGeometry,
+                material
+            );
+            cube.position.set(
+                (Math.random() * 10 - Math.random() * 10) * 8,
+                (Math.random() * 10 - Math.random() * 10) * 8,
+                (Math.random() * 10 - Math.random() * 10) * 8
+            )
+            cube.rotation.x = Math.PI * Math.random();
+            cube.rotation.y = Math.PI * Math.random();
+            cube.rotation.z = Math.PI * Math.random();
+
+            scene.add(dognut, cube)
+        }
+        console.timeEnd('f')
     }
 );
 
@@ -72,8 +125,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -115,8 +167,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update controls
