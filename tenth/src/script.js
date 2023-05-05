@@ -108,6 +108,55 @@ const material = new THREE.MeshStandardMaterial();
 // For the ambient to apply we need to add its coordinates itself as threejs itself doesn't provides coordinatesfor abient;
 material.map = doorColorTexture
 material.aoMap = doorAmbientOcclusionTexture;
+// To change the intensity of the ambientOcclusion we use 
+material.aoMapIntensity = 1;
+
+// To provide terrain or relif to the textures
+// To apply it properly provide enough vertices i.e. increase the segments of geomtries
+material.displacementMap = doorHeightTexture;
+
+// To apply Terrain to certain level;
+material.displacementScale = 0.071;
+
+// FOR Metalness and roughness
+material.metalnessMap = doorMetalnessTexture;
+material.roughnessMap = doorRoughnessTexture;
+material.normalMap = doorNormalTexture;
+
+// To scale normal
+material.normalScale.set(0.5, 0.5);
+
+
+
+gui
+    .add(material.normalScale, 'x')
+    .min(0)
+    .max(1)
+    .step(0.001)
+    .name("Normal Scale X")
+
+gui
+    .add(material.normalScale, 'y')
+    .min(0)
+    .max(1)
+    .step(0.001)
+    .name("Normal Scale Y")
+
+gui
+    .add(material, 'displacementScale')
+    .min(0)
+    .max(0.1)
+    .step(0.0001)
+    .name('Terrain Scale');
+
+gui
+    .add(material, 'aoMapIntensity')
+    .min(0)
+    .max(10)
+    .step(0.0001)
+    .name('AO Intensity');
+
+
 
 gui
     .add(material, 'roughness')
@@ -126,7 +175,7 @@ gui
 
 
 const sphere = new THREE.Mesh(
-    new THREE.SphereGeometry(0.5, 16, 16),
+    new THREE.SphereGeometry(0.5, 160, 160),
     material
 );
 
@@ -138,7 +187,7 @@ sphere.geometry.setAttribute('uv2',
 sphere.position.x = -1.5
 
 const plane = new THREE.Mesh(
-    new THREE.PlaneGeometry(1, 1),
+    new THREE.PlaneGeometry(1, 1, 100, 100),
     material
 );
 
@@ -147,7 +196,7 @@ plane.geometry.setAttribute('uv2',
 );
 
 const torus = new THREE.Mesh(
-    new THREE.TorusGeometry(0.3, 0.2, 16, 32),
+    new THREE.TorusGeometry(0.3, 0.2, 160, 320),
     material
 );
 
