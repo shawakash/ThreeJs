@@ -29,7 +29,7 @@ const matcap1Texture= textureLoader.load('/textures/matcaps/1.png');
 const matcap2Texture = textureLoader.load('/textures/matcaps/2.png');
 const matcap3Texture= textureLoader.load('/textures/matcaps/3.png');
 const matcap4Texture = textureLoader.load('/textures/matcaps/4.png');
-const matcap5Textureure = textureLoader.load('/textures/matcaps/5.png');
+const matcap5Texture = textureLoader.load('/textures/matcaps/5.png');
 const matcap6Texture = textureLoader.load('/textures/matcaps/6.png');
 const matcap7Texture = textureLoader.load('/textures/matcaps/7.png');
 const matcap8Texture = textureLoader.load('/textures/matcaps/8.png');
@@ -69,9 +69,12 @@ doorColorTexture.magFilter = THREE.NearestFilter
 // MeshNormalMaterial
 // Normal are the information that stores value for outside of the geometry or Textures
 // Noramls are used for Lightning, Reflection, Refraction
-const material = new THREE.MeshNormalMaterial();            //   ---->>>> Just Beautifull  // Used to debug normals
-material.wireframe = true;
+// const material = new THREE.MeshNormalMaterial();            //   ---->>>> Just Beautifull  // Used to debug normals
+// material.wireframe = true;
 // material.flatShading = true;     // to flaten the surface, means normal won't be interpolated between the surface;  means you can see the faces
+
+const material = new THREE.MeshMatcapMaterial();   // To use normal perfectly
+material.matcap = matcap8Texture ;
 
 
 const sphere = new THREE.Mesh(
