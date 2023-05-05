@@ -103,8 +103,8 @@ gradient5Texture.generateMipmaps = false;
 
 // Best of PHONG AND LAMBER
 // Mesh Standard Material Uses PBR (Physcially based Render), i.e. it uses algorithms that are derived to depect the exact way the material would respond once in real world
-
-const material = new THREE.MeshStandardMaterial();
+// PointsMaterial For Particals
+const material = new THREE.MeshStandardMaterial();  // Or Physcial Material 
 // For the ambient to apply we need to add its coordinates itself as threejs itself doesn't provides coordinatesfor abient;
 material.map = doorColorTexture
 material.aoMap = doorAmbientOcclusionTexture;
@@ -122,6 +122,8 @@ material.displacementScale = 0.071;
 material.metalnessMap = doorMetalnessTexture;
 material.roughnessMap = doorRoughnessTexture;
 material.normalMap = doorNormalTexture;
+material.transparent = true;
+material.alphaMap = doorAlphaTexture;
 
 // To scale normal
 material.normalScale.set(0.5, 0.5);
