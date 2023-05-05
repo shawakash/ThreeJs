@@ -19,6 +19,22 @@ const scene = new THREE.Scene()
  */
 
 const loadingManager = new THREE.LoadingManager();
+
+/**
+ * Env Textures 
+*/ 
+const envTextureLoader = new THREE.CubeTextureLoader(loadingManager);
+
+// Order of textures are very important
+const envTextures = envTextureLoader.load([
+    '/textures/environmentMaps/0/px.jpg',
+    '/textures/environmentMaps/0/nx.jpg',
+    '/textures/environmentMaps/0/py.jpg',
+    '/textures/environmentMaps/0/ny.jpg',
+    '/textures/environmentMaps/0/pz.jpg',
+    '/textures/environmentMaps/0/nz.jpg',
+]);
+
 const textureLoader = new THREE.TextureLoader(loadingManager);
 
 const doorAlphaTexture = textureLoader.load('/textures/door/alpha.jpg');
@@ -104,63 +120,83 @@ gradient5Texture.generateMipmaps = false;
 // Best of PHONG AND LAMBER
 // Mesh Standard Material Uses PBR (Physcially based Render), i.e. it uses algorithms that are derived to depect the exact way the material would respond once in real world
 // PointsMaterial For Particals
-const material = new THREE.MeshStandardMaterial();  // Or Physcial Material 
-// For the ambient to apply we need to add its coordinates itself as threejs itself doesn't provides coordinatesfor abient;
-material.map = doorColorTexture
-material.aoMap = doorAmbientOcclusionTexture;
-// To change the intensity of the ambientOcclusion we use 
-material.aoMapIntensity = 1;
+// const material = new THREE.MeshStandardMaterial();  // Or Physcial Material 
+// // For the ambient to apply we need to add its coordinates itself as threejs itself doesn't provides coordinatesfor abient;
+// material.map = doorColorTexture
+// material.aoMap = doorAmbientOcclusionTexture;
+// // To change the intensity of the ambientOcclusion we use 
+// material.aoMapIntensity = 1;
 
-// To provide terrain or relif to the textures
-// To apply it properly provide enough vertices i.e. increase the segments of geomtries
-material.displacementMap = doorHeightTexture;
+// // To provide terrain or relif to the textures
+// // To apply it properly provide enough vertices i.e. increase the segments of geomtries
+// material.displacementMap = doorHeightTexture;
 
-// To apply Terrain to certain level;
-material.displacementScale = 0.071;
+// // To apply Terrain to certain level;
+// material.displacementScale = 0.071;
 
-// FOR Metalness and roughness
-material.metalnessMap = doorMetalnessTexture;
-material.roughnessMap = doorRoughnessTexture;
-material.normalMap = doorNormalTexture;
-material.transparent = true;
-material.alphaMap = doorAlphaTexture;
+// // FOR Metalness and roughness
+// material.metalnessMap = doorMetalnessTexture;
+// material.roughnessMap = doorRoughnessTexture;
+// material.normalMap = doorNormalTexture;
+// material.transparent = true;
+// material.alphaMap = doorAlphaTexture;
 
-// To scale normal
-material.normalScale.set(0.5, 0.5);
+// // To scale normal
+// material.normalScale.set(0.5, 0.5);
 
+
+
+// gui
+//     .add(material.normalScale, 'x')
+//     .min(0)
+//     .max(1)
+//     .step(0.001)
+//     .name("Normal Scale X")
+
+// gui
+//     .add(material.normalScale, 'y')
+//     .min(0)
+//     .max(1)
+//     .step(0.001)
+//     .name("Normal Scale Y")
+
+// gui
+//     .add(material, 'displacementScale')
+//     .min(0)
+//     .max(0.1)
+//     .step(0.0001)
+//     .name('Terrain Scale');
+
+// gui
+//     .add(material, 'aoMapIntensity')
+//     .min(0)
+//     .max(10)
+//     .step(0.0001)
+//     .name('AO Intensity');
+
+
+
+// Enviorments Maps ---->>>> As the name suggests
+
+
+const material = new THREE.MeshStandardMaterial();
+material.metalness = 0.7;
+material.roughness = 0.2;
+
+// Maps the reflection of enviorments to material
+material.envMap = envTextures;
+material.envMapIntensity = 0.8
 
 
 gui
-    .add(material.normalScale, 'x')
+    .add(material, 'envMapIntensity')
     .min(0)
     .max(1)
-    .step(0.001)
-    .name("Normal Scale X")
-
-gui
-    .add(material.normalScale, 'y')
-    .min(0)
-    .max(1)
-    .step(0.001)
-    .name("Normal Scale Y")
-
-gui
-    .add(material, 'displacementScale')
-    .min(0)
-    .max(0.1)
     .step(0.0001)
-    .name('Terrain Scale');
-
-gui
-    .add(material, 'aoMapIntensity')
-    .min(0)
-    .max(10)
-    .step(0.0001)
-    .name('AO Intensity');
+    .name('Env Intensity');
 
 
-
-gui
+    gui
     .add(material, 'roughness')
     .min(0)
     .max(1)
