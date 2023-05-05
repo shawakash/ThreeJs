@@ -34,6 +34,7 @@ const matcap6Texture = textureLoader.load('/textures/matcaps/6.png');
 const matcap7Texture = textureLoader.load('/textures/matcaps/7.png');
 const matcap8Texture = textureLoader.load('/textures/matcaps/8.png');
 const gradient3Texture = textureLoader.load('/textures/gradients/3.jpg')
+const gradient5Texture = textureLoader.load('/textures/gradients/5.jpg')
 
 
 /**
@@ -43,9 +44,13 @@ const gradient3Texture = textureLoader.load('/textures/gradients/3.jpg')
 // const material = new THREE.MeshBasicMaterial();
 
 // Setting the texture
-doorColorTexture.generateMipmaps = false;
 doorColorTexture.minFilter = THREE.NearestFilter
 doorColorTexture.magFilter = THREE.NearestFilter
+doorColorTexture.generateMipmaps = false;
+
+gradient5Texture.minFilter = THREE.NearestFilter
+gradient5Texture.magFilter = THREE.NearestFilter
+gradient5Texture.generateMipmaps = false;
 
 // material.map = doorColorTexture    // remember to assign the correct dataType
 // like material.color = 'red'    doesn't works as material.color is a THREE.Color Object
@@ -84,10 +89,15 @@ doorColorTexture.magFilter = THREE.NearestFilter
 
 // Alternative to MeshLamber
 // Provides Reflection to light falling on it
-const material = new THREE.MeshPhongMaterial();
-material.shininess = 100;   // To shine Mas'
+// const material = new THREE.MeshPhongMaterial();
+// material.shininess = 100;   // To shine Mas'
 
-material.specular = new THREE.Color('red')
+// material.specular = new THREE.Color('red')
+
+// A cartoon Type material; mainly used for gradients
+const material = new THREE.MeshToonMaterial();
+material.gradientMap = gradient5Texture
+
 
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 16, 16),
