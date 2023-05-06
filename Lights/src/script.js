@@ -27,7 +27,12 @@ gui.add(ambientLight, 'intensity').min(0).max(1).step(0.00001).name('Light Inten
 
 scene.add(ambientLight)
 
-
+// Directional lights are used to send parrell lights i.e. it is not spreading light in all direction like sun
+const directionalLights = new THREE.DirectionalLight(0x00ffcc, 0.5);
+// Direction of sun can be set, but it is always normal to origin
+// Imagine a sphere then the directionallights lights normally
+directionalLights.position.set(1, 0, 0)
+scene.add(directionalLights);
 
 /**
  * Objects
