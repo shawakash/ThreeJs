@@ -44,9 +44,17 @@ scene.add(hemisphericalLight)
 // Its like a candle
 // Distance is the amount upto which it should spread Light
 const pointLight = new THREE.PointLight(0xff9000, 0.5, 10, 2);
-pointLight.position.set(1, -0.5, 1)
+pointLight.position.set(1, -0.5, 1);
 
 scene.add(pointLight);
+
+
+// RECTANGULAR lIGHT
+// It works only with MeshStandardMaterial and MeshPhyscialMaterial
+const rectAreaLight = new THREE.RectAreaLight(0x4e00ff, 1, 2, 2);
+rectAreaLight.position.set(-1.5, 0, 1.5);
+rectAreaLight.lookAt(new THREE.Vector3())    // To turn the rectangular Light at (-1.5, 0, 1.5) to origin 
+scene.add(rectAreaLight);
 
 /**
  * Objects
