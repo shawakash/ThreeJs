@@ -93,26 +93,25 @@ sphere.castShadow = true;
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
     material
-    )
-    plane.rotation.x = - Math.PI * 0.5
-    plane.position.y = - 0.5
-    plane.receiveShadow = true
-    scene.add(sphere, plane)
-    
-    /**
-     * Sizes
-    */
-   const sizes = {
-       width: window.innerWidth,
-       height: window.innerHeight
-    }
-    
-    window.addEventListener('resize', () =>
-    {
+)
+plane.rotation.x = - Math.PI * 0.5
+plane.position.y = - 0.5
+plane.receiveShadow = true
+scene.add(sphere, plane)
+
+/**
+ * Sizes
+*/
+const sizes = {
+    width: window.innerWidth,
+    height: window.innerHeight
+}
+
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
-    
+
     // Update camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
@@ -146,13 +145,17 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 renderer.shadowMap.enabled = true;
 
+// Different Algos. to generate Shadow Maps
+// InCase of PCFSoftShadowMap shadow.radius doesn't works
+// No need Actually
+// renderer.shadowMap.type = THREE.PCFSoftShadowMap  
+
 /**
  * Animate
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update controls
