@@ -16,6 +16,19 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
+ * Shadows
+ * Core Shadows --> Shadows on material itself due to lights
+ * Drop Shadows --> Shadows on one material due to another material in presence of lights
+ * firstly tell the renderer to enable shadowMap for taking shadow map pictures
+ * then go to each geometry and think whether it can cast or(inclusive) receive shadow
+ * then adjust the lights for making shadows 
+ * Only directional, Point, Spot lights can create shadows
+ * Maintain the render size for shadow map in lights
+*/
+
+
+
+/**
  * Lights
  */
 // Ambient light
@@ -32,9 +45,17 @@ gui.add(directionalLight.position, 'y').min(- 5).max(5).step(0.001)
 gui.add(directionalLight.position, 'z').min(- 5).max(5).step(0.001)
 scene.add(directionalLight)
 
+directionalLight.castShadow = true;
+directionalLight.shadow.mapSize.width = 1024;
+directionalLight.shadow.mapSize.height = 1024;
+
+
+
+
+
 /**
  * Materials
- */
+*/
 const material = new THREE.MeshStandardMaterial()
 material.roughness = 0.7
 gui.add(material, 'metalness').min(0).max(1).step(0.001)
@@ -46,31 +67,32 @@ gui.add(material, 'roughness').min(0).max(1).step(0.001)
 const sphere = new THREE.Mesh(
     new THREE.SphereGeometry(0.5, 32, 32),
     material
-)
+);
+sphere.castShadow = true;
 
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
     material
-)
-plane.rotation.x = - Math.PI * 0.5
-plane.position.y = - 0.5
-
-scene.add(sphere, plane)
-
-/**
- * Sizes
- */
-const sizes = {
-    width: window.innerWidth,
-    height: window.innerHeight
-}
-
-window.addEventListener('resize', () =>
-{
+    )
+    plane.rotation.x = - Math.PI * 0.5
+    plane.position.y = - 0.5
+    plane.receiveShadow = true
+    scene.add(sphere, plane)
+    
+    /**
+     * Sizes
+    */
+   const sizes = {
+       width: window.innerWidth,
+       height: window.innerHeight
+    }
+    
+    window.addEventListener('resize', () =>
+    {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
-
+    
     // Update camera
     camera.aspect = sizes.width / sizes.height
     camera.updateProjectionMatrix()
@@ -100,8 +122,9 @@ controls.enableDamping = true
 const renderer = new THREE.WebGLRenderer({
     canvas: canvas
 })
-renderer.setSize(sizes.width, sizes.height)
+renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.shadowMap.enabled = true;
 
 /**
  * Animate
