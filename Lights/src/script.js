@@ -56,6 +56,16 @@ rectAreaLight.position.set(-1.5, 0, 1.5);
 rectAreaLight.lookAt(new THREE.Vector3())    // To turn the rectangular Light at (-1.5, 0, 1.5) to origin 
 scene.add(rectAreaLight);
 
+// Spot Light -- Like a FlashLight
+const spotLight = new THREE.SpotLight(0x78ff00, 0.5, 10, Math.PI * 0.1, 0.25, 1);
+// Color, Intensity, Distance, Solid Angle, penumbra-- scattering around edges, decay
+spotLight.position.set(0, 2, 3);
+// spotLight.target is a Object3D, so to fix it's position we need to add it ti scene;
+spotLight.target.position.x = 1.5;
+scene.add(spotLight.target);
+scene.add(spotLight)
+
+
 /**
  * Objects
  */
