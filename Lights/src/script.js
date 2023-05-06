@@ -40,6 +40,14 @@ scene.add(directionalLights);
 const hemisphericalLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.9);
 scene.add(hemisphericalLight)
 
+// Point Light --> Infinetly small Light spreading in all directions, Lights in every Direction
+// Its like a candle
+// Distance is the amount upto which it should spread Light
+const pointLight = new THREE.PointLight(0xff9000, 0.5, 10, 2);
+pointLight.position.set(1, -0.5, 1)
+
+scene.add(pointLight);
+
 /**
  * Objects
  */
