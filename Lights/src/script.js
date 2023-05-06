@@ -34,6 +34,12 @@ const directionalLights = new THREE.DirectionalLight(0x00ffcc, 0.5);
 directionalLights.position.set(1, 0, 0)
 scene.add(directionalLights);
 
+
+// Hemispherical Light --> Parallel Lights comming from -z axis and z-axis i.e. ground lights and sky Lights
+// At surface center of material the skycolor and ground color gets mixed
+const hemisphericalLight = new THREE.HemisphereLight(0xff0000, 0x0000ff, 0.9);
+scene.add(hemisphericalLight)
+
 /**
  * Objects
  */
