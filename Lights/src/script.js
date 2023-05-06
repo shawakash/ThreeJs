@@ -2,6 +2,7 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
+import { RectAreaLightHelper } from 'three/examples/jsm/helpers/RectAreaLightHelper'
 
 /**
  * Base
@@ -61,9 +62,41 @@ const spotLight = new THREE.SpotLight(0x78ff00, 0.5, 10, Math.PI * 0.1, 0.25, 1)
 // Color, Intensity, Distance, Solid Angle, penumbra-- scattering around edges, decay
 spotLight.position.set(0, 2, 3);
 // spotLight.target is a Object3D, so to fix it's position we need to add it ti scene;
-spotLight.target.position.x = 1.5;
+spotLight.target.position.x = -1.5;
 scene.add(spotLight.target);
 scene.add(spotLight)
+
+
+/**
+ * Add few Lights as possible
+ * Reduce the cost of gpu
+ * AmbientLight is the cheaper and spot light is costly
+ * Try to use Baking --> Shadows and Lights on textures
+ */
+
+/**
+ * Helpers
+ * To help to setup Lights clearly
+ */
+
+const hemisphericalLightHelper = new THREE.HemisphereLightHelper(hemisphericalLight, 0.2);
+scene.add(hemisphericalLightHelper);
+
+const directionalLightHelper = new THREE.DirectionalLightHelper(directionalLights, 0.2);
+scene.add(directionalLightHelper)
+
+const pointLightHelper = new THREE.PointLightHelper(pointLight, 0.2);
+scene.add(pointLightHelper)
+
+const spotLightHelper = new THREE.SpotLightHelper(spotLight);
+scene.add(spotLightHelper);
+
+window.requestAnimationFrame(() => {
+    spotLightHelper.update()
+});
+
+const rectAreaLightHelper = new RectAreaLightHelper(rectAreaLight);
+scene.add(rectAreaLightHelper)
 
 
 /**
