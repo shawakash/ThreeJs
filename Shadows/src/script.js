@@ -26,6 +26,13 @@ const scene = new THREE.Scene()
  * Maintain the render size for shadow map in lights
 */
 
+/**
+ * Baking
+ */
+
+const textureLoader = new THREE.TextureLoader();
+const bakeTexture = textureLoader.load('textures/bakedShadow.jpg')
+const simpleTexture = textureLoader.load('textures/simpleShadow.jpg')
 
 
 /**
@@ -109,7 +116,7 @@ pointLight.position.set(-1, 1, 0);
 pointLight.shadow.mapSize.width = 1024;
 pointLight.shadow.mapSize.height = 1024;
 pointLight.shadow.camera.near = 0.1;
-pointLight.shadow.camera.far = 3;
+pointLight.shadow.camera.far = 5;
 
 
 scene.add(pointLight);
@@ -121,7 +128,9 @@ scene.add(pointLightCameraHelper);
 pointLightCameraHelper.visible = false;
 
 
-
+/**
+ * Add Bake to texture Not shadows to the lights
+ */
 
 
 /**
@@ -141,14 +150,35 @@ const sphere = new THREE.Mesh(
 );
 sphere.castShadow = true;
 
+// const plane = new THREE.Mesh(
+//     new THREE.PlaneGeometry(5, 5),
+//     new THREE.MeshBasicMaterial({ map: bakeTexture })  // CREATES A STATIC SHADOW I.E. IF YOU MOVE THE SPHERE SHADOW DOEN'T CHANGE
+// )
+
 const plane = new THREE.Mesh(
     new THREE.PlaneGeometry(5, 5),
     material
 )
+
 plane.rotation.x = - Math.PI * 0.5
 plane.position.y = - 0.5
 plane.receiveShadow = true
 scene.add(sphere, plane)
+
+
+const sphereShadow = new THREE.Mesh(
+    new THREE.PlaneGeometry(1.5, 1.5),
+    new THREE.MeshBasicMaterial({
+        color: 0x000000,
+        transparent: true,
+        alphaMap: simpleTexture
+    })
+);
+sphereShadow.rotation.x = - Math.PI * 0.5;
+sphereShadow.position.y = plane.position.y + 0.001 ;
+
+scene.add(sphereShadow);
+
 
 /**
  * Sizes
@@ -194,7 +224,7 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.shadowMap.enabled = true;
+renderer.shadowMap.enabled = false;
 
 // Different Algos. to generate Shadow Maps
 // InCase of PCFSoftShadowMap shadow.radius doesn't works
@@ -208,6 +238,15 @@ const clock = new THREE.Clock()
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
+
+    // update the sphere position
+    sphere.position.x = Math.cos(Math.PI * elapsedTime * 0.5);
+    sphere.position.z = Math.sin(Math.PI * elapsedTime * 0.5);
+    sphere.position.y = Math.abs(Math.sin(Math.PI * elapsedTime * 0.9));
+    
+    sphereShadow.position.x = sphere.position.x;
+    sphereShadow.position.z = sphere.position.z;
+    sphereShadow.material.opacity = (1 - sphere.position.y) * 0.4
 
     // Update controls
     controls.update()
