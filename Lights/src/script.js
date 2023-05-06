@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui'
 
 /**
  * Base
@@ -18,20 +18,23 @@ const scene = new THREE.Scene()
 /**
  * Lights
  */
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.5)
+// Use Ambient Light for bouncing Lights
+const ambientLight = new THREE.AmbientLight()         // omni direstional light --> rays come from <everywhere
+ambientLight.color = new THREE.Color('white');
+ambientLight.intensity = 0.5;
+
+gui.add(ambientLight, 'intensity').min(0).max(1).step(0.00001).name('Light Intensity');
+
 scene.add(ambientLight)
 
-const pointLight = new THREE.PointLight(0xffffff, 0.5)
-pointLight.position.x = 2
-pointLight.position.y = 3
-pointLight.position.z = 4
-scene.add(pointLight)
+
 
 /**
  * Objects
  */
 // Material
-const material = new THREE.MeshStandardMaterial()
+const material = new THREE.MeshStandardMaterial()            // Requires Light
+// material.wireframe = true;
 material.roughness = 0.4
 
 // Objects
