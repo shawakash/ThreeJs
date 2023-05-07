@@ -29,14 +29,30 @@ const house = new THREE.Group();
 scene.add(house);
 
 const walls = new THREE.Mesh(
-    new THREE.BoxGeometry(3, 1.5, 3),
-    new THREE.MeshStandardMaterial()
+    new THREE.BoxGeometry(4, 2.5, 4),
+    new THREE.MeshStandardMaterial({ color: '#ac8e82' })
 );
-walls.position.set(0, 0.75, 0)
+walls.position.set(0, 1.25, 0)
 
 house.add(walls);
 
-const roof = new
+const roof = new THREE.Mesh(
+    new THREE.ConeGeometry(3.5, 1, 4),
+    new THREE.MeshStandardMaterial({ color: '#b35f45' })
+);
+roof.position.y = 1/2 + 2.5;
+roof.rotation.y = Math.PI * 0.25
+
+house.add(roof)
+
+const door = new THREE.Mesh(
+    new THREE.PlaneGeometry(2, 2), 
+    new THREE.MeshStandardMaterial({ color: '#aa7b7b' })
+);
+door.position.y = 1; 
+door.position.z = 4/2 + 0.0001;
+
+house.add(door)
 
 
 // Floor
