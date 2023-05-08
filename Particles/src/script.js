@@ -48,7 +48,7 @@ scene.add(particles)
 
 /**
  *  Random Points -->>>> Custom
-*/ 
+*/
 
 // Particle Material
 const particleMaterial = new THREE.PointsMaterial({
@@ -57,14 +57,15 @@ const particleMaterial = new THREE.PointsMaterial({
 });
 
 
-for (let i = 0; i < 1000; i++) {
-    
+for (let i = 0; i < 3000; i++) {
+
     // Particle Geometry
     const particleGeometry = new THREE.BufferGeometry();
 
     const positionX = (Math.random() - 0.5) * 20;
     const positionY = (Math.random() - 0.5) * 20;
     const positionZ = (Math.random() - 0.5) * 20;
+
     const position = new THREE.Float32BufferAttribute([
         positionX, positionY, positionZ
     ], 3);
@@ -73,6 +74,32 @@ for (let i = 0; i < 1000; i++) {
     const particle = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particle)
 }
+
+//  || Alternative to up
+
+/**
+ * const particleGeometry = new THREE.BufferGeometry();
+ * const count = 5000;
+ * const positions = new Float32Array(count * 3);
+ * 
+ * for(let i=0; i< count * 3; i++) {
+ *      positions[i] = (Math.random() - 0.5) * 20;
+ * }
+ * 
+ * particleGeometry.setAttribute(
+ *      'position', 
+ *      new THREE.Float32BufferAttribute(positions, 3)
+ * );
+ * 
+ * const particleMaterial = new THREE.PointsMaterial({
+ *      sizes: 0.02,
+ *      sizeAttenuation: true
+ * });
+ * 
+ * const particle = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particle);
+ */
+
 
 
 
