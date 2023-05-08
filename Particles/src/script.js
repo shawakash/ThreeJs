@@ -26,7 +26,8 @@ const scene = new THREE.Scene()
 /**
  * Textures
  */
-const textureLoader = new THREE.TextureLoader()
+const textureLoader = new THREE.TextureLoader();
+const particleTexture = textureLoader.load('textures/particles/9.png');
 
 /**
  * Particles
@@ -38,12 +39,34 @@ const particlesGeometry = new THREE.SphereGeometry(1, 32, 32);
 // Particle Material
 const particlesMaterial = new THREE.PointsMaterial({
     size: 0.02,              // for particle pixel
-    sizeAttenuation: true   // for particles to be perspective
+    sizeAttenuation: true,   // for particles to be perspective
+    transparent: true,
+    alphaMap: particleTexture,
+    color: 'pink'
 });
+
+// particlesMaterial.alphaTest = 0.001;
+// When drawing WebGl Tests if what's being drawn is closer than what's already drawn
+// This deactivates the alphaTest
+
+particlesMaterial.depthTest = false;
+
+// Depth testing is not a good solution as when geometries of other colors are added it makes it look like transparent making the particle behind it visible
+
 
 // Particle Mesh --> .Point
 const particles = new THREE.Points(particlesGeometry, particlesMaterial);
 scene.add(particles)
+
+
+/**
+ * Multiple Render of a Particles confuses the Webgl which one was created first,
+ * as a result of which some particle allows transparency whereas some doesn't
+ * Gpu is fine here
+ * 
+ * *** To fix this we use Alpha Test
+ */
+
 
 
 /**
@@ -52,19 +75,24 @@ scene.add(particles)
 
 // Particle Material
 const particleMaterial = new THREE.PointsMaterial({
-    size: 0.02,
-    sizeAttenuation: true
+    size: 0.05,
+    sizeAttenuation: true,
+    transparent: true,
+    alphaMap: particleTexture,
+    color: 'cyan'
 });
 
+particleMaterial.alphaTest = 0.001;
 
-for (let i = 0; i < 3000; i++) {
+
+for (let i = 0; i < 30000; i++) {
 
     // Particle Geometry
     const particleGeometry = new THREE.BufferGeometry();
 
-    const positionX = (Math.random() - 0.5) * 20;
-    const positionY = (Math.random() - 0.5) * 20;
-    const positionZ = (Math.random() - 0.5) * 20;
+    const positionX = (Math.random() - 0.5) * 300;
+    const positionY = (Math.random() - 0.5) * 300;
+    const positionZ = (Math.random() - 0.5) * 300;
 
     const position = new THREE.Float32BufferAttribute([
         positionX, positionY, positionZ
