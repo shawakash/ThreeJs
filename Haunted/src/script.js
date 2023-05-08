@@ -24,7 +24,14 @@ scene.fog = fog;
 /**
  * Textures
  */
-const textureLoader = new THREE.TextureLoader()
+const textureLoader = new THREE.TextureLoader();
+const doorAlpha = textureLoader.load('textures/door/alpha.jpg');
+const doorAmbient = textureLoader.load('textures/door/ambientOcclusion.jpg');
+const doorColor = textureLoader.load('textures/door/color.jpg');
+const doorHeight = textureLoader.load('textures/door/height.jpg');
+const doorMetalness = textureLoader.load('textures/door/metalness.jpg');
+const doorNormal = textureLoader.load('textures/door/normal.jpg');
+const doorRoughness = textureLoader.load('textures/door/roughness.jpg');
 
 
 /**
@@ -46,17 +53,33 @@ const roof = new THREE.Mesh(
     new THREE.ConeGeometry(3.5, 1, 4),
     new THREE.MeshStandardMaterial({ color: '#b35f45' })
 );
-roof.position.y = 1/2 + 2.5;
+roof.position.y = 1 / 2 + 2.5;
 roof.rotation.y = Math.PI * 0.25
 
 house.add(roof)
 
 const door = new THREE.Mesh(
-    new THREE.PlaneGeometry(2, 2), 
-    new THREE.MeshStandardMaterial({ color: '#aa7b7b' })
+    new THREE.PlaneGeometry(2, 2, 100, 100),
+    new THREE.MeshStandardMaterial({
+        map: doorColor,
+        aoMap: doorAmbient,
+        transparent: true,
+        alphaMap: doorAlpha,
+        metalnessMap: doorMetalness,
+        normalMap: doorNormal,
+        displacementMap: doorHeight,
+        displacementScale: 0.1,
+        roughnessMap: doorRoughness
+    })
 );
-door.position.y = 1; 
-door.position.z = 4/2 + 0.0001;
+door.geometry.setAttribute(
+        'uv2',
+        new THREE.Float16BufferAttribute(door.geometry.attributes.uv.array,
+        2
+    )
+);
+door.position.y = 0.95;
+door.position.z = 4 / 2 + 0.0001;
 
 house.add(door)
 
@@ -91,7 +114,7 @@ scene.add(graves);
 const graveGeometry = new THREE.BoxGeometry(0.6, 0.8, 0.2);
 const graveMaterial = new THREE.MeshStandardMaterial({ color: '#b2b6b1' });
 
-for(let i=0; i<50; i++) {
+for (let i = 0; i < 50; i++) {
     const angle = Math.random() * Math.PI * 2;
     const radius = 4 + 5 * Math.random();
     const z = radius * Math.cos(angle) - 0.0001;
@@ -145,8 +168,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -189,8 +211,7 @@ renderer.setClearColor('#262837');   // Makes the color to be visible all around
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update controls
