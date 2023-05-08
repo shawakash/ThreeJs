@@ -1,7 +1,15 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui'
+
+/**
+ * Particles
+ * Each Particles is composed of two triangles always facing the cameras
+ * Star Smoke Rain Dust Fire can be created with particles
+ * Making is similar to mesh 
+ */
+
 
 /**
  * Base
@@ -21,13 +29,53 @@ const scene = new THREE.Scene()
 const textureLoader = new THREE.TextureLoader()
 
 /**
- * Test cube
+ * Particles
  */
-const cube = new THREE.Mesh(
-    new THREE.BoxGeometry(1, 1, 1),
-    new THREE.MeshBasicMaterial()
-)
-scene.add(cube)
+
+// Geometry
+const particlesGeometry = new THREE.SphereGeometry(1, 32, 32);
+
+// Particle Material
+const particlesMaterial = new THREE.PointsMaterial({
+    size: 0.02,              // for particle pixel
+    sizeAttenuation: true   // for particles to be perspective
+});
+
+// Particle Mesh --> .Point
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+scene.add(particles)
+
+
+/**
+ *  Random Points -->>>> Custom
+*/ 
+
+// Particle Material
+const particleMaterial = new THREE.PointsMaterial({
+    size: 0.02,
+    sizeAttenuation: true
+});
+
+
+for (let i = 0; i < 1000; i++) {
+    
+    // Particle Geometry
+    const particleGeometry = new THREE.BufferGeometry();
+
+    const positionX = (Math.random() - 0.5) * 20;
+    const positionY = (Math.random() - 0.5) * 20;
+    const positionZ = (Math.random() - 0.5) * 20;
+    const position = new THREE.Float32BufferAttribute([
+        positionX, positionY, positionZ
+    ], 3);
+
+    particleGeometry.setAttribute('position', position);
+    const particle = new THREE.Points(particleGeometry, particleMaterial);
+    scene.add(particle)
+}
+
+
+
 
 /**
  * Sizes
@@ -37,8 +85,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -78,8 +125,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update controls
