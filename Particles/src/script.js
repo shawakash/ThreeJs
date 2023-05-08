@@ -49,9 +49,14 @@ const particlesMaterial = new THREE.PointsMaterial({
 // When drawing WebGl Tests if what's being drawn is closer than what's already drawn
 // This deactivates the alphaTest
 
-particlesMaterial.depthTest = false;
+// particlesMaterial.depthTest = false;
 
 // Depth testing is not a good solution as when geometries of other colors are added it makes it look like transparent making the particle behind it visible
+
+// The depth of what being drawn is stored in depth buffer.
+// Instead of not testing if the particle is close than what is in depth buffer we can tell WebGl not to write particle in that depth buffer with depth test
+
+particlesMaterial.depthWrite = false;
 
 
 // Particle Mesh --> .Point
