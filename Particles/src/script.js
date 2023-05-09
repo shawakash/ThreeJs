@@ -179,8 +179,10 @@ const tick = () => {
 
     // Update Particle
     // particle.rotation.y = elapsedTime * 0.02
-    for(let i=0; i<count * 3; i+=3) {
 
+    // This Technique consumes a lot of work of gpu. We would see a better approach
+    // I.E. By custom Shaders
+    for(let i=0; i<count * 3; i+=3) {
         const x = particleGeometry.attributes.position.array[i + 0]; 
         particleGeometry.attributes.position.array[i + 1] = Math.sin(elapsedTime + x)
 
