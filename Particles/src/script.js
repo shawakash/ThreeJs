@@ -27,7 +27,7 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader();
-const particleTexture = textureLoader.load('textures/particles/9.png');
+const particleTexture = textureLoader.load('textures/particles/2.png');
 
 /**
  * Particles
@@ -50,6 +50,11 @@ const particlesMaterial = new THREE.PointsMaterial({
 // This deactivates the alphaTest
 
 // particlesMaterial.depthTest = false;
+
+// This add the color of pixel to the pixel already created;
+// is usefull to create sparkels;
+particlesMaterial.blending = THREE.AdditiveBlending;
+
 
 // Depth testing is not a good solution as when geometries of other colors are added it makes it look like transparent making the particle behind it visible
 
@@ -84,26 +89,35 @@ const particleMaterial = new THREE.PointsMaterial({
     sizeAttenuation: true,
     transparent: true,
     alphaMap: particleTexture,
-    color: 'cyan'
 });
 
-particleMaterial.alphaTest = 0.001;
-
+particleMaterial.depthWrite = false;
+particleMaterial.blending = true;
+// For color attribute to work
+particleMaterial.vertexColors = true;
 
 for (let i = 0; i < 30000; i++) {
 
     // Particle Geometry
     const particleGeometry = new THREE.BufferGeometry();
 
-    const positionX = (Math.random() - 0.5) * 300;
-    const positionY = (Math.random() - 0.5) * 300;
-    const positionZ = (Math.random() - 0.5) * 300;
+    const positionX = (Math.random() - 0.5) * 10;
+    const positionY = (Math.random() - 0.5) * 10;
+    const positionZ = (Math.random() - 0.5) * 10;
+    const RColor = Math.random();
+    const GColor = Math.random();
+    const BColor = Math.random();
+
+    const color = new THREE.Float32BufferAttribute([
+        RColor, BColor, GColor
+    ], 3)
 
     const position = new THREE.Float32BufferAttribute([
         positionX, positionY, positionZ
     ], 3);
 
     particleGeometry.setAttribute('position', position);
+    particleGeometry.setAttribute('color', color);
     const particle = new THREE.Points(particleGeometry, particleMaterial);
     scene.add(particle)
 }
