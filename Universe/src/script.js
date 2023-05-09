@@ -7,7 +7,7 @@ import * as dat from 'dat.gui'
  * Base
  */
 // Debug
-const gui = new dat.GUI()
+const gui = new dat.GUI({ width: 400 })
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -21,9 +21,6 @@ const scene = new THREE.Scene()
 const parameters = {};
 parameters.count = 40000;
 parameters.size = 0.02;
-gui.add(parameters, 'count').min(20000).max(40000).step(1).name('Particles Count');
-gui.add(parameters, 'size').min(20000).max(40000).step(1).name('Particles Size');
-
 
 const generateGalaxy = () => {
 
@@ -31,35 +28,49 @@ const generateGalaxy = () => {
      * Particles Geometry
      */
     const particlesGeometry = new THREE.BufferGeometry();
-    
+
     const positions = new Float32Array(parameters.count * 3);
-    
-    for (let i = 0; i < parameters.count; i+=3) {
-        positions[i+0] = (Math.random() - 0.5) * 500;
-        positions[i+1] = (Math.random() - 0.5) * 500;
-        positions[i+2] = (Math.random() - 0.5) * 500;
+
+    for (let i = 0; i < parameters.count; i += 3) {
+        positions[i + 0] = (Math.random() - 0.5) * 500;
+        positions[i + 1] = (Math.random() - 0.5) * 500;
+        positions[i + 2] = (Math.random() - 0.5) * 500;
     }
-    
+
     particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
 
     /**
      * Particles Material
-     */
+    */
     const particlesMaterial = new THREE.PointsMaterial({
         size: parameters.size,
         sizeAttenuation: true,
         depthWrite: true,
         blending: THREE.AdditiveBlending
     });
-    
+
 
     /**
      * Particles
-     */
+    */
     const particles = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particles);
 
 }
+gui
+    .add(parameters, 'count')
+    .min(200)
+    .max(40000)
+    .step(100)
+    .name('Particles Count')
+    .onFinishChange(generateGalaxy);
+gui
+    .add(parameters, 'size')
+    .min(0.02)
+    .max(4)
+    .step(0.0001)
+    .name('Particles Size')
+    .onFinishChange(generateGalaxy);
 
 
 generateGalaxy();
