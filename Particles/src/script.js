@@ -92,60 +92,32 @@ const particleMaterial = new THREE.PointsMaterial({
 });
 
 particleMaterial.depthWrite = false;
-particleMaterial.blending = true;
+particleMaterial.blending = THREE.AdditiveBlending;
 // For color attribute to work
 particleMaterial.vertexColors = true;
 
-for (let i = 0; i < 30000; i++) {
+// Particle Geometry
+const particleGeometry = new THREE.BufferGeometry();
 
-    // Particle Geometry
-    const particleGeometry = new THREE.BufferGeometry();
+const count = 30000;
+const positions = new Float32Array(count * 3);
+const colors = new Float32Array(count * 3);
 
-    const positionX = (Math.random() - 0.5) * 10;
-    const positionY = (Math.random() - 0.5) * 10;
-    const positionZ = (Math.random() - 0.5) * 10;
-    const RColor = Math.random();
-    const GColor = Math.random();
-    const BColor = Math.random();
-
-    const color = new THREE.Float32BufferAttribute([
-        RColor, BColor, GColor
-    ], 3)
-
-    const position = new THREE.Float32BufferAttribute([
-        positionX, positionY, positionZ
-    ], 3);
-
-    particleGeometry.setAttribute('position', position);
-    particleGeometry.setAttribute('color', color);
-    const particle = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particle)
+for (let i = 0; i < count *3; i++) {
+    positions[i] = (Math.random() - 0.5) * 10;
+    colors[i] = Math.random();
 }
 
-//  || Alternative to up
 
-/**
- * const particleGeometry = new THREE.BufferGeometry();
- * const count = 5000;
- * const positions = new Float32Array(count * 3);
- * 
- * for(let i=0; i< count * 3; i++) {
- *      positions[i] = (Math.random() - 0.5) * 20;
- * }
- * 
- * particleGeometry.setAttribute(
- *      'position', 
- *      new THREE.Float32BufferAttribute(positions, 3)
- * );
- * 
- * const particleMaterial = new THREE.PointsMaterial({
- *      sizes: 0.02,
- *      sizeAttenuation: true
- * });
- * 
- * const particle = new THREE.Points(particleGeometry, particleMaterial);
-    scene.add(particle);
- */
+const color = new THREE.Float32BufferAttribute(colors, 3)
+
+const position = new THREE.Float32BufferAttribute(positions, 3);
+
+particleGeometry.setAttribute('position', position);
+particleGeometry.setAttribute('color', color);
+const particle = new THREE.Points(particleGeometry, particleMaterial);
+scene.add(particle)
+
 
 
 
@@ -205,6 +177,15 @@ const tick = () => {
     // Update controls
     controls.update()
 
+    // Update Particle
+    // particle.rotation.y = elapsedTime * 0.02
+    for(let i=0; i<count * 3; i+=3) {
+
+        const x = particleGeometry.attributes.position.array[i + 0]; 
+        particleGeometry.attributes.position.array[i + 1] = Math.sin(elapsedTime + x)
+
+    }
+    particleGeometry.attributes.position.needsUpdate = true
     // Render
     renderer.render(scene, camera)
 
