@@ -67,7 +67,7 @@ const intersect = raycaster.intersectObject(object1);    // to test if the ray i
 // Returns an array as it can intersect a same object twice, e.g. torus
 // console.log(intersect);
 
-const intersects =  raycaster.intersectObjects([object1, object2, object3])  // to test multiple objects 
+const intersects = raycaster.intersectObjects([object1, object2, object3])  // to test multiple objects 
 // Takes an array
 // returns a empty array if it doesn't intersects
 // console.log(intersects);
@@ -84,11 +84,31 @@ const sizes = {
 const mouse = new THREE.Vector2();
 
 window.addEventListener('mousemove', (e) => {
-    mouse.set((e.clientX / sizes.width) * 2 - 1, 1 - (e.clientY / sizes.height) * 2 );
+    mouse.set((e.clientX / sizes.width) * 2 - 1, 1 - (e.clientY / sizes.height) * 2);
+});
+
+
+window.addEventListener('click', (e) => {
+    if (currentInterset) {
+        switch (currentInterset.object) {
+            case object1:
+                console.log('object1 is clicked');
+                break;
+            case object2:
+                console.log('object2 is clicked');
+                break;
+            case object3:
+                console.log('object3 is clicked');
+                break;
+            default:
+                console.log('Sphere is clicked');
+                break;
+        }
+    }
 })
 
-window.addEventListener('resize', () =>
-{
+
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -126,41 +146,61 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
-const clock = new THREE.Clock()
+const clock = new THREE.Clock();
 
-const tick = () =>
-{
+let currentInterset = null;
+
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Animate Object
-    object1.position.y = Math.sin(elapsedTime * 3.3 + object1.position.x) * 2;
-    object2.position.y = Math.sin(elapsedTime * 3.3 + object2.position.x) * 2;
-    object3.position.y = Math.sin(elapsedTime * 3.3 + object3.position.x) * 2;
+    object1.position.y = Math.sin(elapsedTime * .3 + object1.position.x) * 2;
+    object2.position.y = Math.sin(elapsedTime * .3 + object2.position.x) * 2;
+    object3.position.y = Math.sin(elapsedTime * .3 + object3.position.x) * 2;
 
     // raycaster
+
+    raycaster.setFromCamera(mouse, camera);   // orients the ray in the direction of coordinates otherwise tan etc
+    // in this case ray is parallel form camera to mouse coordinates
+
     // const rayOrigin = new THREE.Vector3(-3, 0, 0);
     // const rayDirection = new THREE.Vector3(1, 0, 0);
     // rayDirection.normalize();
 
     // raycaster.set(rayOrigin, rayDirection);
 
-    // const testObject = [
-    //     object1,
-    //     object2,
-    //     object3
-    // ];
+    const testObject = [
+        object1,
+        object2,
+        object3
+    ];
 
-    // const intersects = raycaster.intersectObjects(testObject);
+    const intersects = raycaster.intersectObjects(testObject);
+    // In case of multiple intersect the one closure is selected first
 
-    // testObject.forEach(object => {
-    //     object.material.color.set('red');
-    //     object.material.wireframe = false;
-    // });
+    testObject.forEach(object => {
+        object.material.color.set('red');
+        object.material.wireframe = false;
+    });
 
-    // intersects.forEach(intersect => {
-    //     intersect.object.material.wireframe = true;             // Applied to all as at start it was all at origin so we didn't set it back
-    //     intersect.object.material.color.set('cyan');    
-    // });
+    intersects.forEach(intersect => {
+        intersect.object.material.wireframe = true;             // Applied to all as at start it was all at origin so we didn't set it back
+        intersect.object.material.color.set('cyan');
+    });
+
+    if (intersects.length) {
+        if (currentInterset == null) {
+            console.log('mouse enter');
+        }
+        currentInterset = intersects[0];
+    } else {
+        if (currentInterset != null) {
+            console.log('mouse leave')
+        }
+        currentInterset = null;
+    }
+
+
 
     // Update controls
     controls.update()
