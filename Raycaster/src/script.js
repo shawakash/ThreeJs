@@ -58,7 +58,17 @@ const rayDirection = new THREE.Vector3(10, 0, 0);
 rayDirection.normalize();                  //  --->>>> Most important  , takes a unit vector
 
 raycaster.set(rayOrigin, rayDirection)
-console.log(raycaster)
+// console.log(raycaster)
+
+const intersect = raycaster.intersectObject(object1);    // to test if the ray intersect one object
+// returns a empty array if it doesn't intersects
+// Returns an array as it can intersect a same object twice, e.g. torus
+// console.log(intersect);
+
+const intersects =  raycaster.intersectObjects([object1, object2, object3])  // to test multiple objects 
+// Takes an array
+// returns a empty array if it doesn't intersects
+// console.log(intersects);
 
 
 /**
@@ -113,6 +123,36 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Animate Object
+    object1.position.y = Math.sin(elapsedTime * 3.3 + object1.position.x) * 2;
+    object2.position.y = Math.sin(elapsedTime * 3.3 + object2.position.x) * 2;
+    object3.position.y = Math.sin(elapsedTime * 3.3 + object3.position.x) * 2;
+
+    // raycaster
+    const rayOrigin = new THREE.Vector3(-3, 0, 0);
+    const rayDirection = new THREE.Vector3(1, 0, 0);
+    rayDirection.normalize();
+
+    raycaster.set(rayOrigin, rayDirection);
+
+    const testObject = [
+        object1,
+        object2,
+        object3
+    ];
+
+    const intersects = raycaster.intersectObjects(testObject);
+
+    testObject.forEach(object => {
+        object.material.color.set('red');
+        object.material.wireframe = false;
+    });
+
+    intersects.forEach(intersect => {
+        intersect.object.material.wireframe = true;             // Applied to all as at start it was all at origin so we didn't set it back
+        intersect.object.material.color.set('cyan');    
+    });
 
     // Update controls
     controls.update()
