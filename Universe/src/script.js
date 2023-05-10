@@ -28,24 +28,19 @@ parameters.randomness = 0.343;
 parameters.randomnessPow = 4;
 parameters.insideColor = '#3fd7fd';
 parameters.outsideColor = '#1a3047';
+parameters.universeCount = 100000;
+parameters.universeSize = 0.002;
 
 let particlesGeometry = null;
 let particlesMaterial = null;
 let particles = null;
 
 
-let universeGeometry = null;
-let universeMaterial = null;
-let universe = null;
 
 
-
-
-const generateGalaxy = () =>
-{
+const generateGalaxy = () => {
     // Destroy old galaxy
-    if(particles !== null)
-    {
+    if (particles !== null) {
         particlesGeometry.dispose()
         particlesMaterial.dispose()
         scene.remove(particles)
@@ -55,7 +50,7 @@ const generateGalaxy = () =>
      * particlesGeometry
      */
     particlesGeometry = new THREE.BufferGeometry()
-    universeGeometry = new THREE.BufferGeometry()
+
 
     const positions = new Float32Array(parameters.count * 3)
     const colors = new Float32Array(parameters.count * 3)
@@ -63,8 +58,7 @@ const generateGalaxy = () =>
     const colorInside = new THREE.Color(parameters.insideColor)
     const colorOutside = new THREE.Color(parameters.outsideColor)
 
-    for(let i = 0; i < parameters.count; i++)
-    {
+    for (let i = 0; i < parameters.count; i++) {
         // Position
         const i3 = i * 3
 
@@ -72,7 +66,7 @@ const generateGalaxy = () =>
 
         const spinAngle = radius * parameters.spin
         const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
-        
+
         const randomX = Math.pow(Math.random(), parameters.randomnessPow) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
         const randomY = Math.pow(Math.random(), parameters.randomnessPow) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
         const randomZ = Math.pow(Math.random(), parameters.randomnessPow) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
@@ -81,10 +75,11 @@ const generateGalaxy = () =>
         positions[i3 + 1] = randomY
         positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
 
+
         // Color
         const mixedColor = colorInside.clone()
         mixedColor.lerp(colorOutside, radius / parameters.radius)
-        
+
         colors[i3 + 0] = mixedColor.r
         colors[i3 + 1] = mixedColor.g
         colors[i3 + 2] = mixedColor.b
@@ -95,7 +90,7 @@ const generateGalaxy = () =>
 
     /**
      * Material
-     */
+    */
     particlesMaterial = new THREE.PointsMaterial({
         size: parameters.size,
         sizeAttenuation: true,
@@ -104,12 +99,54 @@ const generateGalaxy = () =>
         vertexColors: true
     })
 
+
     /**
      * Points
-     */
+    */
     particles = new THREE.Points(particlesGeometry, particlesMaterial)
     scene.add(particles)
+
 }
+
+
+
+
+/**
+ * Universe
+*/
+
+let universeGeometry = null;
+let universeMaterial = null;
+let universe = null;
+
+const generateUniverse = () => {
+
+    if(universe != null) {
+        universeGeometry = null;
+        universeMaterial = null;
+        scene.remove(universe);
+    }
+
+    universeGeometry = new THREE.BufferGeometry()
+    const universePositions = new Float32Array(parameters.count * 3)
+    for (let i = 0; i < parameters.universeCount; i++) {
+
+        universePositions[i + 0] = (Math.random() - 0.5) * 500;
+        universePositions[i + 1] = (Math.random() - 0.5) * 500;
+        universePositions[i + 2] = (Math.random() - 0.5) * 500;
+    }
+
+    universeGeometry.setAttribute('position', new THREE.Float32BufferAttribute(universePositions, 3))
+    universeMaterial = new THREE.PointsMaterial({
+        size: parameters.universeSize,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+    })
+    universe = new THREE.Points(universeGeometry, universeMaterial);
+    scene.add(universe)
+}
+
 gui
     .add(parameters, 'count')
     .min(200)
@@ -133,7 +170,7 @@ gui
     .name('Galaxy Radius')
     .onFinishChange(generateGalaxy);
 
-    gui
+gui
     .add(parameters, 'spin')
     .min(0.01)
     .max(20)
@@ -171,7 +208,25 @@ gui
     .onFinishChange(generateGalaxy);
 
 
+gui
+    .add(parameters, 'universeCount')
+    .min(100000)
+    .max(1000000)
+    .step(1)
+    .name('Universe Count')
+    .onFinishChange(generateUniverse);
+gui
+    .add(parameters, 'universeSize')
+    .min(0.0001)
+    .max(3)
+    .step(0.0001)
+    .name('Universe Size')
+    .onFinishChange(generateUniverse);
+
+
+generateUniverse();
 generateGalaxy();
+
 
 
 /**
