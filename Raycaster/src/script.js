@@ -1,3 +1,5 @@
+'use strict'
+
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -14,6 +16,13 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+/**
+ * Raycaster casts an ray in a specific direction and test what objects intersects it
+ * detect if a gun points to a direction hits the target
+ * an spaceship is reaching a planet
+ */
+
 
 /**
  * Objects
@@ -36,6 +45,21 @@ const object3 = new THREE.Mesh(
 object3.position.x = 2
 
 scene.add(object1, object2, object3)
+
+/**
+ * Raycaster
+ * 
+ */
+
+
+const raycaster = new THREE.Raycaster() // tAKES AN ORIGIN AND A DIRECTION
+const rayOrigin = new THREE.Vector3(-3, 0, 0);
+const rayDirection = new THREE.Vector3(10, 0, 0);
+rayDirection.normalize();                  //  --->>>> Most important  , takes a unit vector
+
+raycaster.set(rayOrigin, rayDirection)
+console.log(raycaster)
+
 
 /**
  * Sizes
