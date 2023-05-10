@@ -1,7 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'dat.gui'
+import * as dat from 'lil-gui'
 
 /**
  * Base
@@ -19,71 +19,96 @@ const scene = new THREE.Scene()
  * Generate Galaxy
  */
 const parameters = {};
-parameters.count = 40000;
-parameters.size = 0.02;
+parameters.count = 100000;
+parameters.size = 0.0002;
 parameters.radius = 5;
 parameters.branches = 3;
+parameters.spin = 1
+parameters.randomness = 0.343;
+parameters.randomnessPow = 4;
+parameters.insideColor = '#3fd7fd';
+parameters.outsideColor = '#1a3047';
 
 let particlesGeometry = null;
 let particlesMaterial = null;
 let particles = null;
 
 
-const generateGalaxy = () => {
+let universeGeometry = null;
+let universeMaterial = null;
+let universe = null;
 
-    /***
-     *  To destroy old galaxy before creating a new one for to optimize gpu
-     */
 
-    if (particles != null) {
-        particlesGeometry = null;
-        particlesMaterial = null;
-        scene.remove(particles);
+
+
+const generateGalaxy = () =>
+{
+    // Destroy old galaxy
+    if(particles !== null)
+    {
+        particlesGeometry.dispose()
+        particlesMaterial.dispose()
+        scene.remove(particles)
     }
 
     /**
-     * Particles Geometry
+     * particlesGeometry
      */
-    particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry = new THREE.BufferGeometry()
+    universeGeometry = new THREE.BufferGeometry()
 
-    const positions = new Float32Array(parameters.count * 3);
+    const positions = new Float32Array(parameters.count * 3)
+    const colors = new Float32Array(parameters.count * 3)
 
+    const colorInside = new THREE.Color(parameters.insideColor)
+    const colorOutside = new THREE.Color(parameters.outsideColor)
 
-    /**
-     * Branches
-     */
-    let branchAngle = 0;
+    for(let i = 0; i < parameters.count; i++)
+    {
+        // Position
+        const i3 = i * 3
 
-    for (let branch = 0; branch < parameters.branches; branch++) {
-        branchAngle += Math.PI * (2 / 3);
+        const radius = Math.random() * parameters.radius
 
-        for (let i = 0; i < parameters.count; i += 3) {
-            const radius = Math.random() * parameters.radius;
-            positions[i + 0] = radius * Math.cos(radius) ;
-            positions[i + 1] = radius * Math.sin(radius);
-            positions[i + 2] = radius * 0.4;
-        }
-
-        particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-        /**
-         * Particles Material
-        */
-        particlesMaterial = new THREE.PointsMaterial({
-            size: parameters.size,
-            sizeAttenuation: true,
-            depthWrite: true,
-            blending: THREE.AdditiveBlending
-        });
-
-
-        /**
-         * Particles
-        */
-        particles = new THREE.Points(particlesGeometry, particlesMaterial);
-        particles.rotation.z = branchAngle;
+        const spinAngle = radius * parameters.spin
+        const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
         
-        scene.add(particles);
+        const randomX = Math.pow(Math.random(), parameters.randomnessPow) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
+        const randomY = Math.pow(Math.random(), parameters.randomnessPow) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
+        const randomZ = Math.pow(Math.random(), parameters.randomnessPow) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
+
+        positions[i3 + 0] = Math.cos(branchAngle + spinAngle) * radius + randomX
+        positions[i3 + 1] = randomY
+        positions[i3 + 2] = Math.sin(branchAngle + spinAngle) * radius + randomZ
+
+        // Color
+        const mixedColor = colorInside.clone()
+        mixedColor.lerp(colorOutside, radius / parameters.radius)
+        
+        colors[i3 + 0] = mixedColor.r
+        colors[i3 + 1] = mixedColor.g
+        colors[i3 + 2] = mixedColor.b
     }
+
+    particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3))
+    particlesGeometry.setAttribute('color', new THREE.Float32BufferAttribute(colors, 3))
+
+    /**
+     * Material
+     */
+    particlesMaterial = new THREE.PointsMaterial({
+        size: parameters.size,
+        sizeAttenuation: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexColors: true
+    })
+
+    /**
+     * Points
+     */
+    particles = new THREE.Points(particlesGeometry, particlesMaterial)
+    scene.add(particles)
 }
 gui
     .add(parameters, 'count')
@@ -94,7 +119,7 @@ gui
     .onFinishChange(generateGalaxy);
 gui
     .add(parameters, 'size')
-    .min(0.02)
+    .min(0.00002)
     .max(4)
     .step(0.0001)
     .name('Particles Size')
@@ -107,12 +132,42 @@ gui
     .step(0.001)
     .name('Galaxy Radius')
     .onFinishChange(generateGalaxy);
+
+    gui
+    .add(parameters, 'spin')
+    .min(0.01)
+    .max(20)
+    .step(0.001)
+    .name('Galaxy Spin')
+    .onFinishChange(generateGalaxy);
 gui
     .add(parameters, 'branches')
     .min(2)
     .max(20)
     .step(1)
     .name('Galaxy Branches')
+    .onFinishChange(generateGalaxy);
+gui
+    .add(parameters, 'randomness')
+    .min(0)
+    .max(1)
+    .step(0.001)
+    .name('Galaxy  Random')
+    .onFinishChange(generateGalaxy);
+gui
+    .add(parameters, 'randomnessPow')
+    .min(0)
+    .max(10)
+    .step(0.001)
+    .name('Galaxy  Random Power')
+    .onFinishChange(generateGalaxy);
+gui
+    .addColor(parameters, 'insideColor')
+    .name('Galaxy Inside Color')
+    .onFinishChange(generateGalaxy);
+gui
+    .addColor(parameters, 'outsideColor')
+    .name('Galaxy Outside Color')
     .onFinishChange(generateGalaxy);
 
 
