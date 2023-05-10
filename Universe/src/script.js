@@ -22,19 +22,34 @@ const parameters = {};
 parameters.count = 40000;
 parameters.size = 0.02;
 
+let particlesGeometry = null; 
+let particlesMaterial = null; 
+let particles = null; 
+
+
 const generateGalaxy = () => {
+
+    /***
+     *  To destroy old galaxy before creating a new one for to optimize gpu
+     */
+
+    if(particles != null) {
+        particlesGeometry = null;
+        particlesMaterial = null;
+        scene.remove(particles);
+    }
 
     /**
      * Particles Geometry
      */
-    const particlesGeometry = new THREE.BufferGeometry();
+    particlesGeometry = new THREE.BufferGeometry();
 
     const positions = new Float32Array(parameters.count * 3);
 
     for (let i = 0; i < parameters.count; i += 3) {
-        positions[i + 0] = (Math.random() - 0.5) * 500;
-        positions[i + 1] = (Math.random() - 0.5) * 500;
-        positions[i + 2] = (Math.random() - 0.5) * 500;
+        positions[i + 0] = (Math.random() - 0.5) * 50;
+        positions[i + 1] = (Math.random() - 0.5) * 50;
+        positions[i + 2] = (Math.random() - 0.5) * 50;
     }
 
     particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
@@ -42,7 +57,7 @@ const generateGalaxy = () => {
     /**
      * Particles Material
     */
-    const particlesMaterial = new THREE.PointsMaterial({
+    particlesMaterial = new THREE.PointsMaterial({
         size: parameters.size,
         sizeAttenuation: true,
         depthWrite: true,
@@ -53,14 +68,14 @@ const generateGalaxy = () => {
     /**
      * Particles
     */
-    const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+    particles = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particles);
 
 }
 gui
     .add(parameters, 'count')
     .min(200)
-    .max(40000)
+    .max(4000000)
     .step(100)
     .name('Particles Count')
     .onFinishChange(generateGalaxy);
