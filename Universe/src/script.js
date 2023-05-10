@@ -21,10 +21,12 @@ const scene = new THREE.Scene()
 const parameters = {};
 parameters.count = 40000;
 parameters.size = 0.02;
+parameters.radius = 5;
+parameters.branches = 3;
 
-let particlesGeometry = null; 
-let particlesMaterial = null; 
-let particles = null; 
+let particlesGeometry = null;
+let particlesMaterial = null;
+let particles = null;
 
 
 const generateGalaxy = () => {
@@ -33,7 +35,7 @@ const generateGalaxy = () => {
      *  To destroy old galaxy before creating a new one for to optimize gpu
      */
 
-    if(particles != null) {
+    if (particles != null) {
         particlesGeometry = null;
         particlesMaterial = null;
         scene.remove(particles);
@@ -46,31 +48,42 @@ const generateGalaxy = () => {
 
     const positions = new Float32Array(parameters.count * 3);
 
-    for (let i = 0; i < parameters.count; i += 3) {
-        positions[i + 0] = (Math.random() - 0.5) * 50;
-        positions[i + 1] = (Math.random() - 0.5) * 50;
-        positions[i + 2] = (Math.random() - 0.5) * 50;
+
+    /**
+     * Branches
+     */
+    let branchAngle = 0;
+
+    for (let branch = 0; branch < parameters.branches; branch++) {
+        branchAngle += Math.PI * (2 / 3);
+
+        for (let i = 0; i < parameters.count; i += 3) {
+            const radius = Math.random() * parameters.radius;
+            positions[i + 0] = radius * Math.cos(radius) ;
+            positions[i + 1] = radius * Math.sin(radius);
+            positions[i + 2] = radius * 0.4;
+        }
+
+        particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+        /**
+         * Particles Material
+        */
+        particlesMaterial = new THREE.PointsMaterial({
+            size: parameters.size,
+            sizeAttenuation: true,
+            depthWrite: true,
+            blending: THREE.AdditiveBlending
+        });
+
+
+        /**
+         * Particles
+        */
+        particles = new THREE.Points(particlesGeometry, particlesMaterial);
+        particles.rotation.z = branchAngle;
+        
+        scene.add(particles);
     }
-
-    particlesGeometry.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-
-    /**
-     * Particles Material
-    */
-    particlesMaterial = new THREE.PointsMaterial({
-        size: parameters.size,
-        sizeAttenuation: true,
-        depthWrite: true,
-        blending: THREE.AdditiveBlending
-    });
-
-
-    /**
-     * Particles
-    */
-    particles = new THREE.Points(particlesGeometry, particlesMaterial);
-    scene.add(particles);
-
 }
 gui
     .add(parameters, 'count')
@@ -85,6 +98,21 @@ gui
     .max(4)
     .step(0.0001)
     .name('Particles Size')
+    .onFinishChange(generateGalaxy);
+
+gui
+    .add(parameters, 'radius')
+    .min(0.01)
+    .max(20)
+    .step(0.001)
+    .name('Galaxy Radius')
+    .onFinishChange(generateGalaxy);
+gui
+    .add(parameters, 'branches')
+    .min(2)
+    .max(20)
+    .step(1)
+    .name('Galaxy Branches')
     .onFinishChange(generateGalaxy);
 
 
