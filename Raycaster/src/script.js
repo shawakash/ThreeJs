@@ -1,5 +1,7 @@
 'use strict'
 
+// Avoid Using anything in mousemove eventListner as it triggers more than requestanimate
+
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
@@ -79,6 +81,12 @@ const sizes = {
     height: window.innerHeight
 }
 
+const mouse = new THREE.Vector2();
+
+window.addEventListener('mousemove', (e) => {
+    mouse.set((e.clientX / sizes.width) * 2 - 1, 1 - (e.clientY / sizes.height) * 2 );
+})
+
 window.addEventListener('resize', () =>
 {
     // Update sizes
@@ -130,29 +138,29 @@ const tick = () =>
     object3.position.y = Math.sin(elapsedTime * 3.3 + object3.position.x) * 2;
 
     // raycaster
-    const rayOrigin = new THREE.Vector3(-3, 0, 0);
-    const rayDirection = new THREE.Vector3(1, 0, 0);
-    rayDirection.normalize();
+    // const rayOrigin = new THREE.Vector3(-3, 0, 0);
+    // const rayDirection = new THREE.Vector3(1, 0, 0);
+    // rayDirection.normalize();
 
-    raycaster.set(rayOrigin, rayDirection);
+    // raycaster.set(rayOrigin, rayDirection);
 
-    const testObject = [
-        object1,
-        object2,
-        object3
-    ];
+    // const testObject = [
+    //     object1,
+    //     object2,
+    //     object3
+    // ];
 
-    const intersects = raycaster.intersectObjects(testObject);
+    // const intersects = raycaster.intersectObjects(testObject);
 
-    testObject.forEach(object => {
-        object.material.color.set('red');
-        object.material.wireframe = false;
-    });
+    // testObject.forEach(object => {
+    //     object.material.color.set('red');
+    //     object.material.wireframe = false;
+    // });
 
-    intersects.forEach(intersect => {
-        intersect.object.material.wireframe = true;             // Applied to all as at start it was all at origin so we didn't set it back
-        intersect.object.material.color.set('cyan');    
-    });
+    // intersects.forEach(intersect => {
+    //     intersect.object.material.wireframe = true;             // Applied to all as at start it was all at origin so we didn't set it back
+    //     intersect.object.material.color.set('cyan');    
+    // });
 
     // Update controls
     controls.update()
