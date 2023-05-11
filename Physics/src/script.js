@@ -39,6 +39,20 @@ debugObject.createSphere = () => {
         }
     )
 };
+debugObject.createBox = () => {
+    createBox(
+        {
+            x: Math.random(),
+            y: Math.random(),
+            z: Math.random()
+        },
+        {
+            x: (Math.random() - 0.5) * 5,
+            y: 3,
+            z: (Math.random() - 0.5) * 5
+        }
+    )
+};
 
 /**
  * Base
@@ -278,16 +292,48 @@ const createSphere = (radius, position) => {
     })
 }
 
+// Boxes
+const boxGeometry = new THREE.BoxGeometry(1,1,1);
+
+const createBox = (size, position) => {
+
+    // threeJs
+    console.log(size)
+    const mesh = new THREE.Mesh(boxGeometry, sphereMaterial);
+    mesh.scale.set(size.x, size.y, size.z);
+    mesh.position.copy(position);
+    mesh.castShadow = true;
+    scene.add(mesh);
+
+    // Cannon
+    const shape = new CANNON.Box(new CANNON.Vec3(size.x / 2, size.y / 2, size.z / 2));   // Box TAKES HALF EXTEND
+    const body = new CANNON.Body({
+        mass: 1,
+        shape,
+        material: defaultMaterial
+    });
+    body.position.copy(position);
+    world.addBody(body);
+    
+    // Saving Objects
+    objectToUpdate.push({
+        mesh,
+        body
+    });
+    console.log(position)
+}
+
 // createSphere(0.5, { x: 0, y: 3, z: 0 })  // position can be object, need not to be a vector3 or vec3
 // createSphere(0.5, { x: 2, y: 3, z: 2 })  // position can be object, need not to be a vector3 or vec3
 // createSphere(0.5, { x: -2, y: 3, z: -2 })  // position can be object, need not to be a vector3 or vec3
 
-gui.add(debugObject, 'createSphere').name(' -----Click Me----- ')
+gui.add(debugObject, 'createSphere').name(' -----Click Me----- ');
+gui.add(debugObject, 'createBox').name(' -----Click Me----- ');
 
 
 /**
  * Animate
- */
+*/
 const clock = new THREE.Clock();
 let oldTime = 0;
 
@@ -301,6 +347,7 @@ const tick = () => {
     // sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position);  // For wind
     objectToUpdate.forEach(({ mesh, body }) => {
         mesh.position.copy(body.position);
+        mesh.quaternion.copy(body.quaternion)
         // body.applyForce(new CANNON.Vec3(-0.5, 0, 0), body.position)
     });
     world.step(1 / 60, deltaTime, 3);
