@@ -2,6 +2,11 @@ import './style.css'
 import * as THREE from 'three'
 import * as dat from 'dat.gui'
 
+
+/**
+ * Parallax == The ablity to seeing different objects from different point of view
+ */
+
 /**
  * Debug
  */
@@ -125,9 +130,12 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 // Field of view is vertical in threeJs
+const cameraGroup = new THREE.Group();
+scene.add(cameraGroup);
+
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 6
-scene.add(camera)
+cameraGroup.add(camera)
 
 /**
  * Renderer
@@ -149,6 +157,14 @@ window.addEventListener('scroll', (e) => {
     // console.log(scrollY);
 })
 
+let cursor = {};
+cursor.x = 0;
+cursor.y = 0;
+
+window.addEventListener('mousemove', (e) => {
+    cursor.x = (e.clientX / sizes.width) - 0.5;
+    cursor.y = 0.5 - (e.clientY / sizes.height) ;  
+})
 
 
 /**
@@ -163,7 +179,14 @@ const tick = () => {
     // ScrollY Has value in pixels but we want the camera to move to object distance only according to the view-port
     // So we first normalize the value according to the view-port then we tell to increase by objectDistance per unit
     // Its a very important concept;
-    camera.position.y = -scrollY / sizes.height * objectDistance;
+    cameraGroup.position.y = -scrollY / sizes.height * objectDistance;
+    
+    // To fix the scroll an parallax conjuction we gonna put the camera in a group AND APPLY PARALLAX TO THE GROUP
+
+    const parallaxX = cursor.x;
+    const parallaxY = cursor.y;
+    camera.position.x = parallaxX;
+    camera.position.y = parallaxY;
 
     // Objects
 
