@@ -60,6 +60,8 @@ const mesh3 = new THREE.Mesh(
 
 scene.add(mesh1, mesh2, mesh3);
 
+const sectionMeshes = [mesh1, mesh2, mesh3]
+
 /**
  * To position objects in such a way that it scales as we resize and the distance between them remains proportinal
  * Makes it on the verge of field of view
@@ -74,10 +76,16 @@ scene.add(mesh1, mesh2, mesh3);
 */
 
 const objectDistance = 4;
+const objectDistanceFormHtmlTag = 2;
 
 mesh1.position.y = -1 * objectDistance * 0;
+mesh1.position.x = -1 * objectDistanceFormHtmlTag;
+
 mesh2.position.y = -1 * objectDistance * 1;
+mesh2.position.x = 1 * objectDistanceFormHtmlTag;
+
 mesh3.position.y = -1 * objectDistance * 2;
+mesh3.position.x = -1 * objectDistanceFormHtmlTag;
 
 
 /**
@@ -132,12 +140,38 @@ renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
 /**
+ * Scroll
+ */
+
+let scrollY = window.scrollY;
+window.addEventListener('scroll', (e) => {
+    scrollY = window.scrollY;
+    // console.log(scrollY);
+})
+
+
+
+/**
  * Animate
  */
 const clock = new THREE.Clock()
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
+
+    // Camera Scroll
+    // ScrollY Has value in pixels but we want the camera to move to object distance only according to the view-port
+    // So we first normalize the value according to the view-port then we tell to increase by objectDistance per unit
+    // Its a very important concept;
+    camera.position.y = -scrollY / sizes.height * objectDistance;
+
+    // Objects
+
+    sectionMeshes.forEach(object => {
+        object.rotation.x = elapsedTime * 0.7;
+        object.rotation.y = elapsedTime * 0.6;
+        object.rotation.z = elapsedTime * 0.65;
+    });
 
     // Render
     renderer.render(scene, camera)
