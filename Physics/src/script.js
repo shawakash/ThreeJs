@@ -1,7 +1,28 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui'
+import CANNON from 'cannon'
+
+/**
+ * Ammo.js
+ * Cannon.js
+ * Oimo.js
+ * Matter.js
+ * P2.js
+ * Plank.js
+ * 
+ * 
+ * So basically we create a world  or a canvas called physics world where laws of physics govern
+ * we create a shape, body and observe how it behave in presence of gravity or these laws;
+ * and then we mimics or copy the positions into threejs meshes
+ * 
+ * 
+ * You can do all the same work as in threeJs in CannonJs with:
+ * 
+ * (shape, Body)  <<<<==>>>>  (geometry, Material)
+ * 
+ */
 
 /**
  * Debug
@@ -30,7 +51,69 @@ const environmentMapTexture = cubeTextureLoader.load([
     '/textures/environmentMaps/0/ny.png',
     '/textures/environmentMaps/0/pz.png',
     '/textures/environmentMaps/0/nz.png'
-])
+]);
+
+
+/**
+ * World
+ */
+
+const world = new CANNON.World();
+world.gravity.set(0, -9.812, 0);
+
+// Bodies is an object that fall, collides 
+// Material in cannon consist of concret and plastic
+
+// const concretMaterial = new CANNON.Material('concrete');
+// const plasticMaterial = new CANNON.Material('plastic');
+const defaultMaterial = new CANNON.Material('default');
+// Not a good practice to make many materials
+
+// Contact Material -> surface contact
+
+const defaultContactMaterial = new CANNON.ContactMaterial(
+    defaultMaterial,
+    defaultMaterial,
+    {
+        friction: 0.5,
+        restitution: 0.6,
+        // contactEquationStiffness: 1e8,
+        // contactEquationRelaxation: 3,
+        // frictionEquationStiffness: 1e8,
+        // frictionEquationRelaxation: 3,
+    });
+
+world.addContactMaterial(defaultContactMaterial)
+world.defaultContactMaterial = defaultContactMaterial;    // Either this or indivual material to bodies
+
+// Sphere
+const sphereShape = new CANNON.Sphere(0.5);
+const sphereBody = new CANNON.Body({
+    mass: 1,
+    position: new CANNON.Vec3(0, 3, 0),
+    shape: sphereShape,
+    // material: defaultMaterial
+});
+world.addBody(sphereBody)
+
+
+
+// Cannon Floor
+const floorShape = new CANNON.Plane();
+const floorBody = new CANNON.Body();
+floorBody.mass = 0;
+floorBody.addShape(floorShape);
+// floorBody.material = defaultMaterial;
+
+// As plane is initialy rotated so we need to rotate it 
+// CANNON Doesn't supports rotation, only qaterion
+floorBody.quaternion.setFromAxisAngle(
+    new CANNON.Vec3(-1, 0, 0),
+    Math.PI * 0.5
+)
+
+world.addBody(floorBody)
+
 
 /**
  * Test sphere
@@ -90,8 +173,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -131,11 +213,22 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
-const clock = new THREE.Clock()
+const clock = new THREE.Clock();
+let oldTime = 0;
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - oldTime;
+    oldTime = elapsedTime;
+
+
+    // Update the physics world
+    world.step(1 / 60, deltaTime, 3);
+
+    // sphere.position.x = sphereBody.position.x;
+    // sphere.position.y = sphereBody.position.y;
+    // sphere.position.z = sphereBody.position.z;
+    sphere.position.copy(sphereBody.position);
 
     // Update controls
     controls.update()
