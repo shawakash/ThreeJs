@@ -75,7 +75,7 @@ const defaultContactMaterial = new CANNON.ContactMaterial(
     defaultMaterial,
     defaultMaterial,
     {
-        friction: 0.5,
+        friction: 0.8,
         restitution: 0.6,
         // contactEquationStiffness: 1e8,
         // contactEquationRelaxation: 3,
@@ -94,6 +94,7 @@ const sphereBody = new CANNON.Body({
     shape: sphereShape,
     // material: defaultMaterial
 });
+sphereBody.applyLocalForce(new CANNON.Vec3(150, 0, 0), new CANNON.Vec3(0, 0, 0))
 world.addBody(sphereBody)
 
 
@@ -113,6 +114,15 @@ floorBody.quaternion.setFromAxisAngle(
 )
 
 world.addBody(floorBody)
+
+
+/**
+ * Forces In CANNON Js
+ * ApplyForce -->> apply a force in a specific point in space(not necessialry on body surface) like wind, a small push, domino, angry bird
+ * applyImpulse -->> apply velocity in place of force, like applyForce
+ * applyLocalForce -->> same as applyForce but coordinates are local to the body(0,0,0 would be the center of the body)
+ * applyLocalImpluses -->> same as applyImpulse but local to body
+ */
 
 
 /**
