@@ -27,7 +27,18 @@ import CANNON from 'cannon'
 /**
  * Debug
  */
-const gui = new dat.GUI()
+const gui = new dat.GUI({ width: 360 });
+const debugObject = {};
+debugObject.createSphere = () => {
+    createSphere(
+        Math.random() * 0.5,
+        {
+            x: (Math.random() - 0.5) * 5,
+            y: 3,
+            z: (Math.random() - 0.5) * 5
+        }
+    )
+};
 
 /**
  * Base
@@ -229,18 +240,22 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const objectToUpdate = []
 
+const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
+const sphereMaterial = new THREE.MeshStandardMaterial({
+    metalness: 0.3,
+    roughness: 0.4,
+    envMap: environmentMapTexture,
+    envMapIntensity: 0.5
+});
+
 const createSphere = (radius, position) => {
 
     // ThreeJs Mesh
     const mesh = new THREE.Mesh(
-        new THREE.SphereGeometry(radius, 32, 32),
-        new THREE.MeshStandardMaterial({
-            metalness: 0.3,
-            roughness: 0.4,
-            envMap: environmentMapTexture,
-            envMapIntensity: 0.5
-        })
+        sphereGeometry,
+        sphereMaterial
     );
+    mesh.scale.set(radius, radius, radius)
     mesh.castShadow = true;
     mesh.position.copy(position);
     scene.add(mesh);
@@ -253,6 +268,7 @@ const createSphere = (radius, position) => {
         material: defaultMaterial
     });
     body.position.copy(position)
+    // body.applyForce(new CANNON.Vec3(150, 0, 0), body.position)
     world.addBody(body);
 
     // Saving
@@ -262,10 +278,11 @@ const createSphere = (radius, position) => {
     })
 }
 
-createSphere(0.5, {x: 0, y: 3, z: 0})  // position can be object, need not to be a vector3 or vec3
-createSphere(0.5, {x: 2, y: 3, z: 2})  // position can be object, need not to be a vector3 or vec3
-createSphere(0.5, {x: -2, y: 3, z: -2})  // position can be object, need not to be a vector3 or vec3
+// createSphere(0.5, { x: 0, y: 3, z: 0 })  // position can be object, need not to be a vector3 or vec3
+// createSphere(0.5, { x: 2, y: 3, z: 2 })  // position can be object, need not to be a vector3 or vec3
+// createSphere(0.5, { x: -2, y: 3, z: -2 })  // position can be object, need not to be a vector3 or vec3
 
+gui.add(debugObject, 'createSphere').name(' -----Click Me----- ')
 
 
 /**
@@ -282,11 +299,12 @@ const tick = () => {
 
     // Update the physics world
     // sphereBody.applyForce(new CANNON.Vec3(-0.5, 0, 0), sphereBody.position);  // For wind
+    objectToUpdate.forEach(({ mesh, body }) => {
+        mesh.position.copy(body.position);
+        // body.applyForce(new CANNON.Vec3(-0.5, 0, 0), body.position)
+    });
     world.step(1 / 60, deltaTime, 3);
 
-    objectToUpdate.forEach(({mesh, body}) => {
-        mesh.position.copy(body.position)
-    });
 
     // sphere.position.x = sphereBody.position.x;
     // sphere.position.y = sphereBody.position.y;
