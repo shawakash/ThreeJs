@@ -20,6 +20,7 @@ gui
     .addColor(parameters, 'materialColor')
     .onChange(() => {
         material.color.set(parameters.materialColor)
+        particlesMaterial.color.set(parameters.materialColor)
     })
 
 /**
@@ -31,6 +32,8 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+const objectDistance = 4;
+const objectDistanceFormHtmlTag = 2;
 
 /**
  * TETXURES
@@ -41,13 +44,15 @@ const gradientTexture = textureLoaders.load('textures/gradients/3.jpg');
 gradientTexture.magFilter = THREE.NearestFilter;
 
 
+
+
 /**
  * Objects
 */
 
-const material = new THREE.MeshToonMaterial({ 
-    color: parameters.materialColor, 
-    gradientMap: gradientTexture 
+const material = new THREE.MeshToonMaterial({
+    color: parameters.materialColor,
+    gradientMap: gradientTexture
 });
 
 const mesh1 = new THREE.Mesh(
@@ -80,8 +85,6 @@ const sectionMeshes = [mesh1, mesh2, mesh3]
  * mesh3.scale.set(0.5, 0.5, 0.5)
 */
 
-const objectDistance = 4;
-const objectDistanceFormHtmlTag = 2;
 
 mesh1.position.y = -1 * objectDistance * 0;
 mesh1.position.x = -1 * objectDistanceFormHtmlTag;
@@ -92,10 +95,48 @@ mesh2.position.x = 1 * objectDistanceFormHtmlTag;
 mesh3.position.y = -1 * objectDistance * 2;
 mesh3.position.x = -1 * objectDistanceFormHtmlTag;
 
+/**
+ * Particles
+ */
+
+
+const particleGeometry = new THREE.BufferGeometry();
+const count = 2000;
+
+const positions = new Float32Array(count * 3);
+
+for (let i = 0; i < count; i++) {
+
+    positions[i * 3 + 0] = (Math.random() - .5) * 30;
+    positions[i * 3 + 1] = objectDistance * 0.5 - Math.random() * objectDistance * sectionMeshes.length;
+    positions[i * 3 + 2] = (Math.random() - .5) * 30;
+
+}
+// for (let i = 0; i < count * 3; i += 3) {
+
+//     positions[i + 0] = (Math.random() - .5) * 30;
+//     positions[i + 1] = (Math.random() - .5) * 30;
+//     positions[i + 2] = (Math.random() - .5) * 30;
+
+// }
+
+particleGeometry.setAttribute(
+    'position',
+    new THREE.Float32BufferAttribute(positions, 3)
+);
+
+const particlesMaterial = new THREE.PointsMaterial({
+    color: parameters.materialColor,
+    size: 0.002,
+    sizeAttenuation: true
+});
+
+const particles = new THREE.Points(particleGeometry, particlesMaterial);
+scene.add(particles)
 
 /**
  * Light
- */
+*/
 
 const directionalLight = new THREE.DirectionalLight('#ffffff', 1);
 directionalLight.position.set(1, 1, 0);
@@ -163,30 +204,38 @@ cursor.y = 0;
 
 window.addEventListener('mousemove', (e) => {
     cursor.x = (e.clientX / sizes.width) - 0.5;
-    cursor.y = 0.5 - (e.clientY / sizes.height) ;  
+    cursor.y = 0.5 - (e.clientY / sizes.height);
 })
 
 
 /**
  * Animate
  */
-const clock = new THREE.Clock()
+const clock = new THREE.Clock();
+let previousTime = 0;
+
+/**
+ * The animation is not relatics , it is rather <mechanical></mechanical>
+ */
+
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
+    const deltaTime = elapsedTime - previousTime;
+    previousTime = elapsedTime;
 
     // Camera Scroll
     // ScrollY Has value in pixels but we want the camera to move to object distance only according to the view-port
     // So we first normalize the value according to the view-port then we tell to increase by objectDistance per unit
     // Its a very important concept;
-    cameraGroup.position.y = -scrollY / sizes.height * objectDistance;
-    
+    camera.position.y = -scrollY / sizes.height * objectDistance;
+
     // To fix the scroll an parallax conjuction we gonna put the camera in a group AND APPLY PARALLAX TO THE GROUP
 
-    const parallaxX = cursor.x;
-    const parallaxY = cursor.y;
-    camera.position.x = parallaxX;
-    camera.position.y = parallaxY;
+    const parallaxX = cursor.x * 0.5;
+    const parallaxY = cursor.y * 0.5;
+    cameraGroup.position.x += (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
+    cameraGroup.position.y += (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
 
     // Objects
 
