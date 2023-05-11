@@ -60,6 +60,25 @@ const mesh3 = new THREE.Mesh(
 
 scene.add(mesh1, mesh2, mesh3);
 
+/**
+ * To position objects in such a way that it scales as we resize and the distance between them remains proportinal
+ * Makes it on the verge of field of view
+ * 
+ * mesh1.position.y = 2;
+ * mesh1.scale.set(0.5, 0.5, 0.5);
+ * 
+ * mesh2.visible = false;
+ * 
+ * mesh3.position.y = -2;
+ * mesh3.scale.set(0.5, 0.5, 0.5)
+*/
+
+const objectDistance = 4;
+
+mesh1.position.y = -1 * objectDistance * 0;
+mesh2.position.y = -1 * objectDistance * 1;
+mesh3.position.y = -1 * objectDistance * 2;
+
 
 /**
  * Light
