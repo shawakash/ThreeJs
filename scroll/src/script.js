@@ -13,46 +13,73 @@ const parameters = {
 
 gui
     .addColor(parameters, 'materialColor')
+    .onChange(() => {
+        material.color.set(parameters.materialColor)
+    })
 
 /**
  * Base
- */
+*/
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
 
+
+/**
+ * TETXURES
+ */
+
+const textureLoaders = new THREE.TextureLoader();
+const gradientTexture = textureLoaders.load('textures/gradients/3.jpg');
+gradientTexture.magFilter = THREE.NearestFilter;
+
+
 /**
  * Objects
- */
+*/
+
+const material = new THREE.MeshToonMaterial({ 
+    color: parameters.materialColor, 
+    gradientMap: gradientTexture 
+});
 
 const mesh1 = new THREE.Mesh(
     new THREE.TorusGeometry(1, 0.4, 16, 60),
-    new THREE.MeshBasicMaterial({ color: '#ff0000' })
+    material
 );
 const mesh2 = new THREE.Mesh(
     new THREE.ConeGeometry(1, 2, 32),
-    new THREE.MeshBasicMaterial({ color: '#ff0000' })
+    material
 );
 const mesh3 = new THREE.Mesh(
     new THREE.TorusKnotGeometry(0.8, 0.35, 100, 16),
-    new THREE.MeshBasicMaterial({ color: '#ff0000' })
+    material
 );
 
 scene.add(mesh1, mesh2, mesh3);
 
 
 /**
- * Sizes
+ * Light
  */
+
+const directionalLight = new THREE.DirectionalLight('#ffffff', 1);
+directionalLight.position.set(1, 1, 0);
+
+scene.add(directionalLight);
+
+
+/**
+ * Sizes
+*/
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -70,6 +97,7 @@ window.addEventListener('resize', () =>
  * Camera
  */
 // Base camera
+// Field of view is vertical in threeJs
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
 camera.position.z = 6
 scene.add(camera)
@@ -89,8 +117,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Render
