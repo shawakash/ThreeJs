@@ -42,9 +42,9 @@ debugObject.createSphere = () => {
 debugObject.createBox = () => {
     createBox(
         {
-            x: Math.random(),
-            y: Math.random(),
-            z: Math.random()
+            x: Math.random() + 0.001,
+            y: Math.random() + 0.001,
+            z: Math.random() + 0.001
         },
         {
             x: (Math.random() - 0.5) * 5,
@@ -77,6 +77,9 @@ const environmentMapTexture = cubeTextureLoader.load([
     '/textures/environmentMaps/0/pz.png',
     '/textures/environmentMaps/0/nz.png'
 ]);
+// environmentMapTexture.wrapS = THREE.RepeatWrapping;
+// environmentMapTexture.wrapT = THREE.RepeatWrapping;
+// environmentMapTexture.repeat.set(2,2)
 
 
 /**
@@ -85,6 +88,7 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 const world = new CANNON.World();
 world.gravity.set(0, -9.812, 0);
+world.broadphase = new CANNON.SAPBroadphase(world);    // see down
 
 // Bodies is an object that fall, collides 
 // Material in cannon consist of concret and plastic
@@ -174,7 +178,7 @@ world.addBody(floorBody)
  * Floor
  */
 const floor = new THREE.Mesh(
-    new THREE.PlaneGeometry(10, 10),
+    new THREE.PlaneGeometry(100, 100),
     new THREE.MeshStandardMaterial({
         color: '#777777',
         metalness: 0.3,
@@ -298,7 +302,7 @@ const boxGeometry = new THREE.BoxGeometry(1,1,1);
 const createBox = (size, position) => {
 
     // threeJs
-    console.log(size)
+
     const mesh = new THREE.Mesh(boxGeometry, sphereMaterial);
     mesh.scale.set(size.x, size.y, size.z);
     mesh.position.copy(position);
@@ -320,7 +324,6 @@ const createBox = (size, position) => {
         mesh,
         body
     });
-    console.log(position)
 }
 
 // createSphere(0.5, { x: 0, y: 3, z: 0 })  // position can be object, need not to be a vector3 or vec3
@@ -329,6 +332,21 @@ const createBox = (size, position) => {
 
 gui.add(debugObject, 'createSphere').name(' -----Click Me----- ');
 gui.add(debugObject, 'createBox').name(' -----Click Me----- ');
+
+
+
+/**
+ * Broadspace
+ * 
+ * While Collision Cannon js checks if a single body is colliding with each and every other body
+ * the above approach is called NaiveBroadspace
+ * 
+ * GridBroadspace - quadrills the world into grids and check collision in itself grid as well as neighbours grid
+ * 
+ * SapBroadspace (Sweep And Purne) - test bodies during arbitary axes during multiple steps
+ */
+
+
 
 
 /**
