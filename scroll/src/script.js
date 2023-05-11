@@ -1,6 +1,7 @@
 import './style.css'
 import * as THREE from 'three'
 import * as dat from 'dat.gui'
+import gsap from 'gsap'
 
 
 /**
@@ -193,9 +194,25 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 
 let scrollY = window.scrollY;
+let currentSection = 0;
+// let rotate
+
 window.addEventListener('scroll', (e) => {
     scrollY = window.scrollY;
-    // console.log(scrollY);
+
+    const newSection = Math.floor(scrollY / sizes.height);
+    if (newSection != currentSection) {
+        currentSection = newSection;
+        gsap.to(
+            sectionMeshes[currentSection].rotation,
+            {
+                duration: 1.5,
+                ease: 'power2.inOut',
+                x: '+=6',
+                y: '+=3'
+            }
+        )
+    }
 })
 
 let cursor = {};
@@ -240,10 +257,12 @@ const tick = () => {
     // Objects
 
     sectionMeshes.forEach(object => {
-        object.rotation.x = elapsedTime * 0.7;
-        object.rotation.y = elapsedTime * 0.6;
-        object.rotation.z = elapsedTime * 0.65;
+        object.rotation.x += deltaTime * 0.7;
+        object.rotation.y += deltaTime * 0.6;
+        object.rotation.z += deltaTime * 0.65;
     });
+
+    
 
     // Render
     renderer.render(scene, camera)
