@@ -20,7 +20,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
  * Embedded file contains all information including textures, geometries
  * 
  * Make changes in your code with respect to the gltl material
- */ 
+ */
 
 
 
@@ -56,13 +56,17 @@ loadingManager.onStart = () => {
 }
 
 const gltlLoader = new GLTFLoader(loadingManager);
-
+let duck = null;
 gltlLoader.load(
     'models/Duck/glTF/Duck.gltf',
     (gltf) => {
-        console.log(gltf)
+        console.log(gltf);
+        duck = gltf.scene;
+        scene.add(duck)
     }
 );
+
+
 
 /**
  * Floor
@@ -104,8 +108,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -149,11 +152,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 const clock = new THREE.Clock()
 let previousTime = 0
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+    // Duck
+    if(duck != null) {
+        duck.rotation.y = elapsedTime * .5
+    }
 
     // Update controls
     controls.update()
