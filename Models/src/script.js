@@ -73,11 +73,29 @@ const gltlLoader = new GLTFLoader(loadingManager);
 gltlLoader.setDRACOLoader(gltlDracoLoader);
 let duck = null;
 
+// gltlLoader.load(
+//     'models/Duck/glTF/Duck.gltf',
+//     (gltf) => {
+//         duck = gltf.scene;
+//         scene.add(duck);
+//     }
+// )
+let fox = null;
+let mixer = null;
 gltlLoader.load(
-    'models/Duck/glTF/Duck.gltf',
+    'models/Fox/glTF/Fox.gltf',
     (gltf) => {
-        duck = gltf.scene;
-        scene.add(duck);
+        console.log(gltf)        // Has preloaded Animation // Animation Clips
+
+        mixer = new THREE.AnimationMixer(gltf.scene);
+
+        const action = mixer.clipAction(gltf.animations[1]);
+        action.play();  
+
+
+        fox = gltf.scene;
+        fox.scale.set(.021, .021, .021)
+        scene.add(fox);
     }
 )
 
@@ -210,6 +228,13 @@ const tick = () => {
     const elapsedTime = clock.getElapsedTime()
     const deltaTime = elapsedTime - previousTime
     previousTime = elapsedTime
+
+    // Mixer
+    if(mixer) {
+        // fox.children[0].children[1].material.wireframe = true;
+        mixer.update(deltaTime);
+    }
+
 
     // Duck
     if (duck != null) {
