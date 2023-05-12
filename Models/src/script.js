@@ -89,8 +89,12 @@ gltlLoader.load(
 
         mixer = new THREE.AnimationMixer(gltf.scene);
 
-        const action = mixer.clipAction(gltf.animations[1]);
-        action.play();  
+        const action1 = mixer.clipAction(gltf.animations[0]);
+        const action2 = mixer.clipAction(gltf.animations[1]);
+        const action3 = mixer.clipAction(gltf.animations[2]);
+        action1.play();  
+        action2.play();
+        // action3.play();
 
 
         fox = gltf.scene;
@@ -232,7 +236,7 @@ const tick = () => {
     // Mixer
     if(mixer) {
         // fox.children[0].children[1].material.wireframe = true;
-        mixer.update(deltaTime);
+        mixer.update(deltaTime * 1);
     }
 
 
