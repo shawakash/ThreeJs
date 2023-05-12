@@ -1,7 +1,28 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+
+
+/**
+ * Models are object created other than threeJs objects for a better experience
+ * For different models we have different formats
+ * We need to choose formats wisely
+ * We have different criteria based on different formats
+ * OBJ, FBX, STL
+ * 
+ * different formats contain different ectensions
+ * like GLTL provides you with a default, dracos, bin, embedded
+ *  default file contains all the information about mesh like material, loader, and it also connects .png(texture) and geometry file
+ * bin file also contain the same but it is modifiable
+ * Dracos file is like default file with everything compressed
+ * Embedded file contains all information including textures, geometries
+ * 
+ * Make changes in your code with respect to the gltl material
+ */ 
+
+
 
 /**
  * Base
@@ -14,6 +35,34 @@ const canvas = document.querySelector('canvas.webgl')
 
 // Scene
 const scene = new THREE.Scene()
+
+
+/**
+ * Gltl loader
+ */
+const loadingManager = new THREE.LoadingManager();
+
+loadingManager.onLoad = () => {
+    console.log('Loaded');
+}
+loadingManager.onError = (e) => {
+    console.log(e);
+}
+loadingManager.onProgress = () => {
+    console.log('Progressing');
+}
+loadingManager.onStart = () => {
+    console.log('Started');
+}
+
+const gltlLoader = new GLTFLoader(loadingManager);
+
+gltlLoader.load(
+    'models/Duck/glTF/Duck.gltf',
+    (gltf) => {
+        console.log(gltf)
+    }
+);
 
 /**
  * Floor
