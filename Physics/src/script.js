@@ -29,6 +29,13 @@ import CANNON from 'cannon'
  */
 const gui = new dat.GUI({ width: 360 });
 const debugObject = {};
+debugObject.reset = () => {
+    objectToUpdate.map(({body, mesh}) => {
+        scene.remove(mesh);
+        world.remove(body);
+    })
+    objectToUpdate.splice(0, objectToUpdate.length);
+};
 debugObject.createSphere = () => {
     createSphere(
         Math.random() * 0.5,
@@ -63,6 +70,39 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+
+/**
+ * Sounds
+ */
+
+const hitSound = new Audio('/sounds/hit.mp3');
+// create an AudioContext object
+const audioContext = new AudioContext();
+
+// create a DelayNode with a delay time of 1 second
+const delayNode = audioContext.createDelay(0.5);
+
+// connect the Audio object to the DelayNode
+const source = audioContext.createMediaElementSource(hitSound);
+source.connect(delayNode);
+
+// connect the DelayNode to the AudioContext destination
+delayNode.connect(audioContext.destination);
+
+const playHitSound = (collision) => {
+    const impactStrength = collision.contact.getImpactVelocityAlongNormal();
+
+    if (impactStrength > 1.5) {
+        hitSound.volume = Math.random() * impactStrength / 15;
+        hitSound.currentTime = 0;
+
+        hitSound.play();
+    }
+
+}
+
+
+
 /**
  * Textures
  */
@@ -88,6 +128,7 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 const world = new CANNON.World();
 world.gravity.set(0, -9.812, 0);
+world.allowSleep = true;                     // Makes the body sleep if its movement is nill -> improves performance
 world.broadphase = new CANNON.SAPBroadphase(world);    // see down
 
 // Bodies is an object that fall, collides 
@@ -256,7 +297,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Utils
  */
-const objectToUpdate = []
+let objectToUpdate = []
 
 const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
 const sphereMaterial = new THREE.MeshStandardMaterial({
@@ -285,6 +326,7 @@ const createSphere = (radius, position) => {
         shape,
         material: defaultMaterial
     });
+    body.addEventListener('collide', playHitSound)
     body.position.copy(position)
     // body.applyForce(new CANNON.Vec3(150, 0, 0), body.position)
     world.addBody(body);
@@ -297,7 +339,7 @@ const createSphere = (radius, position) => {
 }
 
 // Boxes
-const boxGeometry = new THREE.BoxGeometry(1,1,1);
+const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 const createBox = (size, position) => {
 
@@ -316,9 +358,10 @@ const createBox = (size, position) => {
         shape,
         material: defaultMaterial
     });
+    body.addEventListener('collide', playHitSound)
     body.position.copy(position);
     world.addBody(body);
-    
+
     // Saving Objects
     objectToUpdate.push({
         mesh,
@@ -332,6 +375,9 @@ const createBox = (size, position) => {
 
 gui.add(debugObject, 'createSphere').name(' -----Click Me----- ');
 gui.add(debugObject, 'createBox').name(' -----Click Me----- ');
+gui
+    .add(debugObject, 'reset')
+    .name(' Reset Enviorment ')
 
 
 
