@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 
 /**
@@ -55,38 +56,69 @@ loadingManager.onStart = () => {
     console.log('Started');
 }
 
+// Draco Is much much lighter than gltf
+// Load the draco loader much before the gltf loader
+// Draco Loader works with Gltf loader
+
+// When to use Draco
+// It is light but the dracoloader and the decoder are very heavy'
+// so we load heavy data to load small data
+// Use it wisely
+// It may freeze the system
+
+const gltlDracoLoader = new DRACOLoader(loadingManager);
+gltlDracoLoader.setDecoderPath('draco/');               // for webassembly and Walker
+
 const gltlLoader = new GLTFLoader(loadingManager);
+gltlLoader.setDRACOLoader(gltlDracoLoader);
 let duck = null;
+
 gltlLoader.load(
-    'models/Duck/glTF/Duck.gltf',              // change the format to dracos or bin or embedded
-
-    (gltf) => {   // Load
-
-        // check the structure before adding
-        console.log(gltf);
-        
-        // duck = gltf.scene.children[0];                  //   only the first elementt of the group, with this you need to apply
-        // Maybe you want to loop over the whole array and addd indivual to the scene  -->> it doesn't works
-        // when you add one , one is removed from the loop
-        // Solution -> use while loop while(gltf.scene.children.lenght) { scene.add(gltf.scene.children[0]) }
-        // other is const meshes = [...gltf.scene.children]  apply loop on meshes
-        
-        // duck = gltf.scene.children[0].children[1];     // -> unscaled version and only the first element of group
-        duck = gltf.scene;                               //  whole group
-        scene.add(duck)
-    },
-
-    // Progress
-    () => {
-
-    },
-
-    // Error
-    (err) => {
-        console.error(err);
+    'models/Duck/glTF/Duck.gltf',
+    (gltf) => {
+        duck = gltf.scene;
+        scene.add(duck);
     }
+)
 
-);
+
+
+
+
+
+// const gltlLoader = new GLTFLoader(loadingManager);
+// let duck = null;
+// gltlLoader.load(
+//     'models/Duck/glTF/Duck.gltf',              // change the format to dracos or bin or embedded
+
+//     (gltf) => {   // Load
+
+//         // check the structure before adding
+//         console.log(gltf);
+
+//         // duck = gltf.scene.children[0];                  //   only the first elementt of the group, with this you need to apply
+//         // Maybe you want to loop over the whole array and addd indivual to the scene  -->> it doesn't works
+//         // when you add one , one is removed from the loop
+//         // Solution -> use while loop while(gltf.scene.children.lenght) { scene.add(gltf.scene.children[0]) }
+//         // other is const meshes = [...gltf.scene.children]  apply loop on meshes
+
+//         // duck = gltf.scene.children[0].children[1];     // -> unscaled version and only the first element of group
+//         duck = gltf.scene;                               //  whole group
+//         scene.add(duck)
+//     },
+
+//     // Progress
+//     () => {
+
+//     },
+
+//     // Error
+//     (err) => {
+//         console.error(err);
+//     }
+
+// );
+
 
 
 
@@ -180,7 +212,7 @@ const tick = () => {
     previousTime = elapsedTime
 
     // Duck
-    if(duck != null) {
+    if (duck != null) {
         duck.rotation.y = elapsedTime * .5
     }
 
