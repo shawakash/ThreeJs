@@ -58,12 +58,34 @@ loadingManager.onStart = () => {
 const gltlLoader = new GLTFLoader(loadingManager);
 let duck = null;
 gltlLoader.load(
-    'models/Duck/glTF/Duck.gltf',
-    (gltf) => {
+    'models/Duck/glTF/Duck.gltf',              // change the format to dracos or bin or embedded
+
+    (gltf) => {   // Load
+
+        // check the structure before adding
         console.log(gltf);
-        duck = gltf.scene;
+        
+        // duck = gltf.scene.children[0];                  //   only the first elementt of the group, with this you need to apply
+        // Maybe you want to loop over the whole array and addd indivual to the scene  -->> it doesn't works
+        // when you add one , one is removed from the loop
+        // Solution -> use while loop while(gltf.scene.children.lenght) { scene.add(gltf.scene.children[0]) }
+        // other is const meshes = [...gltf.scene.children]  apply loop on meshes
+        
+        // duck = gltf.scene.children[0].children[1];     // -> unscaled version and only the first element of group
+        duck = gltf.scene;                               //  whole group
         scene.add(duck)
+    },
+
+    // Progress
+    () => {
+
+    },
+
+    // Error
+    (err) => {
+        console.error(err);
     }
+
 );
 
 
