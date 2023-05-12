@@ -63,6 +63,19 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+
+/**
+ * Sounds
+ */
+
+const hitSound = new Audio('/sounds/hit.mp3');
+
+const playHitSound = () => {
+    hitSound.play();
+}
+
+
+
 /**
  * Textures
  */
@@ -317,6 +330,7 @@ const createBox = (size, position) => {
         shape,
         material: defaultMaterial
     });
+    body.addEventListener('collide', playHitSound)
     body.position.copy(position);
     world.addBody(body);
     
