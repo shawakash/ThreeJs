@@ -69,9 +69,29 @@ const scene = new THREE.Scene()
  */
 
 const hitSound = new Audio('/sounds/hit.mp3');
+// create an AudioContext object
+const audioContext = new AudioContext();
 
-const playHitSound = () => {
-    hitSound.play();
+// create a DelayNode with a delay time of 1 second
+const delayNode = audioContext.createDelay(0.5);
+
+// connect the Audio object to the DelayNode
+const source = audioContext.createMediaElementSource(hitSound);
+source.connect(delayNode);
+
+// connect the DelayNode to the AudioContext destination
+delayNode.connect(audioContext.destination);
+
+const playHitSound = (collision) => {
+    const impactStrength = collision.contact.getImpactVelocityAlongNormal();
+
+    if (impactStrength > 1.5) {
+        hitSound.volume = Math.random() * impactStrength / 15;
+        hitSound.currentTime = 0;
+
+        hitSound.play();
+    }
+
 }
 
 
@@ -311,7 +331,7 @@ const createSphere = (radius, position) => {
 }
 
 // Boxes
-const boxGeometry = new THREE.BoxGeometry(1,1,1);
+const boxGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 const createBox = (size, position) => {
 
@@ -333,7 +353,7 @@ const createBox = (size, position) => {
     body.addEventListener('collide', playHitSound)
     body.position.copy(position);
     world.addBody(body);
-    
+
     // Saving Objects
     objectToUpdate.push({
         mesh,
