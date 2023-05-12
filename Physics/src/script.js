@@ -29,6 +29,13 @@ import CANNON from 'cannon'
  */
 const gui = new dat.GUI({ width: 360 });
 const debugObject = {};
+debugObject.reset = () => {
+    objectToUpdate.map(({body, mesh}) => {
+        scene.remove(mesh);
+        world.remove(body);
+    })
+    objectToUpdate.splice(0, objectToUpdate.length);
+};
 debugObject.createSphere = () => {
     createSphere(
         Math.random() * 0.5,
@@ -290,7 +297,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Utils
  */
-const objectToUpdate = []
+let objectToUpdate = []
 
 const sphereGeometry = new THREE.SphereGeometry(1, 32, 32);
 const sphereMaterial = new THREE.MeshStandardMaterial({
@@ -319,6 +326,7 @@ const createSphere = (radius, position) => {
         shape,
         material: defaultMaterial
     });
+    body.addEventListener('collide', playHitSound)
     body.position.copy(position)
     // body.applyForce(new CANNON.Vec3(150, 0, 0), body.position)
     world.addBody(body);
@@ -367,6 +375,9 @@ const createBox = (size, position) => {
 
 gui.add(debugObject, 'createSphere').name(' -----Click Me----- ');
 gui.add(debugObject, 'createBox').name(' -----Click Me----- ');
+gui
+    .add(debugObject, 'reset')
+    .name(' Reset Enviorment ')
 
 
 
