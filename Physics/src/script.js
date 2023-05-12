@@ -88,6 +88,7 @@ const environmentMapTexture = cubeTextureLoader.load([
 
 const world = new CANNON.World();
 world.gravity.set(0, -9.812, 0);
+world.allowSleep = true;                     // Makes the body sleep if its movement is nill -> improves performance
 world.broadphase = new CANNON.SAPBroadphase(world);    // see down
 
 // Bodies is an object that fall, collides 
