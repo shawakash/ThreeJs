@@ -1,4 +1,4 @@
-# Three.js Journey
+# Three.js Models
 
 ## Setup
 Download [Node.js](https://nodejs.org/en/download/).
@@ -14,3 +14,4 @@ npm run dev
 # Build for production in the dist/ directory
 npm run build
 ```
+# [Deployment](https://models-tau.vercel.app)
