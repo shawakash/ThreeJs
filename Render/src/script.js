@@ -1,13 +1,15 @@
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import * as dat from 'lil-gui'
+import * as dat from 'dat.gui';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 /**
  * Base
  */
 // Debug
-const gui = new dat.GUI()
+const gui = new dat.GUI({ width: 360 })
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -16,24 +18,80 @@ const canvas = document.querySelector('canvas.webgl')
 const scene = new THREE.Scene()
 
 /**
- * Test sphere
+ * Env Map Texture
  */
+const cubeTextureLoader = new THREE.CubeTextureLoader();
+const envTexture = cubeTextureLoader.load(
+    'textures/enviormentMaps/0/px.jpg',
+    'textures/enviormentMaps/0/nx.jpg',
+    'textures/enviormentMaps/0/py.jpg',
+    'textures/enviormentMaps/0/ny.jpg',
+    'textures/enviormentMaps/0/px.jpg',
+    'textures/enviormentMaps/0/nz.jpg',
+)
+
+
+
+/**
+ * Test sphere
+*/
 const testSphere = new THREE.Mesh(
     new THREE.SphereGeometry(1, 32, 32),
-    new THREE.MeshBasicMaterial()
+    new THREE.MeshStandardMaterial()
 )
 scene.add(testSphere)
 
+
+
 /**
- * Sizes
+ * lOADERS
  */
+
+const gltfLoader = new GLTFLoader();
+let flightHelmet = null;
+gltfLoader.load(
+    'models/FlightHelmet/glTF/FlightHelmet.gltf',
+
+    (glTF) => {
+        console.log(glTF);
+        flightHelmet = glTF.scene;
+        flightHelmet.scale.set(10, 10, 10);
+        flightHelmet.position.set(0, -4, 0)
+        flightHelmet.rotation.y = Math.PI * 0.5;
+        scene.add(flightHelmet);
+
+        gui.add(flightHelmet.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name("Helmet Rotation Y");
+    }
+)
+
+
+
+/**
+ * Lights
+*/
+const ambientLight = new THREE.AmbientLight('#ffffff', .3);
+scene.add(ambientLight);
+const directionalLight = new THREE.DirectionalLight('#ffffff', 3);
+directionalLight.position.set(0.25, 3, -2.25)
+scene.add(directionalLight);
+
+gui.add(directionalLight, 'intensity').min(0.01).max(10).step(0.001).name('Light Intensity');
+gui.add(directionalLight.position, 'x').min(-5).max(5).step(0.0001).name('Light x');
+gui.add(directionalLight.position, 'y').min(-5).max(5).step(0.0001).name('Light Y');
+gui.add(directionalLight.position, 'z').min(-5).max(5).step(0.0001).name('Light Z');
+
+
+
+
+/**
+* Sizes
+*/
 const sizes = {
     width: window.innerWidth,
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -67,12 +125,12 @@ const renderer = new THREE.WebGLRenderer({
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.physicallyCorrectLights = true;
 
 /**
  * Animate
  */
-const tick = () =>
-{
+const tick = () => {
     // Update controls
     controls.update()
 
