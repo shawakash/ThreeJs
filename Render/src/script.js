@@ -75,6 +75,8 @@ debug.add(debugObject, 'envIntensity').min(0).min(10).step(0.01).name('Env Map I
 // But the assets used here is not inlined with hdr, so we need to convert it ti hdr for realistic effect
 // It is done by tone mapping --> squeezing the value
 // Encoding uses the same technique
+// When a model is loaded its shadow map is planned over it 
+// to fix this use normalbias in directional light as light ios creating the shadow
 
 
 const gltfLoader = new GLTFLoader();
@@ -123,6 +125,7 @@ const directionalLight = new THREE.DirectionalLight('#ffffff', 3);
 directionalLight.shadow.camera.far = 15;
 directionalLight.shadow.mapSize.set(1024, 1024);
 directionalLight.position.set(0.25, 3, -2.25);
+directionalLight.shadow.normalBias = 0.05;
 
 directionalLight.castShadow = true;
 const directionalLightCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
