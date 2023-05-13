@@ -14,4 +14,4 @@ npm run dev
 # Build for production in the dist/ directory
 npm run build
 ```
-## [Link](/CustomModels/)
+## [Link](https://custom-models.vercel.app)
