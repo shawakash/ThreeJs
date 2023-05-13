@@ -21,25 +21,18 @@ const scene = new THREE.Scene()
  * Env Map Texture
  */
 const cubeTextureLoader = new THREE.CubeTextureLoader();
-const envTexture = cubeTextureLoader.load(
-    'textures/enviormentMaps/0/px.jpg',
-    'textures/enviormentMaps/0/nx.jpg',
-    'textures/enviormentMaps/0/py.jpg',
-    'textures/enviormentMaps/0/ny.jpg',
-    'textures/enviormentMaps/0/px.jpg',
-    'textures/enviormentMaps/0/nz.jpg',
-)
+const envTexture = cubeTextureLoader.load([
+    'textures/environmentMaps/0/px.jpg',
+    'textures/environmentMaps/0/nx.jpg',
+    'textures/environmentMaps/0/py.jpg',
+    'textures/environmentMaps/0/ny.jpg',
+    'textures/environmentMaps/0/pz.jpg',
+    'textures/environmentMaps/0/nz.jpg',
+]);
+
+scene.background = envTexture;
 
 
-
-/**
- * Test sphere
-*/
-const testSphere = new THREE.Mesh(
-    new THREE.SphereGeometry(1, 32, 32),
-    new THREE.MeshStandardMaterial()
-)
-scene.add(testSphere)
 
 
 
@@ -59,10 +52,23 @@ gltfLoader.load(
         flightHelmet.position.set(0, -4, 0)
         flightHelmet.rotation.y = Math.PI * 0.5;
         scene.add(flightHelmet);
-
+        
+        updateAllMaterials();
         gui.add(flightHelmet.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name("Helmet Rotation Y");
     }
 )
+
+
+
+/**
+ * Update All material;
+ */
+
+const updateAllMaterials = () => {
+    scene.traverse(child => {
+        console.log(child)
+    })
+}
 
 
 
