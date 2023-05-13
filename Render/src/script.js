@@ -7,9 +7,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 /**
  * Base
- */
+*/
 // Debug
-const gui = new dat.GUI({ width: 360 })
+const gui = new dat.GUI({ width: 360 });
+const debugObject = {};
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -17,21 +18,41 @@ const canvas = document.querySelector('canvas.webgl')
 // Scene
 const scene = new THREE.Scene()
 
+
+/**
+ * Update All material;
+*/
+
+const updateAllMaterials = () => {
+    scene.traverse(child => {
+        if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
+            child.material.envMap = envTexture;
+            child.material.envMapIntensity = debugObject.envIntensity;
+        }
+    })
+}
+
+
+
 /**
  * Env Map Texture
- */
+*/
 const cubeTextureLoader = new THREE.CubeTextureLoader();
 const envTexture = cubeTextureLoader.load([
-    'textures/environmentMaps/0/px.jpg',
-    'textures/environmentMaps/0/nx.jpg',
-    'textures/environmentMaps/0/py.jpg',
-    'textures/environmentMaps/0/ny.jpg',
-    'textures/environmentMaps/0/pz.jpg',
-    'textures/environmentMaps/0/nz.jpg',
+    'textures/environmentMaps/1/px.jpg',
+    'textures/environmentMaps/1/nx.jpg',
+    'textures/environmentMaps/1/py.jpg',
+    'textures/environmentMaps/1/ny.jpg',
+    'textures/environmentMaps/1/pz.jpg',
+    'textures/environmentMaps/1/nz.jpg',
 ]);
 
 scene.background = envTexture;
+scene.environment = envTexture;    // This apply the envMap to all the Meshes Present In Scene So no need to call the function
 
+debugObject.envIntensity = 1;
+const debug = gui.addFolder('Debug');
+debug.add(debugObject, 'envIntensity').min(0).min(10).step(0.01).name('Env Map Intensity').onChange(updateAllMaterials)
 
 
 
@@ -53,22 +74,24 @@ gltfLoader.load(
         flightHelmet.rotation.y = Math.PI * 0.5;
         scene.add(flightHelmet);
         
-        updateAllMaterials();
+        // updateAllMaterials();
         gui.add(flightHelmet.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name("Helmet Rotation Y");
     }
 )
 
 
-
 /**
- * Update All material;
+ * Test Sphere
  */
-
-const updateAllMaterials = () => {
-    scene.traverse(child => {
-        console.log(child)
+const sphere = new THREE.Mesh(
+    new THREE.SphereGeometry(1, 100, 100),
+    new THREE.MeshStandardMaterial({
+        metalness: 1,
+        roughness: 0.1
     })
-}
+)
+sphere.position.set(5, 0, 0)
+scene.add(sphere)
 
 
 
