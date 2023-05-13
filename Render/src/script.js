@@ -6,6 +6,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
 
+
 /**
  * Base
 */
@@ -15,6 +16,8 @@ const debugObject = {};
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
+
+
 
 // Scene
 const scene = new THREE.Scene()
@@ -26,9 +29,11 @@ const scene = new THREE.Scene()
 
 const updateAllMaterials = () => {
     scene.traverse(child => {
-        if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
+        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
             child.material.envMap = envTexture;
             child.material.envMapIntensity = debugObject.envIntensity;
+            child.castShadow = true;
+            child.receiveShadow = true;
         }
     })
 }
@@ -75,18 +80,19 @@ debug.add(debugObject, 'envIntensity').min(0).min(10).step(0.01).name('Env Map I
 const gltfLoader = new GLTFLoader();
 let flightHelmet = null;
 gltfLoader.load(
-    'models/FlightHelmet/glTF/FlightHelmet.gltf',
+    'models/hamburger.glb',
+    // 'models/FlightHelmet/glTF/FlightHelmet.gltf',
 
     (glTF) => {
-        console.log(glTF);
         flightHelmet = glTF.scene;
-        flightHelmet.scale.set(10, 10, 10);
-        flightHelmet.position.set(0, -4, 0)
+        flightHelmet.scale.set(.61, .61, .61);
+        flightHelmet.position.set(0, -1.5, 0);
         flightHelmet.rotation.y = Math.PI * 0.5;
         scene.add(flightHelmet);
-        
-        // updateAllMaterials();
+
+        updateAllMaterials();
         gui.add(flightHelmet.rotation, 'y').min(-Math.PI).max(Math.PI).step(0.001).name("Helmet Rotation Y");
+        console.clear()
     }
 )
 
@@ -100,7 +106,9 @@ const sphere = new THREE.Mesh(
         metalness: 1,
         roughness: 0.1
     })
-)
+);
+sphere.castShadow = true;
+sphere.receiveShadow = true;
 sphere.position.set(5, 0, 0)
 scene.add(sphere)
 
@@ -112,7 +120,16 @@ scene.add(sphere)
 const ambientLight = new THREE.AmbientLight('#ffffff', .3);
 scene.add(ambientLight);
 const directionalLight = new THREE.DirectionalLight('#ffffff', 3);
-directionalLight.position.set(0.25, 3, -2.25)
+directionalLight.shadow.camera.far = 15;
+directionalLight.shadow.mapSize.set(1024, 1024);
+directionalLight.position.set(0.25, 3, -2.25);
+
+directionalLight.castShadow = true;
+const directionalLightCameraHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+directionalLightCameraHelper.visible = false;
+scene.add(directionalLightCameraHelper)
+
+
 scene.add(directionalLight);
 
 gui.add(directionalLight, 'intensity').min(0.01).max(10).step(0.001).name('Light Intensity');
@@ -150,7 +167,7 @@ window.addEventListener('resize', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(4, 1, - 4)
+camera.position.set(0, 0, 10)
 scene.add(camera)
 
 // Controls
@@ -161,7 +178,8 @@ controls.enableDamping = true
  * Renderer
  */
 const renderer = new THREE.WebGLRenderer({
-    canvas: canvas
+    canvas: canvas,
+    antialias: true                  //  Provides the stair like effect to the screen
 })
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
@@ -171,23 +189,29 @@ renderer.physicallyCorrectLights = true;
 renderer.outputEncoding = THREE.sRGBEncoding
 renderer.toneMapping = THREE.ACESFilmicToneMapping; // ---NEW wAY
 renderer.toneMappingeExposure = 3;
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
-gui.add(renderer, 'toneMappingeExposure').min(0).max(10).step(0.001).name('Tone Exposure');
+gui.add(renderer, 'toneMappingExposure').min(0).max(10).step(0.001).name('Tone Exposure');
 gui.add(renderer, 'toneMapping', {
     No: THREE.NoToneMapping,
     Linear: THREE.LinearToneMapping,
     Rien: THREE.ReinhardToneMapping,
     Cinenon: THREE.CineonToneMapping,
     Aces: THREE.ACESFilmicToneMapping
-});
+})
+    .onFinishChange(() => {
+        renderer.toneMapping = Number(renderer.toneMapping);
+        updateAllMaterials()
+    });
 
 /**
  * Animate
  */
+console.clear()
 const tick = () => {
     // Update controls
     controls.update()
-
     // Render
     renderer.render(scene, camera)
 
