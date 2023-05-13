@@ -5,6 +5,7 @@ import * as dat from 'dat.gui';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader'
 
+
 /**
  * Base
 */
@@ -47,6 +48,8 @@ const envTexture = cubeTextureLoader.load([
     'textures/environmentMaps/0/nz.jpg',
 ]);
 
+envTexture.encoding = THREE.sRGBEncoding;
+
 scene.background = envTexture;
 scene.environment = envTexture;    // This apply the envMap to all the Meshes Present In Scene So no need to call the function
 
@@ -60,6 +63,14 @@ debug.add(debugObject, 'envIntensity').min(0).min(10).step(0.01).name('Env Map I
 /**
  * lOADERS
  */
+
+// Gltf loaders automatically encodes the model texture to sRGBencoding
+// Tone Mapping Converts the HDR(High Dynamic Range) to LDR(Low Dynamic Range)
+// Hdr contains thing more than color, it contains color information expanding 1 i.e. white(1) and black(0)
+// But the assets used here is not inlined with hdr, so we need to convert it ti hdr for realistic effect
+// It is done by tone mapping --> squeezing the value
+// Encoding uses the same technique
+
 
 const gltfLoader = new GLTFLoader();
 let flightHelmet = null;
@@ -158,7 +169,17 @@ renderer.physicallyCorrectLights = true;
 
 // OutputEncoding controls the output renderer encoding
 renderer.outputEncoding = THREE.sRGBEncoding
-// renderer.toneMapping = THREE.NoToneMapping; // ---NEW wAY
+renderer.toneMapping = THREE.ACESFilmicToneMapping; // ---NEW wAY
+renderer.toneMappingeExposure = 3;
+
+gui.add(renderer, 'toneMappingeExposure').min(0).max(10).step(0.001).name('Tone Exposure');
+gui.add(renderer, 'toneMapping', {
+    No: THREE.NoToneMapping,
+    Linear: THREE.LinearToneMapping,
+    Rien: THREE.ReinhardToneMapping,
+    Cinenon: THREE.CineonToneMapping,
+    Aces: THREE.ACESFilmicToneMapping
+});
 
 /**
  * Animate
