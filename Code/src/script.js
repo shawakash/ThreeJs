@@ -4,19 +4,14 @@ class Robot {                  // Use Pasal Case
         // name can be used everywhere in constructor but this.name is avaiable everywhere in class
         this.name = name;                 // To use the name in whole class of a particular instance
         this.legs = legs;
-        this.sayHi();           // a method can be called inside another method
         console.log(`I am ${this.name}. Thank You Creater`);
+        this.sayHi();           // a method can be called inside another method
     }
     sayHi() {                  // Methods   --> Functions inside class
         console.log(`hoal, my name is ${this.name}. I have ${this.legs} legs.`);
     }
     
 }  
-
-// parameters passed inside constructor are called properties and can be used outside the class also
-const wallE = new Robot('WallE', 5);    // This is an instance of the class use camel Case
-const ultron = new Robot('Ultron', 4);
-const astroBoy = new Robot('AstroBoy', 0);
 
 // console.log(wallE.name)
 // console.log(ultron.name)
@@ -29,6 +24,42 @@ const astroBoy = new Robot('AstroBoy', 0);
 // wallE.sayHi();
 // ultron.sayHi();
 // astroBoy.sayHi();
+
+
+// to extend Class from another class
+
+class FlyingRobot extends Robot {            // Inheirtance
+    // All those code from Robot is implemented if an instance of FlyingRobot is created;
+    constructor(name, legs) {  // Nothing Special The code written Inside Is merged with initial constructor
+        super(name, legs);             // Need To use this to overwrite constructor
+        // Super is used to refer to parent class
+        super.sayHi();               // to implement the parent class
+        console.log(`I am ${this.name}. Thank You To Create Your Destroyer :) `);
+    }
+
+    takeOf() {
+        console.log(`Have A Good Flight ${this.name}`);
+    }
+
+    landing() {
+        console.log(`That was a hell off a trip, you ${this.legs} legged bitch`);
+    }
+
+    sayHi() {        // Overwriting      --> Every Method other than constructor can be overwritten as this
+        console.log('OverWriting SyHi')
+    }
+
+}
+
+
+// parameters passed inside constructor are called properties and can be used outside the class also
+const wallE = new Robot('WallE', 5);    // This is an instance of the class use camel Case
+const ultron = new FlyingRobot('Ultron', 4);
+const astroBoy = new FlyingRobot('AstroBoy', 0);
+
+// ultron.sayHi();
+// ultron.takeOf();
+// ultron.landing();
 
 
 import './style.css'
