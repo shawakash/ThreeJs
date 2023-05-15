@@ -1,14 +1,32 @@
+class Robot {                  // Use Pasal Case
+    constructor(name) {                // Contructor are called authomateical when an instance is created
+        // console.log('Will always be called');
+
+        this.name = name;                 // To use the name in whole class of a particular instance
+
+        console.log('I am ', name, '. Thank You Creater');
+    }
+    sayHi() {                  // Methods   --> Functions inside class
+        console.log('hoal, my name is', this.name);
+    }
+
+}  
+
+const wallE = new Robot('WallE');    // This is an instance of the class use camel Case
+const ultron = new Robot('Ultron');
+const astroBoy = new Robot('AstroBoy');
+
+wallE.sayHi();
+ultron.sayHi();
+
+
 import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import test from './test';
-import {fu, f} from './test';
 
-console.log(test)
-console.log(f);
-fu()
+
 
 /**
  * Loaders
