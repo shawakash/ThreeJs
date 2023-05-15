@@ -12,6 +12,8 @@ export default class Time extends EventEmitter {
         this.elapsedTime = 0;
         this.deltaTime = 16;         // May lead to bug if =0
 
+        this.trigger('tick')
+
         window.requestAnimationFrame(() => {
             this.tick();
         })

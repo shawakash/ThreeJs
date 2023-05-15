@@ -1,9 +1,8 @@
 import EventEmitter from './EventEmitter'
 
 export default class Sizes extends EventEmitter {
-    constructor(canvas) {
+    constructor() {
         super();
-        this.canvas = canvas;
 
         //setup
         this.width = window.innerWidth;
