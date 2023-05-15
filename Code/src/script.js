@@ -3,9 +3,9 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
-import Robot from './classes/Robot';
-import FlyingRobot from './classes/FlyingRobot';
-
+import Experience from './Experience/Experience'
+// import Robot from './classes/Robot';
+// import FlyingRobot from './classes/FlyingRobot';
 
 
 // class Robot {                  // Use Pasal Case
@@ -63,9 +63,9 @@ import FlyingRobot from './classes/FlyingRobot';
 
 
 // parameters passed inside constructor are called properties and can be used outside the class also
-const wallE = new Robot('WallE', 5);    // This is an instance of the class use camel Case
-const ultron = new FlyingRobot('Ultron', 4);
-const astroBoy = new FlyingRobot('AstroBoy', 0);
+// const wallE = new Robot('WallE', 5);    // This is an instance of the class use camel Case
+// const ultron = new FlyingRobot('Ultron', 4);
+// const astroBoy = new FlyingRobot('AstroBoy', 0);
 
 // ultron.sayHi();
 // ultron.takeOf();
@@ -74,7 +74,12 @@ const astroBoy = new FlyingRobot('AstroBoy', 0);
 // First the constructor of parent is implemented then the local contructor
 
 
+/**
+ * Experience
+ */
 
+const experience = new Experience(document.querySelector('.webgl'));              // The Properties can be changed accordingly making the code usefull by other coders
+// console.log(experience)
 
 
 
