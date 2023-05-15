@@ -232,7 +232,7 @@ window.addEventListener('resize', () =>
 // Base camera
 const camera = new THREE.PerspectiveCamera(35, sizes.width / sizes.height, 0.1, 100)
 camera.position.set(6, 4, 8)
-scene.add(camera)
+// scene.add(camera)
 
 // Controls
 const controls = new OrbitControls(camera, canvas)
