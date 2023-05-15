@@ -1,23 +1,34 @@
 class Robot {                  // Use Pasal Case
-    constructor(name) {                // Contructor are called authomateical when an instance is created
+    constructor(name, legs) {                // Contructor are called authomateical when an instance is created
         // console.log('Will always be called');
-
+        // name can be used everywhere in constructor but this.name is avaiable everywhere in class
         this.name = name;                 // To use the name in whole class of a particular instance
-
-        console.log('I am ', name, '. Thank You Creater');
+        this.legs = legs;
+        this.sayHi();           // a method can be called inside another method
+        console.log(`I am ${this.name}. Thank You Creater`);
     }
     sayHi() {                  // Methods   --> Functions inside class
-        console.log('hoal, my name is', this.name);
+        console.log(`hoal, my name is ${this.name}. I have ${this.legs} legs.`);
     }
-
+    
 }  
 
-const wallE = new Robot('WallE');    // This is an instance of the class use camel Case
-const ultron = new Robot('Ultron');
-const astroBoy = new Robot('AstroBoy');
+// parameters passed inside constructor are called properties and can be used outside the class also
+const wallE = new Robot('WallE', 5);    // This is an instance of the class use camel Case
+const ultron = new Robot('Ultron', 4);
+const astroBoy = new Robot('AstroBoy', 0);
 
-wallE.sayHi();
-ultron.sayHi();
+// console.log(wallE.name)
+// console.log(ultron.name)
+// console.log(astroBoy.name)
+
+// console.log(wallE.legs)
+// console.log(ultron.legs)
+// console.log(astroBoy.legs)
+
+// wallE.sayHi();
+// ultron.sayHi();
+// astroBoy.sayHi();
 
 
 import './style.css'
