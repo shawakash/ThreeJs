@@ -2,6 +2,7 @@ import Camera from "./Camera";
 import Renderer from "./Renderer";
 import World from "./World/World";
 import sources from "./sources";
+import Debug from "./utils/Debug";
 import Resource from "./utils/Resources";
 import Sizes from "./utils/Sizes";
 import Time from "./utils/Time";
@@ -20,6 +21,11 @@ export default class Experience {
         }
 
         instance = this;
+
+
+        //debug
+        this.debug = new Debug();
+
 
         // Global Access  --> Through console
         window.experience = this;                // Be carefull
