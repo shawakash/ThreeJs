@@ -71,8 +71,12 @@ const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 // This is called template Literial
 const material = new THREE.RawShaderMaterial({
     vertexShader: testVertexShader,             
-    fragmentShader: testFragmentShader
+    fragmentShader: testFragmentShader,
+    // wireframe: true
 });
+
+// Some common properties of MeshMaterial works fine with Raw/ShaderMaterial like wireframe, test, side etc
+// but properties like alphamap, map etc doesn't
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
