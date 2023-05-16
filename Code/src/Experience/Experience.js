@@ -30,9 +30,8 @@ export default class Experience {
 
         // scene
         this.scene = new THREE.Scene();
-        this.resouces = new Resource(sources);
+        this.resources = new Resource(sources);
 
-        
 
         // World
         this.world = new World();

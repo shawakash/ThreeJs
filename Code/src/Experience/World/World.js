@@ -7,7 +7,8 @@ export default class World {
     constructor() {
         this.experience = new Experience();
         this.scene = this.experience.scene;
-        
+        this.resources = this.experience.resources;
+
         /**
          * Test Mesh
          */
@@ -19,8 +20,16 @@ export default class World {
         );
         this.scene.add(testMesh)
 
-        // Enviornment
-        this.enviornment = new Environment();
+        // WAIT FOR THE RESOOURCE TO LOAD
+        this.resources.on('ready', () => {
+            
+            // Enviornment
+            this.enviornment = new Environment();
+        })
+
+
+
+        
     }
 
     // setLoaders() {
