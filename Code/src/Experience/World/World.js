@@ -2,6 +2,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import Experience from "../Experience";
 import * as THREE from 'three';
 import Environment from "./Enviornment";
+import Floor from "./Floor";
 
 export default class World {
     constructor() {
@@ -25,6 +26,7 @@ export default class World {
             
             // Enviornment
             this.enviornment = new Environment();
+            this.floor = new Floor();
         })
 
 

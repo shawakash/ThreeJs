@@ -53,10 +53,7 @@ export default class Resource extends EventEmitter {
                         this.sourceLoaded(source, file);
                     }
                 );
-                textureLoader.encoding = THREE.sRGBEncoding
-                textureLoader.repeat.set(1.5, 1.5)
-                textureLoader.wrapS = THREE.RepeatWrapping
-                textureLoader.wrapT = THREE.RepeatWrapping
+                
             }
         });
     }
