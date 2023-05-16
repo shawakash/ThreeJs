@@ -3,6 +3,7 @@ import Experience from "../Experience";
 import * as THREE from 'three';
 import Environment from "./Enviornment";
 import Floor from "./Floor";
+import Fox from "./Fox";
 
 export default class World {
     constructor() {
@@ -19,19 +20,26 @@ export default class World {
                 // wireframe: true
             })
         );
-        this.scene.add(testMesh)
+        // this.scene.add(testMesh)
 
         // WAIT FOR THE RESOOURCE TO LOAD
         this.resources.on('ready', () => {
             
             // Enviornment
-            this.enviornment = new Environment();
             this.floor = new Floor();
+            this.fox = new Fox();
+            this.enviornment = new Environment();
         })
 
 
 
         
+    }
+
+    update() {
+        if(this.fox) {
+            this.fox.update();
+        }
     }
 
     // setLoaders() {

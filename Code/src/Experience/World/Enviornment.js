@@ -40,7 +40,7 @@ export default class Environment {
                 }
             })
         }
-        this.setEnviornmentMap.updateMaterial();
+        // this.setEnviornmentMap.updateMaterial();
         
     }
     
