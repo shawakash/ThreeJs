@@ -31,6 +31,8 @@ export default class Experience {
 
         // World
         this.world = new World();
+        
+        
 
         // Setup
         this.sizes = new Sizes();

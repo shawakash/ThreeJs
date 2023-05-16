@@ -1,5 +1,7 @@
+import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import Experience from "../Experience";
 import * as THREE from 'three';
+import Environment from "./Enviornment";
 
 export default class World {
     constructor() {
@@ -11,14 +13,17 @@ export default class World {
          */
         const testMesh = new THREE.Mesh(
             new THREE.BoxGeometry(1, 1, 1),
-            new THREE.MeshBasicMaterial({
-                wireframe: true
+            new THREE.MeshStandardMaterial({
+                // wireframe: true
             })
         );
         this.scene.add(testMesh)
+
+        // Enviornment
+        this.enviornment = new Environment();
     }
 
-    setLoaders() {
-
-    }
+    // setLoaders() {
+    //     this.loaders = new GLTFLoader();
+    // }
 }
