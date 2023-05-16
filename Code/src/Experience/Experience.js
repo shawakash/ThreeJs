@@ -79,4 +79,23 @@ export default class Experience {
         this.camera.resize();         // on resize update the camera;
         this.renderer.resize();  
     }
+
+    destroy() {
+        this.sizes.off('resize');
+        this.time.off('tick');
+
+        this.scene.traverse(child => {
+            if(child instanceof THREE.Mesh) {
+                child.geometry.dispose();
+
+                for(const key in child.material) {
+                    const value = child.material[key];
+
+                    if(value &&  typeof value.dispose == 'function') {
+                        value.dispose();
+                    }
+                }
+            }
+        })
+    }
 }
