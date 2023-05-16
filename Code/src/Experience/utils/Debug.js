@@ -6,7 +6,7 @@ export default class Debug {
         // console.log(this.active);
 
         if(this.active) {
-            this.ui = new dat.GUI();
+            this.ui = new dat.GUI({ width: 360 });
         }
     }
 }
