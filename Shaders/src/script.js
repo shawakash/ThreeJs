@@ -3,6 +3,39 @@ import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui'
 
+
+/**
+ * Shaders
+ * Main Components of WebGL
+ * Programs Written in GLSL
+ * Positions each vertices on
+ * Tells the GPU to color each pixels
+ * No, we don't call pixel,  we call fragments
+ * Shaders Require data, al lot of data
+ * 
+ * Two Types
+ * 
+ * 1) Vertex Shaders   --> Positions each vertices of a geometry
+ * 2) Fragment Shaders --> Colors Each Fragment of the renderer
+ * 
+ * 
+ * Vertex Shaders only creates the vertice, the data provided makes it look like geometry
+ * The same vertex shaders are used to create multiple vertices, only some data would be different from each vertex
+ * Those Data are called """""""""attributes"""""""""
+ * 
+ * Some Type of data doesn't changes with vertices, these are called """"""""""""""""""""""""Uniforms'''''''''''''''''
+ * 
+ * Once the gpu knows that a vertice lies in a region then its the fragment shaders that guides the renderer to color each visible fragments of that geometry
+ * It also takes data
+ * Fragment Shaders only takes uniform and no attributes
+ * Vertice shaders also sends data to fragment shader, those are called varying
+ * 
+ * Varying are Interpolated between vertices
+ */
+
+
+
+
 /**
  * Base
  */
