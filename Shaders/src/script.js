@@ -31,7 +31,12 @@ import * as dat from 'dat.gui'
  * Vertice shaders also sends data to fragment shader, those are called varying
  * 
  * Varying are Interpolated between vertices
+ * 
+ * With Shaders, we can do Post-Proccessing
+ * 
  */
+
+
 
 
 
@@ -60,7 +65,28 @@ const textureLoader = new THREE.TextureLoader()
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
 // Material
-const material = new THREE.MeshBasicMaterial()
+// Use Backticks to write code/data in multiline
+// This is called template Literial
+const material = new THREE.RawShaderMaterial({
+    vertexShader: `
+        uniform mat4 projectionMatrix;
+        uniform mat4 viewMatrix;
+        uniform mat4 modelMatrix;
+
+        attribute vec3 position;
+
+        void main() {
+            gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+        }
+    `,             
+    fragmentShader: `
+        precision mediump float;
+
+        void main() {
+            gl_FragColor = vec4(1.0, 1.0, 1.1, 1.0);
+        }
+    `
+});
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
