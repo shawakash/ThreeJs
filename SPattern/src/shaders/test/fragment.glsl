@@ -25,6 +25,9 @@ void main()
     // gl_FragColor = vec4(vec3(strengthY), 1.0);
     
     // Pattern 7
+    // gl_FragColor = vec4(vec3(mod(strengthY * 10.0, 1.0)), 1.0);
+    
+    // Pattern 8
     gl_FragColor = vec4(vec3(mod(strengthY * 10.0, 1.0)), 1.0);
     
 }
