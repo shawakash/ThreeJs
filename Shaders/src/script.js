@@ -80,12 +80,12 @@ for (let i = 0; i < count; i++) {
 // For varying use vrandom
 // for uniforn use urandom
 geometry.setAttribute('arandom', new THREE.Float32BufferAttribute(random, 1))
-console.log(geometry)
+// console.log(geometry)
 
 // Material
 // Use Backticks to write code/data in multiline
 // This is called template Literial
-const material = new THREE.RawShaderMaterial({
+const material = new THREE.ShaderMaterial({
     vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
     // wireframe: true,
@@ -100,6 +100,21 @@ const material = new THREE.RawShaderMaterial({
     }
 
 });
+// const material = new THREE.RawShaderMaterial({
+//     vertexShader: testVertexShader,
+//     fragmentShader: testFragmentShader,
+//     // wireframe: true,
+//     // transparent: true,
+
+//     // Uniforms --> Tweekable Uniforms
+//     uniforms: {
+//         uFrequency: { value: new THREE.Vector2(13, 3) },
+//         uTime: { value: 0 },
+//         uColor: { value: new THREE.Color('orange') },
+//         uTexture: { value: flagTexture }
+//     }
+
+// });
 
 
 const uniforms = gui.addFolder('Uniforms');

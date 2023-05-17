@@ -1,15 +1,15 @@
 // GLSL is close to C
 // Typed Language
 
-uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
+// uniform mat4 projectionMatrix;              // Prebuilt in THREE.ShaderMaterial
+// uniform mat4 viewMatrix;              // Prebuilt in THREE.ShaderMaterial
+// uniform mat4 modelMatrix;              // Prebuilt in THREE.ShaderMaterial
 uniform vec2 uFrequency;
 uniform float uTime;
 
 attribute float arandom;
-attribute vec3 position;
-attribute vec2 uv;
+// attribute vec3 position;
+// attribute vec2 uv;
 
 varying vec2 vUv;
 varying float vElevation;

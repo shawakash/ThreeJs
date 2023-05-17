@@ -1,5 +1,5 @@
     // Precicision value refers to the extend to which it will color
-precision mediump float;
+// precision mediump float;  //Prebuilt in THREE.ShaderMaterial
 
 uniform vec3 uColor;
 uniform sampler2D uTexture;
