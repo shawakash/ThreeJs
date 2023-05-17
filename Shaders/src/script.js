@@ -25,7 +25,7 @@ import testFragmentShader from './shaders/test/fragment.glsl'
  * The same vertex shaders are used to create multiple vertices, only some data would be different from each vertex
  * Those Data are called """""""""attributes"""""""""
  * 
- * Some Type of data doesn't changes with vertices, these are called """"""""""""""""""""""""Uniforms'''''''''''''''''
+ * Some Type of data doesn't changes with vertices or fragments, these are called """"""""""""""""""""""""Uniforms'''''''''''''''''
  * 
  * Once the gpu knows that a vertice lies in a region then its the fragment shaders that guides the renderer to color each visible fragments of that geometry
  * It also takes data
@@ -70,7 +70,7 @@ const count = geometry.attributes.position.count;
 let random = new Float32Array(count);
 
 for(let i=0; i<count; i++) {
-    random[i] = Math.random()  ;
+    random[i] =  Math.random()  ;
 }
 
 // Name is arandom as it is a attribute --> Convection
@@ -86,8 +86,20 @@ const material = new THREE.RawShaderMaterial({
     vertexShader: testVertexShader,             
     fragmentShader: testFragmentShader,
     // wireframe: true,
-    transparent: true,
+    // transparent: true,
+
+    // Uniforms --> Tweekable Uniforms
+    uniforms: {
+        uFrequency: { value: 10 }
+    }
+
 });
+
+
+const uniforms = gui.addFolder('Uniforms');
+
+uniforms.add(material.uniforms.uFrequency, 'value').min(0).max(100).step(0.001).name('Frequency');
+
 
 // Some common properties of MeshMaterial works fine with Raw/ShaderMaterial like wireframe, test, side etc
 // but properties like alphamap, map etc doesn't
