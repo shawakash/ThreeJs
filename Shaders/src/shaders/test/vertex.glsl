@@ -4,6 +4,7 @@
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
+attribute float arandom;
 attribute vec3 position;
 
 // float func() {
@@ -79,7 +80,12 @@ void main() {
     // projectionMatrix  --> projects the coordinates to clip space coordinates
     // model and view matrix can be merged as modelViewMatrix
 
+
+    // seperatting gives more control
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+
+    modelPosition.z += sin(modelPosition.x * 10.0) * 0.10 + arandom;
+
     vec4 viewPostion = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPostion;
 

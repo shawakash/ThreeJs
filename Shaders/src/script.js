@@ -66,13 +66,27 @@ const textureLoader = new THREE.TextureLoader()
 // Geometry
 const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 
+const count = geometry.attributes.position.count;
+let random = new Float32Array(count);
+
+for(let i=0; i<count; i++) {
+    random[i] = (Math.random() - 0.5) * 0.1  ;
+}
+
+// Name is arandom as it is a attribute --> Convection
+// For varying use vrandom
+// for uniforn use urandom
+geometry.setAttribute('arandom', new THREE.Float32BufferAttribute(random, 1))
+console.log(geometry)
+
 // Material
 // Use Backticks to write code/data in multiline
 // This is called template Literial
 const material = new THREE.RawShaderMaterial({
     vertexShader: testVertexShader,             
     fragmentShader: testFragmentShader,
-    wireframe: true
+    // wireframe: true,
+    transparent: true,
 });
 
 // Some common properties of MeshMaterial works fine with Raw/ShaderMaterial like wireframe, test, side etc
