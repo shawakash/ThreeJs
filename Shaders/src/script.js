@@ -70,7 +70,7 @@ const count = geometry.attributes.position.count;
 let random = new Float32Array(count);
 
 for(let i=0; i<count; i++) {
-    random[i] = (Math.random() - 0.5) * 0.1  ;
+    random[i] = Math.random()  ;
 }
 
 // Name is arandom as it is a attribute --> Convection

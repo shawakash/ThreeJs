@@ -7,6 +7,8 @@ uniform mat4 modelMatrix;
 attribute float arandom;
 attribute vec3 position;
 
+varying float vrandom;
+
 // float func() {
 //     float a = 1.0;
 //     float b = 2.0;
@@ -84,12 +86,16 @@ void main() {
     // seperatting gives more control
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-    modelPosition.z += sin(modelPosition.x * 10.0) * 0.10 + arandom;
+    // modelPosition.z += sin(modelPosition.x * 10.0) * 0.10 ;
+    modelPosition.z += arandom * 0.1 ;
 
     vec4 viewPostion = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPostion;
 
     gl_Position = projectedPosition;
+
+    // Passing a varying
+    vrandom = arandom;
 
     // Hola
 }
