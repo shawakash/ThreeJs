@@ -28,44 +28,44 @@ void main() {
     // bool fi = false;
 
 
-    vec2 foo = vec2(1.0, 3.0);    // Requires two float values
-    // empty vec2 results into error 
-    vec2 fi = vec2(0.0);          // a single value makes both the value same
+//     vec2 foo = vec2(1.0, 3.0);    // Requires two float values
+//     // empty vec2 results into error 
+//     vec2 fi = vec2(0.0);          // a single value makes both the value same
 
-    fi.x = 5.0;
-    fi.y = 6.0;
+//     fi.x = 5.0;
+//     fi.y = 6.0;
 
-    // single operation is performed on both parameters
-    fi *= 5.0;
+//     // single operation is performed on both parameters
+//     fi *= 5.0;
 
-    // Vect3
+//     // Vect3
 
-    vec3 fww = vec3(0.2);
-    fww.x = 56.3;
-    fww.y = 5.3;
-    fww.z = 56.243;
+//     vec3 fww = vec3(0.2);
+//     fww.x = 56.3;
+//     fww.y = 5.3;
+//     fww.z = 56.243;
 
-//  Instead of x, y, z rgb is also supported
-// Xyz and rgb can be mixed also
-    vec3 color = vec3(0);
-    color.r = 0.5;
-    color.g = 0.2;
-    color.b = 0.12;
+// //  Instead of x, y, z rgb is also supported
+// // Xyz and rgb can be mixed also
+//     vec3 color = vec3(0);
+//     color.r = 0.5;
+//     color.g = 0.2;
+//     color.b = 0.12;
 
 
-    vec2 f1 = vec2(1.0);
+//     vec2 f1 = vec2(1.0);
 
-    vec3 f3 = vec3(f1, 3.0);
+//     vec3 f3 = vec3(f1, 3.0);
 
-    // Swizzle
-    vec2 f2 = f3.xy;
+//     // Swizzle
+//     vec2 f2 = f3.xy;
 
-    // VEc4 - xyzw, rgba
+//     // VEc4 - xyzw, rgba
 
-    // Gl_position contains information regarding the vertex
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
-    gl_Position.x += 0.5;
-    gl_Position.y += 0.5;
+//     // Gl_position contains information regarding the vertex
+//     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+//     gl_Position.x += 0.5;
+    // gl_Position.y += 0.5;
 
     // gl_position contains 4 value(vec4) widht, height, depth of the clip and the fourth is perspective of the clip
     // These 4 together is called homogenous coordinates
@@ -77,7 +77,13 @@ void main() {
     // modelMat --> apply transformation of position relative to mesh position, rotation, and scale 
     // viewMat --> is tranformation related to camera(position, fov, ascpect)
     // projectionMatrix  --> projects the coordinates to clip space coordinates
+    // model and view matrix can be merged as modelViewMatrix
 
+    vec4 modelPosition = modelMatrix * vec4(position, 1.0);
+    vec4 viewPostion = viewMatrix * modelPosition;
+    vec4 projectedPosition = projectionMatrix * viewPostion;
+
+    gl_Position = projectedPosition;
 
     // Hola
 }
