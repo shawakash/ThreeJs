@@ -4,7 +4,8 @@
 uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
-uniform float uFrequency;
+uniform vec2 uFrequency;
+uniform float uTime;
 
 attribute float arandom;
 attribute vec3 position;
@@ -90,7 +91,8 @@ void main() {
 
     
 
-    modelPosition.z += sin(modelPosition.x * uFrequency) * 0.10 ;
+    modelPosition.z += sin(modelPosition.x * uFrequency.x - uTime) * 0.10 ;
+    modelPosition.z += sin(modelPosition.y * uFrequency.y - uTime) * 0.10 ;
     // modelPosition.z += arandom * 0.1 ;
 
     vec4 viewPostion = viewMatrix * modelPosition;

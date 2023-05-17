@@ -48,6 +48,8 @@ import testFragmentShader from './shaders/test/fragment.glsl'
  */
 // Debug
 const gui = new dat.GUI()
+let debugObject = {};
+debugObject.windSpeed = 1;
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -90,7 +92,8 @@ const material = new THREE.RawShaderMaterial({
 
     // Uniforms --> Tweekable Uniforms
     uniforms: {
-        uFrequency: { value: 10 }
+        uFrequency: { value: new THREE.Vector2(10, 5) },
+        uTime: { value: 0 }
     }
 
 });
@@ -98,7 +101,9 @@ const material = new THREE.RawShaderMaterial({
 
 const uniforms = gui.addFolder('Uniforms');
 
-uniforms.add(material.uniforms.uFrequency, 'value').min(0).max(100).step(0.001).name('Frequency');
+uniforms.add(material.uniforms.uFrequency.value, 'x').min(0).max(100).step(0.001).name('Frequency X');
+uniforms.add(material.uniforms.uFrequency.value, 'y').min(0).max(100).step(0.001).name('Frequency Y');
+
 
 
 // Some common properties of MeshMaterial works fine with Raw/ShaderMaterial like wireframe, test, side etc
@@ -157,10 +162,15 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
+let wind = gui.addFolder('Wind');
+wind.add(debugObject, 'windSpeed').min(0).max(100).step(0.001).name("Wind Speed");
 
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // Update Materials
+    material.uniforms.uTime.value = elapsedTime * debugObject.windSpeed;
 
     // Update controls
     controls.update()
