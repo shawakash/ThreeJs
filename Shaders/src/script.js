@@ -72,7 +72,7 @@ const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 const material = new THREE.RawShaderMaterial({
     vertexShader: testVertexShader,             
     fragmentShader: testFragmentShader,
-    // wireframe: true
+    wireframe: true
 });
 
 // Some common properties of MeshMaterial works fine with Raw/ShaderMaterial like wireframe, test, side etc
@@ -80,6 +80,7 @@ const material = new THREE.RawShaderMaterial({
 
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
+// mesh.position/rotation/scale --> This is related to model matrix
 scene.add(mesh)
 
 /**

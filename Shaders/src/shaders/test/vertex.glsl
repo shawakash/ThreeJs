@@ -5,6 +5,14 @@ uniform mat4 projectionMatrix;
 uniform mat4 viewMatrix;
 uniform mat4 modelMatrix;
 attribute vec3 position;
+
+// float func() {
+//     float a = 1.0;
+//     float b = 2.0;
+
+//     return a+b;
+// }
+
 void main() {
     // float fooBar = 0.2225;
     // float fooBar2 = -0.2225;
@@ -54,6 +62,22 @@ void main() {
 
     // VEc4 - xyzw, rgba
 
+    // Gl_position contains information regarding the vertex
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    gl_Position.x += 0.5;
+    gl_Position.y += 0.5;
+
+    // gl_position contains 4 value(vec4) widht, height, depth of the clip and the fourth is perspective of the clip
+    // These 4 together is called homogenous coordinates
+    // position attribute contains the first three coordinates of the vertex of coordinates(multiple)
+    // Then it is converted to vec4 for gl_position is vec4
+    // Each matrix will transform the position in order to get final clip space coodinates
+    // matrix is uinform here
+    // gl_Position is a range space of transformation of position
+    // modelMat --> apply transformation of position relative to mesh position, rotation, and scale 
+    // viewMat --> is tranformation related to camera(position, fov, ascpect)
+    // projectionMatrix  --> projects the coordinates to clip space coordinates
+
+
     // Hola
 }
