@@ -61,6 +61,7 @@ const scene = new THREE.Scene()
  * Textures
  */
 const textureLoader = new THREE.TextureLoader()
+const flagTexture = textureLoader.load('textures/Flag_of_India.png');
 
 /**
  * Test mesh
@@ -71,8 +72,8 @@ const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
 const count = geometry.attributes.position.count;
 let random = new Float32Array(count);
 
-for(let i=0; i<count; i++) {
-    random[i] =  Math.random()  ;
+for (let i = 0; i < count; i++) {
+    random[i] = Math.random();
 }
 
 // Name is arandom as it is a attribute --> Convection
@@ -85,15 +86,17 @@ console.log(geometry)
 // Use Backticks to write code/data in multiline
 // This is called template Literial
 const material = new THREE.RawShaderMaterial({
-    vertexShader: testVertexShader,             
+    vertexShader: testVertexShader,
     fragmentShader: testFragmentShader,
     // wireframe: true,
     // transparent: true,
 
     // Uniforms --> Tweekable Uniforms
     uniforms: {
-        uFrequency: { value: new THREE.Vector2(10, 5) },
-        uTime: { value: 0 }
+        uFrequency: { value: new THREE.Vector2(13, 3) },
+        uTime: { value: 0 },
+        uColor: { value: new THREE.Color('orange') },
+        uTexture: { value: flagTexture }
     }
 
 });
@@ -101,8 +104,18 @@ const material = new THREE.RawShaderMaterial({
 
 const uniforms = gui.addFolder('Uniforms');
 
-uniforms.add(material.uniforms.uFrequency.value, 'x').min(0).max(100).step(0.001).name('Frequency X');
-uniforms.add(material.uniforms.uFrequency.value, 'y').min(0).max(100).step(0.001).name('Frequency Y');
+uniforms
+    .add(material.uniforms.uFrequency.value, 'x')
+    .min(0)
+    .max(100)
+    .step(0.001)
+    .name('Frequency X');
+uniforms
+    .add(material.uniforms.uFrequency.value, 'y')
+    .min(0)
+    .max(100)
+    .step(0.001)
+    .name('Frequency Y');
 
 
 
@@ -112,6 +125,8 @@ uniforms.add(material.uniforms.uFrequency.value, 'y').min(0).max(100).step(0.001
 // Mesh
 const mesh = new THREE.Mesh(geometry, material)
 // mesh.position/rotation/scale --> This is related to model matrix
+mesh.scale.y = 0.7;
+mesh.scale.x = 1.2;
 scene.add(mesh)
 
 /**
@@ -122,8 +137,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -162,11 +176,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  * Animate
  */
 const clock = new THREE.Clock()
-let wind = gui.addFolder('Wind');
-wind.add(debugObject, 'windSpeed').min(0).max(100).step(0.001).name("Wind Speed");
 
-const tick = () =>
-{
+let wind = uniforms.addFolder('Wind');
+wind
+    .add(debugObject, 'windSpeed')
+    .min(0)
+    .max(100)
+    .step(0.001)
+    .name("Wind Speed");
+
+const tick = () => {
     const elapsedTime = clock.getElapsedTime()
 
     // Update Materials

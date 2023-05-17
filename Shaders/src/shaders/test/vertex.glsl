@@ -9,6 +9,10 @@ uniform float uTime;
 
 attribute float arandom;
 attribute vec3 position;
+attribute vec2 uv;
+
+varying vec2 vUv;
+varying float vElevation;
 
 // varying float vrandom;
 
@@ -89,10 +93,10 @@ void main() {
     // seperatting gives more control
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
-    
+    float elevation = sin(modelPosition.x * uFrequency.x - uTime) * 0.10 ;
+    elevation += sin(modelPosition.y * uFrequency.y - uTime) * 0.10 ;
 
-    modelPosition.z += sin(modelPosition.x * uFrequency.x - uTime) * 0.10 ;
-    modelPosition.z += sin(modelPosition.y * uFrequency.y - uTime) * 0.10 ;
+    modelPosition.z += elevation;
     // modelPosition.z += arandom * 0.1 ;
 
     vec4 viewPostion = viewMatrix * modelPosition;
@@ -102,6 +106,8 @@ void main() {
 
     // Passing a varying
     // vrandom = arandom;
+    vElevation = elevation;
+    vUv = uv;
 
     // Hola
 }
