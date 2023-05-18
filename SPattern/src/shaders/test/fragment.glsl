@@ -123,10 +123,10 @@ void main() {
     // // //     subStrength = vUv.y;
     // // // }
 
-    // // subStrength = strength == 1.0 ? vUv.x : vUv.y;
+    // subStrength = strength == 1.0 ? vUv.x : vUv.y;
 
-    // // strength = mod(subStrength * 10.0, 1.0);
-    // // strength = step(0.8, strength);
+    // strength = mod(subStrength * 10.0, 1.0);
+    // strength = step(0.8, strength);
 
     // strength += step(0.8, mod(vUv.y * 10.0, 1.0));
 
@@ -338,5 +338,6 @@ void main() {
     // vec3 mixedColor = mix(blackColor, uvColor, strength);
 
     // gl_FragColor = vec4(mixedColor, 1.0);
+    strength = clamp(strength, 0.0, 1.0);
     gl_FragColor = vec4(strength  * vUv.x, strength * vUv.y, 1.0 * strength, 1.0) * 2.0;
 }
