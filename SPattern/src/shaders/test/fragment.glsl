@@ -225,11 +225,42 @@ void main() {
     // float strength = 1.0 - (step(0.015, abs(distance(vUv, vec2(0.5)) - 0.3)));
     
     // Pattern 37
-    vec2 wave = vec2(
-        vUv.x,
-        vUv.y + sin(vUv.x * 25.0) * 0.1
-    );
-    float strength = 1.0 - step(0.015, abs(distance(wave, vec2(0.5)) - 0.35));
+    // vec2 wave = vec2(
+    //     vUv.x,
+    //     vUv.y + sin(vUv.x * 25.0) * 0.1
+    // );
+    // float strength = 1.0 - step(0.015, abs(distance(wave, vec2(0.5)) - 0.35));
+    
+    // Pattern 38
+    // vec2 wave = vec2(
+    //     vUv.x + sin(vUv.y * 25.0) * 0.1,
+    //     vUv.y + sin(vUv.x * 25.0) * 0.1
+    // );
+    
+    // Pattern 39
+    // vec2 wave = vec2(
+    //     vUv.x + sin(vUv.y * 75.0) * 0.1,
+    //     vUv.y + sin(vUv.x * 75.0) * 0.1
+    // );
+    // float strength = 1.0 - step(0.015, abs(distance(wave, vec2(0.5)) - 0.35));
+    
+    // Pattern 40
+    // float strength = atan(vUv.x, vUv.y);
+    
+    // Pattern 41
+    // float strength = atan(vUv.x - 0.5, vUv.y - 0.5);
+    
+    // Pattern 42
+    // float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
+    // angle /= 3.14 * 2.0;
+    // angle += 0.5;
+    // float strength = angle;
+    
+    // Pattern 43
+    float angle = atan(vUv.x - 0.5, vUv.y - 0.5);
+    angle /= 3.14 * 2.0;
+    angle += 0.5;
+    float strength = mod(angle, 0.051) * 10.0;
 
     gl_FragColor = vec4(vec3(strength), 1.0);
 }
