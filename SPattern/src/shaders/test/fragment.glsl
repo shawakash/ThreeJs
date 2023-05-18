@@ -60,21 +60,31 @@ void main() {
 
     // Pattern 11
     // float subStrength = vUv.x;
+    // float strength = step(0.8, mod(vUv.x * 10.0, 1.0));
+    // // strength = step(0.8, strength);
+
+    // // // if(strength == 1.0) {
+    // // //     subStrength = vUv.x;
+    // // // } else {
+    // // //     subStrength = vUv.y;
+    // // // }
+
+    // // subStrength = strength == 1.0 ? vUv.x : vUv.y;
+
+    // // strength = mod(subStrength * 10.0, 1.0);
+    // // strength = step(0.8, strength);
+
+    // strength += step(0.8, mod(vUv.y * 10.0, 1.0));
+
+    // gl_FragColor = vec4(vec3(strength), 1.0);
+    
+    
+    // Pattern 12
+    // float strength = step(0.8, mod(vUv.y * 10.0, 1.0));
+    // strength = step(0.8, mod((strength == 1.0 ? vUv.x : vUv.y) * 10.0, 1.0));
     float strength = step(0.8, mod(vUv.x * 10.0, 1.0));
-    // strength = step(0.8, strength);
-
-    // // if(strength == 1.0) {
-    // //     subStrength = vUv.x;
-    // // } else {
-    // //     subStrength = vUv.y;
-    // // }
-
-    // subStrength = strength == 1.0 ? vUv.x : vUv.y;
-
-    // strength = mod(subStrength * 10.0, 1.0);
-    // strength = step(0.8, strength);
-
-    strength += step(0.8, mod(vUv.y * 10.0, 1.0));
+    strength *= step(0.8, mod(vUv.y * 10.0, 1.0));
 
     gl_FragColor = vec4(vec3(strength), 1.0);
 }
+    
