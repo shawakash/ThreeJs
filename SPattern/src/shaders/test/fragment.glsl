@@ -28,20 +28,34 @@ void main()
     // gl_FragColor = vec4(vec3(mod(strengthY * 10.0, 1.0)), 1.0);
     
     // Pattern 8
-    float strength = mod(vUv.y * 10.0, 1.0);
+//     float strength = mod(vUv.y * 10.0, 1.0);
 
-// Avoid if, ternary operator , not better for performance
+// // Avoid if, ternary operator , not better for performance
 
-    // strength = strength < 0.5 ? 1.0 : 0.0;
+//     // strength = strength < 0.5 ? 1.0 : 0.0;
 
-    strength = step(0.5, strength);     // strength returns 0 if the value inside less than edge or else 1'
-    // Step is more efficient
+//     strength = step(0.5, strength);     // strength returns 0 if the value inside less than edge or else 1'
+//     // Step is more efficient
 
-    // if(strength < 0.5) {
-    //     strength = 1.0;
-    // } else {
-    //     strength = 0.0;
-    // }
+//     // if(strength < 0.5) {
+//     //     strength = 1.0;
+//     // } else {
+//     //     strength = 0.0;
+//     // }
+    
+//     gl_FragColor = vec4(vec3(strength), 1.0);
+    
+    // Pattern 9
+    // float strength = mod(vUv.y * 10.0, 1.0);
+
+    // strength = step(0.8, strength);     // strength returns 0 if the value inside less than edge or else 1'
+    
+    // gl_FragColor = vec4(vec3(strength), 1.0);
+    
+    // Pattern 10
+    float strength = mod(vUv.x * 10.0, 1.0);
+
+    strength = step(0.8, strength);     // strength returns 0 if the value inside less than edge or else 1'
     
     gl_FragColor = vec4(vec3(strength), 1.0);
 }
