@@ -29,17 +29,18 @@ const waterMaterial = new THREE.ShaderMaterial({
     fragmentShader: waterFragmentShader,
     side: THREE.DoubleSide,
     uniforms: {
-        uBigWaveElevation: { value: 0.2 },
-        uBigWaveFrequency: { value: new THREE.Vector2(10.0, 5.0) }
+        uBigWaveElevation: { value: 0.3 },
+        uBigWaveFrequency: { value: new THREE.Vector2(5.0, 4.0) },
+        uTime: { value: 0.0 }
 
     }
 })
 
-const debugWater = gui.addFolder('Water');
-const uniforms = debugWater.addFolder('Uniforms');
-uniforms.add(waterMaterial.uniforms.uBigWaveElevation, 'value').min(0.0).max(1.0).step(0.00001).name('Water Elevation');
-uniforms.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'x').min(2.0).max(20.0).step(0.01).name('Water Frequency X');
-uniforms.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'y').min(2.0).max(20.0).step(0.01).name('Water Frequency Y');
+const uniforms = gui.addFolder('Uniforms');
+const debugWater = uniforms.addFolder('Water');
+debugWater.add(waterMaterial.uniforms.uBigWaveElevation, 'value').min(0.0).max(1.0).step(0.00001).name('Water Elevation');
+debugWater.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'x').min(0.0).max(20.0).step(0.01).name('Water Frequency X');
+debugWater.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'y').min(0.0).max(20.0).step(0.01).name('Water Frequency Y');
 
 // Mesh
 const water = new THREE.Mesh(waterGeometry, waterMaterial)
@@ -98,6 +99,9 @@ const clock = new THREE.Clock()
 const tick = () =>
 {
     const elapsedTime = clock.getElapsedTime()
+
+    // ShaderAnimation
+    waterMaterial.uniforms.uTime.value = elapsedTime;
 
     // Update controls
     controls.update()
