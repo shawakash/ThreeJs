@@ -11,8 +11,8 @@ import waterFragmentShader from './shaders/water/fragment.glsl'
 // Debug
 const gui = new dat.GUI({ width: 340 });
 const debugObject = {};
-debugObject.surfaceColor = '#8888ff';
-debugObject.depthColor = '#0000ff';
+debugObject.surfaceColor = '#9bd8ff';
+debugObject.depthColor = '#186691';
 
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
@@ -24,7 +24,7 @@ const scene = new THREE.Scene()
  * Water
  */
 // Geometry
-const waterGeometry = new THREE.PlaneGeometry(2, 2, 128, 128)
+const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
 
 // Material
 const waterMaterial = new THREE.ShaderMaterial({
@@ -36,12 +36,13 @@ const waterMaterial = new THREE.ShaderMaterial({
         uTime: { value: 0.0 },
 
         uBigWaveElevation: { value: 0.3 },
+        uRandom: { value: Math.random() },
         uBigWaveFrequency: { value: new THREE.Vector2(5.0, 4.0) },
-        uBigWaveSpeed: { value: new THREE.Vector2(0.75, 0.75) },
+        uBigWaveSpeed: { value: new THREE.Vector2(4.4, 0.75) },
 
         uWaveDepthColor: { value: new THREE.Color(debugObject.depthColor) },
         uWaveSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
-        uElevationStrength: { value: new THREE.Vector2(3.0, 0.5) }
+        uElevationStrength: { value: new THREE.Vector2(1.4, 0.2) }
 
     }
 })
@@ -55,7 +56,7 @@ debugWater.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'x').min(0.0).max(20.
 debugWater.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'y').min(0.0).max(20.0).step(0.0001).name('Water Speed Z');
 
 debugWater.add(waterMaterial.uniforms.uElevationStrength.value, 'x').min(0.0).max(20.0).step(0.0001).name('Color Strength');
-debugWater.add(waterMaterial.uniforms.uElevationStrength, 'y').min(0.0).max(1.0).step(0.0001).name('Color Strength offset');
+debugWater.add(waterMaterial.uniforms.uElevationStrength.value, 'y').min(0.0).max(1.0).step(0.0001).name('Color Strength offset');
 
 debugWater.addColor(debugObject, 'surfaceColor').onChange(() => {
     waterMaterial.uniforms.uWaveSurfaceColor.value.set(debugObject.surfaceColor)
@@ -124,6 +125,7 @@ const tick = () =>
 
     // ShaderAnimation
     waterMaterial.uniforms.uTime.value = elapsedTime;
+    // waterMaterial.uniforms.uRandom.value = Math.random();
 
     // Update controls
     controls.update()
