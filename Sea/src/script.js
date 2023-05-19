@@ -24,25 +24,26 @@ const scene = new THREE.Scene()
  * Water
  */
 // Geometry
-const waterGeometry = new THREE.PlaneGeometry(20, 20, 128, 128)
+const waterGeometry = new THREE.PlaneGeometry(100, 100, 512, 512)
 
 // Material
 const waterMaterial = new THREE.ShaderMaterial({
     vertexShader: waterVertexShader,
     fragmentShader: waterFragmentShader,
     side: THREE.DoubleSide,
+    // wireframe: true,    
     uniforms: {
 
         uTime: { value: 0.0 },
 
         uBigWaveElevation: { value: 0.3 },
         uRandom: { value: Math.random() },
-        uBigWaveFrequency: { value: new THREE.Vector2(5.0, 4.0) },
-        uBigWaveSpeed: { value: new THREE.Vector2(4.4, 0.75) },
+        uBigWaveFrequency: { value: new THREE.Vector2(4.0, 1.5) },
+        uBigWaveSpeed: { value: new THREE.Vector2(0.75, 0.75) },
 
         uWaveDepthColor: { value: new THREE.Color(debugObject.depthColor) },
         uWaveSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
-        uElevationStrength: { value: new THREE.Vector2(1.4, 0.2) }
+        uElevationStrength: { value: new THREE.Vector2(7.0, 0.8) }
 
     }
 })
