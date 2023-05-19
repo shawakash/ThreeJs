@@ -29,9 +29,11 @@ const waterMaterial = new THREE.ShaderMaterial({
     fragmentShader: waterFragmentShader,
     side: THREE.DoubleSide,
     uniforms: {
+        
         uBigWaveElevation: { value: 0.3 },
         uBigWaveFrequency: { value: new THREE.Vector2(5.0, 4.0) },
-        uTime: { value: 0.0 }
+        uTime: { value: 0.0 },
+        uBigWaveSpeed: { value: new THREE.Vector2(0.75, 0.75) }
 
     }
 })
@@ -41,6 +43,8 @@ const debugWater = uniforms.addFolder('Water');
 debugWater.add(waterMaterial.uniforms.uBigWaveElevation, 'value').min(0.0).max(1.0).step(0.00001).name('Water Elevation');
 debugWater.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'x').min(0.0).max(20.0).step(0.01).name('Water Frequency X');
 debugWater.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'y').min(0.0).max(20.0).step(0.01).name('Water Frequency Y');
+debugWater.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'x').min(0.0).max(20.0).step(0.0001).name('Water Speed X');
+debugWater.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'y').min(0.0).max(20.0).step(0.0001).name('Water Speed Z');
 
 // Mesh
 const water = new THREE.Mesh(waterGeometry, waterMaterial)
