@@ -3,6 +3,12 @@ uniform vec2 uBigWaveFrequency;
 uniform vec2 uBigWaveSpeed;
 uniform float uTime;
 uniform float uRandom;
+uniform float uNoiseElevation;
+uniform float uNoiseFrequency;
+uniform float uNoiseSpeed;
+uniform float uNoiseEncryption;
+
+
 
 varying float vElevation;
 
@@ -93,8 +99,8 @@ void main() {
     float elevation = sin(modelPosition.x * uBigWaveFrequency.x + uTime * uBigWaveSpeed.x) * uBigWaveElevation;
     elevation *= sin(modelPosition.z * uBigWaveFrequency.y + uTime * uBigWaveSpeed.y) * uBigWaveElevation;
 
-    for(float i = 1.0; i <= 5.0; i++) {
-        elevation -= abs(cnoise(vec3(modelPosition.xz * 3.0 * i, uTime * 0.2)) * 0.15 / i);
+    for(float i = 1.0; i <= uNoiseEncryption; i++) {
+        elevation -= abs(cnoise(vec3(modelPosition.xz * uNoiseFrequency * i, uTime * uNoiseSpeed)) * uNoiseElevation / i);
 
     }
 

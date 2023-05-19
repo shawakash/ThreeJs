@@ -24,7 +24,7 @@ const scene = new THREE.Scene()
  * Water
  */
 // Geometry
-const waterGeometry = new THREE.PlaneGeometry(100, 100, 512, 512)
+const waterGeometry = new THREE.PlaneGeometry(2, 2, 512, 512)
 
 // Material
 const waterMaterial = new THREE.ShaderMaterial({
@@ -41,6 +41,11 @@ const waterMaterial = new THREE.ShaderMaterial({
         uBigWaveFrequency: { value: new THREE.Vector2(4.0, 1.5) },
         uBigWaveSpeed: { value: new THREE.Vector2(0.75, 0.75) },
 
+        uNoiseElevation: { value: 0.15},
+        uNoiseFrequency: { value: 3.0},
+        uNoiseSpeed: { value: 0.2},
+        uNoiseEncryption: { value: 5.0},
+
         uWaveDepthColor: { value: new THREE.Color(debugObject.depthColor) },
         uWaveSurfaceColor: { value: new THREE.Color(debugObject.surfaceColor) },
         uElevationStrength: { value: new THREE.Vector2(7.0, 0.8) }
@@ -50,21 +55,30 @@ const waterMaterial = new THREE.ShaderMaterial({
 
 const uniforms = gui.addFolder('Uniforms');
 const debugWater = uniforms.addFolder('Water');
-debugWater.add(waterMaterial.uniforms.uBigWaveElevation, 'value').min(0.0).max(1.0).step(0.00001).name('Water Elevation');
-debugWater.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'x').min(0.0).max(20.0).step(0.01).name('Water Frequency X');
-debugWater.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'y').min(0.0).max(20.0).step(0.01).name('Water Frequency Y');
-debugWater.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'x').min(0.0).max(20.0).step(0.0001).name('Water Speed X');
-debugWater.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'y').min(0.0).max(20.0).step(0.0001).name('Water Speed Z');
+const bigWave = debugWater.addFolder('Big Wave');
+const waveColor = debugWater.addFolder('Color');
+const noise = debugWater.addFolder('Noise');
 
-debugWater.add(waterMaterial.uniforms.uElevationStrength.value, 'x').min(0.0).max(20.0).step(0.0001).name('Color Strength');
-debugWater.add(waterMaterial.uniforms.uElevationStrength.value, 'y').min(0.0).max(1.0).step(0.0001).name('Color Strength offset');
+bigWave.add(waterMaterial.uniforms.uBigWaveElevation, 'value').min(0.0).max(1.0).step(0.00001).name('Elevation');
+bigWave.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'x').min(0.0).max(20.0).step(0.01).name('Frequency X');
+bigWave.add(waterMaterial.uniforms.uBigWaveFrequency.value, 'y').min(0.0).max(20.0).step(0.01).name('Frequency Y');
+bigWave.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'x').min(0.0).max(20.0).step(0.0001).name('Speed X');
+bigWave.add(waterMaterial.uniforms.uBigWaveSpeed.value, 'y').min(0.0).max(20.0).step(0.0001).name('Speed Z');
 
-debugWater.addColor(debugObject, 'surfaceColor').onChange(() => {
+
+waveColor.addColor(debugObject, 'surfaceColor').onChange(() => {
     waterMaterial.uniforms.uWaveSurfaceColor.value.set(debugObject.surfaceColor)
-});
-debugWater.addColor(debugObject, 'depthColor').onChange(() => {
+}).name('Surface Color');
+waveColor.addColor(debugObject, 'depthColor').onChange(() => {
     waterMaterial.uniforms.uWaveDepthColor.value.set(debugObject.depthColor)
-});
+}).name('Depth Color');
+waveColor.add(waterMaterial.uniforms.uElevationStrength.value, 'x').min(0.0).max(20.0).step(0.0001).name('Strength Multiplier');
+waveColor.add(waterMaterial.uniforms.uElevationStrength.value, 'y').min(0.0).max(1.0).step(0.0001).name('Strength Offset');
+
+noise.add(waterMaterial.uniforms.uNoiseElevation, 'value').min(0.0).max(1.0).step(0.001).name('Elevation');
+noise.add(waterMaterial.uniforms.uNoiseFrequency, 'value').min(0.0).max(8.0).step(0.001).name('Frequency');
+noise.add(waterMaterial.uniforms.uNoiseEncryption, 'value').min(0.0).max(8.0).step(0.001).name('Encryption');
+noise.add(waterMaterial.uniforms.uNoiseSpeed, 'value').min(0.0).max(4.0).step(0.001).name('Speed');
 
 // Mesh
 const water = new THREE.Mesh(waterGeometry, waterMaterial)
