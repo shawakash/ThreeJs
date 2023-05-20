@@ -4,7 +4,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui';
 import vertexShader from './shaders/galaxy/vertex.glsl';
 import fragmentShader from './shaders/galaxy/fragment.glsl';
-import Points from 'three/src/renderers/shaders/ShaderLib/points.glsl'
+
+import uvertexShader from './shaders/universe/vertex.glsl';
+import ufragmentShader from './shaders/universe/fragment.glsl';
 
 /**
  * Base
@@ -65,13 +67,7 @@ const generateGalaxy = () => {
         const radius = Math.random() * parameters.radius
 
         const branchAngle = (i % parameters.branches) / parameters.branches * Math.PI * 2
-
         
-        positions[i3] = Math.cos(branchAngle) * radius;
-        positions[i3 + 1] = 0;
-        positions[i3 + 2] = Math.sin(branchAngle) * radius;
-        
-
         // Randomness
 
         const randomX = Math.pow(Math.random(), parameters.randomnessPower) * (Math.random() < 0.5 ? 1 : - 1) * parameters.randomness * radius
@@ -81,6 +77,12 @@ const generateGalaxy = () => {
         randomness[i3 + 0] = randomX;
         randomness[i3 + 1] = randomY;
         randomness[i3 + 2] = randomZ;
+        
+        positions[i3] = Math.cos(branchAngle) * radius + randomX;
+        positions[i3 + 1] = 0 + randomY;
+        positions[i3 + 2] = Math.sin(branchAngle) * radius + randomZ;
+        
+
         
         // Color
         const mixedColor = insideColor.clone()
@@ -135,6 +137,59 @@ gui.add(parameters, 'randomness').min(0).max(2).step(0.001).onFinishChange(gener
 gui.add(parameters, 'randomnessPower').min(1).max(10).step(0.001).onFinishChange(generateGalaxy)
 gui.addColor(parameters, 'insideColor').onFinishChange(generateGalaxy)
 gui.addColor(parameters, 'outsideColor').onFinishChange(generateGalaxy)
+
+
+let ugeometry = null
+let umaterial = null
+let upoints = null
+
+const generateUniverse = () => {
+
+    if(upoints != null) {
+        umaterial.dispose();
+        ugeometry.dispose();
+        scene.remove(upoints);
+    }
+
+    const count = 20000;
+
+    const position = new Float32Array(count * 3);
+    const scale = new Float32Array(count);
+
+    ugeometry = new THREE.BufferGeometry();
+
+    for(let i=0; i<count; i++) {
+
+        position[i * 3 + 0] = (Math.random() - 0.5) * 500 + 5;
+        position[i * 3 + 1] = (Math.random() - 0.5) * 500 + 5;
+        position[i * 3 + 2] = (Math.random() - 0.5) * 500 + 5;
+
+        scale[i] = Math.random();
+    }
+
+    ugeometry.setAttribute('position', new THREE.Float32BufferAttribute(position, 3));
+    ugeometry.setAttribute('aScale', new THREE.Float32BufferAttribute(scale, 1));
+
+    umaterial = new THREE.ShaderMaterial({
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexColors: true,
+        vertexShader: uvertexShader,
+        fragmentShader: ufragmentShader,
+        
+        uniforms: {
+            uSize: { value: 50 * renderer.getPixelRatio() },
+
+            uTime: { value: 0.0 }
+        }
+
+    });
+
+    upoints = new THREE.Points(ugeometry, umaterial);
+    scene.add(upoints);
+
+}
+
 
 /**
  * Sizes
@@ -202,5 +257,6 @@ const tick = () => {
     window.requestAnimationFrame(tick)
 }
 
+generateUniverse();
 generateGalaxy()
 tick()

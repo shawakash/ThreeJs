@@ -22,7 +22,7 @@ void main() {
 
     // Randomness
 
-    modalPosition.xyz += aRandomness;
+    // modalPosition.xyz += aRandomness;
 
     vec4 viewPosition = viewMatrix * modalPosition;
     vec4 projectionPosition = projectionMatrix * viewPosition;
