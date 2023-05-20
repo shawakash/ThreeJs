@@ -75,16 +75,40 @@ material.onBeforeCompile = (shader) => {
 
     // To change anything inside the code;
     // we are to change a module used
+    // shader.vertexShader = shader.vertexShader.replace(
+    //     `#include <begin_vertex>`,          // code to be replaced
+
+    //     // new code here
+    //     // Put backqoutes to write in multiple lines
+
+    //     `#include <begin_vertex>
+    //     `
+    // );
+
     shader.vertexShader = shader.vertexShader.replace(
-        `#include <begin_vertex>`,          // code to be replaced
+        `#include <common>`,
 
-        // new code here
-        // Put backqoutes to write in multiple lines
+        `
+        #include <common>
 
-        `#include <begin_vertex>
-        transformed += 10.3;
+        mat2 get2dRotateMatrix(float _angle) {
+            return mat2(cos(_angle), -sin(_angle), sin(_angle), cos(_angle));
+        }
         `
     );
+
+    shader.vertexShader = shader.vertexShader.replace(
+        `#include <begin_vertex>`,
+
+        `
+        #include <begin_vertex>
+        float angle = -0.9;
+        mat2 rotateMatrix = get2dRotateMatrix(angle);
+        transformed.xz *= rotateMatrix;
+
+        `
+    );
+    console.log(shader.vertexShader)
 }
 
 /**
