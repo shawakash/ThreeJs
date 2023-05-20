@@ -4,6 +4,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import * as dat from 'dat.gui';
 import vertexShader from './shaders/galaxy/vertex.glsl';
 import fragmentShader from './shaders/galaxy/fragment.glsl';
+import Points from 'three/src/renderers/shaders/ShaderLib/points.glsl'
 
 /**
  * Base
