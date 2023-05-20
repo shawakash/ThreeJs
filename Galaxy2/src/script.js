@@ -105,7 +105,7 @@ const generateGalaxy = () => {
 
 
     const particles = gui.addFolder('Particles');
-    particles.add(material.uniforms.uSize, 'value').min(0.0).max(5.0).step(0.0001).name('Particle Size');
+    particles.add(material.uniforms.uSize, 'value').min(0.0).max(10.0).step(0.0001).name('Particle Size');
 
     /**
      * Points
