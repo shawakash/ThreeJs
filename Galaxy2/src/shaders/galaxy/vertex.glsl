@@ -1,7 +1,9 @@
 
 uniform float uSize;
 uniform float uTime;
+
 attribute float aScale;
+attribute vec3 aRandomness;
 
 varying vec3 vColor;
 
@@ -17,6 +19,10 @@ void main() {
 
     modalPosition.x = distanceToCenter * cos(angle);
     modalPosition.z = distanceToCenter * sin(angle);
+
+    // Randomness
+
+    modalPosition.xyz += aRandomness;
 
     vec4 viewPosition = viewMatrix * modalPosition;
     vec4 projectionPosition = projectionMatrix * viewPosition;
