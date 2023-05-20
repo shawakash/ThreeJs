@@ -85,12 +85,30 @@ const generateGalaxy = () =>
     /**
      * Material
      */
-    material = new THREE.PointsMaterial({
-        size: parameters.size,
-        sizeAttenuation: true,
+    material = new THREE.ShaderMaterial({
         depthWrite: false,
         blending: THREE.AdditiveBlending,
-        vertexColors: true
+        vertexColors: true,
+        vertexShader: `
+            void main() {
+                vec4 modalPosition = modelMatrix * vec4(position, 1.0);
+                vec4 viewPosition = viewMatrix * modalPosition;
+                vec4 projectionPosition = projectionMatrix * viewPosition;
+
+                gl_Position = projectionPosition;
+
+                gl_PointSize = 2.0;    // Fragment size
+            }
+        `,
+
+        fragmentShader: `
+            void main() {
+
+                gl_FragColor = vec4(0.25, 0.2, 0.1, 1.0);
+            }
+        `
+
+        
     })
 
     /**
