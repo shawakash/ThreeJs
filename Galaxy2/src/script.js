@@ -98,14 +98,14 @@ const generateGalaxy = () => {
         fragmentShader,
 
         uniforms: {
-            uSize: { value: 0.8 * renderer.getPixelRatio() },
+            uSize: { value: 30 * renderer.getPixelRatio() },
         }
 
     })
 
 
-    const particles = gui.addFolder('Particles');
-    particles.add(material.uniforms.uSize, 'value').min(0.0).max(10.0).step(0.0001).name('Particle Size');
+    const particle = gui.addFolder('Particles');
+    particle.add(material.uniforms.uSize, 'value').min(0.0).max(100.0).step(0.0001).name('Particle Size');
 
     /**
      * Points
