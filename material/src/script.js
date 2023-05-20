@@ -66,7 +66,8 @@ const normalTexture = textureLoader.load('/models/LeePerrySmith/normal.jpg')
 // Material
 const material = new THREE.MeshStandardMaterial({
     map: mapTexture,
-    normalMap: normalTexture
+    normalMap: normalTexture,
+    wireframe: true,
 })
 
 const depthMaterial = new THREE.MeshDepthMaterial({
@@ -111,19 +112,30 @@ material.onBeforeCompile = (shader) => {
         }
         `
     );
+    
+    shader.vertexShader = shader.vertexShader.replace(
+        `#include <beginnormal_vertex>`,
 
+        `
+        #include <beginnormal_vertex>
+        float angle = uTime;
+        mat2 rotateMatrix = get2dRotateMatrix(angle);
+        objectNormal.xz *= rotateMatrix;
+        `
+    );
     shader.vertexShader = shader.vertexShader.replace(
         `#include <begin_vertex>`,
 
         `
         #include <begin_vertex>
         // float distanceToCenter = sqrt(transformed.x * transformed.x + transformed.z * transformed.z);
-        float angle = uTime;
-        mat2 rotateMatrix = get2dRotateMatrix(angle);
+        angle = uTime;
+        rotateMatrix = get2dRotateMatrix(angle);
         transformed.xz *= rotateMatrix;
 
         `
     );
+
     console.log(shader)
 }
 
