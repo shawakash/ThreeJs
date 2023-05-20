@@ -69,8 +69,17 @@ const material = new THREE.MeshStandardMaterial({
     normalMap: normalTexture
 })
 
+const customUniforms = {
+    uTime: { value: 0.0 }
+};
+
+
 // ThreeJs Hooks
 material.onBeforeCompile = (shader) => {
+
+    shader.uniforms.uTime =  customUniforms.uTime;
+
+
     // console.log(shader.vertexShader);                                  // Everything of shader here before compilataion
 
     // To change anything inside the code;
@@ -90,6 +99,7 @@ material.onBeforeCompile = (shader) => {
 
         `
         #include <common>
+        uniform float uTime;
 
         mat2 get2dRotateMatrix(float _angle) {
             return mat2(cos(_angle), -sin(_angle), sin(_angle), cos(_angle));
@@ -102,7 +112,8 @@ material.onBeforeCompile = (shader) => {
 
         `
         #include <begin_vertex>
-        float angle = -0.9;
+        // float distanceToCenter = sqrt(transformed.x * transformed.x + transformed.z * transformed.z);
+        float angle = uTime;
         mat2 rotateMatrix = get2dRotateMatrix(angle);
         transformed.xz *= rotateMatrix;
 
@@ -196,6 +207,10 @@ const clock = new THREE.Clock()
 
 const tick = () => {
     const elapsedTime = clock.getElapsedTime()
+
+    // Shader
+    // Uniforms
+    customUniforms.uTime.value = elapsedTime
 
     // Update controls
     controls.update()
