@@ -111,6 +111,10 @@ window.addEventListener('resize', () =>
     // Update renderer
     renderer.setSize(sizes.width, sizes.height)
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    // Update effectComposer
+    effectComposer.setSize(sizes.width, sizes.height)
+    effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 })
 
 /**
@@ -156,19 +160,23 @@ dotScreenPass.enabled = false;
 effectComposer.addPass(dotScreenPass);
 
 const glitchScreenPass = new GlitchPass();
-glitchScreenPass.goWild = true;
-glitchScreenPass.enabled = false;
+// glitchScreenPass.goWild = true;
+// glitchScreenPass.enabled = false;
 effectComposer.addPass(glitchScreenPass);
 
 const shaderPass = new ShaderPass(RGBShiftShader);
 // shaderPass.goWild = true;
-// shaderPass.enabled = false;
+shaderPass.enabled = false;
 effectComposer.addPass(shaderPass);
 
 
 
 // Add the gamma correction pass at last
+// Not so performant
+// Works with every nearly pass
+// Coverts LinearEncoding To sRGBEncoding
 const gammaPass = new ShaderPass(GammaCorrectionShader);
+// gammaPass.enabled = false;
 effectComposer.addPass(gammaPass);
 
 /**
