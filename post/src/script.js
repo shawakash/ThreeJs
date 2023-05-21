@@ -177,7 +177,7 @@ effectComposer.addPass(shaderPass);
 
 
 
-// Add the gamma correction pass at last
+// Add the gamma correction pass at last of classic passes
 // Not so performant
 // Works with every nearly pass
 // Coverts LinearEncoding To sRGBEncoding
