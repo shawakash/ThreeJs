@@ -7,6 +7,10 @@ import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass'
 import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass'
+import { RGBShiftShader } from 'three/examples/jsm/shaders/RGBShiftShader'
+import { GammaCorrectionShader } from 'three/examples/jsm/shaders/GammaCorrectionShader'
+// import {  } from 'three/examples/jsm/postprocessing/'
 
 /**
  * Base
@@ -137,6 +141,7 @@ renderer.toneMappingExposure = 1.5
 renderer.setSize(sizes.width, sizes.height)
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 
+
 /**
  * Post Processing
  */
@@ -151,9 +156,20 @@ dotScreenPass.enabled = false;
 effectComposer.addPass(dotScreenPass);
 
 const glitchScreenPass = new GlitchPass();
-glitchScreenPass.enabled = true;
+glitchScreenPass.goWild = true;
+glitchScreenPass.enabled = false;
 effectComposer.addPass(glitchScreenPass);
 
+const shaderPass = new ShaderPass(RGBShiftShader);
+// shaderPass.goWild = true;
+// shaderPass.enabled = false;
+effectComposer.addPass(shaderPass);
+
+
+
+// Add the gamma correction pass at last
+const gammaPass = new ShaderPass(GammaCorrectionShader);
+effectComposer.addPass(gammaPass);
 
 /**
  * Animate
