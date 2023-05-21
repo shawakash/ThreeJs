@@ -6,6 +6,7 @@ import * as dat from 'dat.gui'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { DotScreenPass } from 'three/examples/jsm/postprocessing/DotScreenPass'
+import { GlitchPass } from 'three/examples/jsm/postprocessing/GlitchPass'
 
 /**
  * Base
@@ -146,8 +147,13 @@ const rendererPass = new RenderPass(scene, camera);
 effectComposer.addPass(rendererPass);
 
 const dotScreenPass = new DotScreenPass();
-// dotScreenPass.enabled = false;
+dotScreenPass.enabled = false;
 effectComposer.addPass(dotScreenPass);
+
+const glitchScreenPass = new GlitchPass();
+glitchScreenPass.enabled = true;
+effectComposer.addPass(glitchScreenPass);
+
 
 /**
  * Animate
