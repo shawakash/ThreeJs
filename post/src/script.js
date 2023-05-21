@@ -34,12 +34,9 @@ const textureLoader = new THREE.TextureLoader()
 /**
  * Update all materials
  */
-const updateAllMaterials = () =>
-{
-    scene.traverse((child) =>
-    {
-        if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial)
-        {
+const updateAllMaterials = () => {
+    scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
             child.material.envMapIntensity = 2.5
             child.material.needsUpdate = true
             child.castShadow = true
@@ -69,8 +66,7 @@ scene.environment = environmentMap
  */
 gltfLoader.load(
     '/models/DamagedHelmet/glTF/DamagedHelmet.gltf',
-    (gltf) =>
-    {
+    (gltf) => {
         gltf.scene.scale.set(2, 2, 2)
         gltf.scene.rotation.y = Math.PI * 0.5
         scene.add(gltf.scene)
@@ -98,8 +94,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -149,7 +144,16 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Post Processing
  */
-const effectComposer = new EffectComposer(renderer);
+
+const renderTarget = new THREE.WebGLRenderTarget(
+    800,
+    600,
+    {
+        samples: renderer.getPixelRatio() === 1? 2:0                   // the more the sample, more is the effect of antialias, less is the performance
+    }
+);
+
+const effectComposer = new EffectComposer(renderer, renderTarget);
 effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 const rendererPass = new RenderPass(scene, camera);
@@ -161,13 +165,15 @@ effectComposer.addPass(dotScreenPass);
 
 const glitchScreenPass = new GlitchPass();
 // glitchScreenPass.goWild = true;
-// glitchScreenPass.enabled = false;
+glitchScreenPass.enabled = false;
 effectComposer.addPass(glitchScreenPass);
 
 const shaderPass = new ShaderPass(RGBShiftShader);
 // shaderPass.goWild = true;
 shaderPass.enabled = false;
 effectComposer.addPass(shaderPass);
+
+// For antialais to works you must have atleast one pass other than render pass
 
 
 
@@ -184,8 +190,7 @@ effectComposer.addPass(gammaPass);
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
+const tick = () => {
     const elapsedTime = clock.getElapsedTime();
 
 
