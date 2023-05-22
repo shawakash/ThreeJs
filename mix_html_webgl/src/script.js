@@ -132,6 +132,7 @@ gltfLoader.load(
 /**
  * Points of interest
  */
+const raycaster = new THREE.Raycaster();
 const points = [
     {
         position: new THREE.Vector3(1.55, 0.3, -0.6),
@@ -215,11 +216,29 @@ const tick = () =>
         const screenPoint = point.position.clone();
         screenPoint.project(camera);
         // console.log(screenPoint.x)            // Normalized coordinates
-        const translateX = screenPoint.x * sizes.width * 0.5;
-        const translateY = screenPoint.y * sizes.height * 0.5;
+        raycaster.setFromCamera(screenPoint, camera);
 
-        point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`;
+        const intersects = raycaster.intersectObjects(scene.children, true);
+
+        if(intersects.length === 0) {
+            point.element.classList.add('visible');
+        } else {
+            const intersectDistance = intersects[0].distance;
+            const pointDistance = point.position.distanceTo(camera.position);
+
+            if(pointDistance >= intersectDistance) {
+
+                point.element.classList.remove('visible');
+            }
+
+        }
+
+        const translateX = screenPoint.x * sizes.width * 0.5;
+        const translateY = -screenPoint.y * sizes.height * 0.5;
+        
+        point.element.style.transform = `translate(${translateX}px, ${translateY}px)`;
     }
+    // console.log(raycaster)
 
     // Render
     renderer.render(scene, camera)
