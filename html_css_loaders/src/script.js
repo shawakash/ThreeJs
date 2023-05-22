@@ -17,9 +17,11 @@ const loading_bar = document.querySelector('.loading-bar');
 const loadingManager = new THREE.LoadingManager(
     () => {
         console.log('Loaders Loaded');
-        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0.0 })
-        // loading_bar.classList.add('ended');
-        // loading_bar.style.transform = ``;
+        gsap.delayedCall(0.15, () => {
+            gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0.0 })
+            // loading_bar.classList.add('ended');
+            // loading_bar.style.transform = ``;
+        });
     },
     (itemUrl, itemsLoaded, itemsTotal) => {
         // console.log('Loaders Progressed');
@@ -48,8 +50,8 @@ const scene = new THREE.Scene()
 /**
  * Overlay
  */
-const overlayGeometry = new THREE.PlaneGeometry(2,2,1,1);
-const overlayMaterial = new THREE.ShaderMaterial({ 
+const overlayGeometry = new THREE.PlaneGeometry(2, 2, 1, 1);
+const overlayMaterial = new THREE.ShaderMaterial({
     transparent: true,
     vertexShader: `
 
@@ -81,12 +83,9 @@ scene.add(overlay);
 /**
  * Update all materials
  */
-const updateAllMaterials = () =>
-{
-    scene.traverse((child) =>
-    {
-        if(child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial)
-        {
+const updateAllMaterials = () => {
+    scene.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material instanceof THREE.MeshStandardMaterial) {
             // child.material.envMap = environmentMap
             child.material.envMapIntensity = debugObject.envMapIntensity
             child.material.needsUpdate = true
@@ -120,8 +119,7 @@ debugObject.envMapIntensity = 2.5
  */
 gltfLoader.load(
     '/models/FlightHelmet/glTF/FlightHelmet.gltf',
-    (gltf) =>
-    {
+    (gltf) => {
         gltf.scene.scale.set(10, 10, 10)
         gltf.scene.position.set(0, - 4, 0)
         gltf.scene.rotation.y = Math.PI * 0.5
@@ -150,8 +148,7 @@ const sizes = {
     height: window.innerHeight
 }
 
-window.addEventListener('resize', () =>
-{
+window.addEventListener('resize', () => {
     // Update sizes
     sizes.width = window.innerWidth
     sizes.height = window.innerHeight
@@ -196,8 +193,7 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
 /**
  * Animate
  */
-const tick = () =>
-{
+const tick = () => {
     // Update controls
     controls.update()
 
