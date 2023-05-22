@@ -7,6 +7,7 @@ import { gsap } from 'gsap'
 /**
  * Loaders
  */
+let sceneReady = false;
 const loadingBarElement = document.querySelector('.loading-bar')
 const loadingManager = new THREE.LoadingManager(
     // Loaded
@@ -21,7 +22,11 @@ const loadingManager = new THREE.LoadingManager(
             // Update loadingBarElement
             loadingBarElement.classList.add('ended')
             loadingBarElement.style.transform = ''
-        }, 500)
+            sceneReady = true;
+        }, 500);
+        
+        window.setTimeout(() => {
+        }, 200);
     },
 
     // Progress
@@ -137,7 +142,15 @@ const points = [
     {
         position: new THREE.Vector3(1.55, 0.3, -0.6),
         element: document.querySelector('.point-0')
-    }
+    },
+    {
+        position: new THREE.Vector3(0.5, 0.8, -1.6),
+        element: document.querySelector('.point-1')
+    },
+    {
+        position: new THREE.Vector3(1.6, -1.3, -0.7),
+        element: document.querySelector('.point-2')
+    },
 ]
 
 
@@ -180,7 +193,7 @@ window.addEventListener('resize', () =>
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.set(4, 1, - 4)
+camera.position.set(6, 0, )
 scene.add(camera)
 
 // Controls
@@ -212,33 +225,35 @@ const tick = () =>
     controls.update()
 
     // Points
-    for(const point of points) {
-        const screenPoint = point.position.clone();
-        screenPoint.project(camera);
-        // console.log(screenPoint.x)            // Normalized coordinates
-        raycaster.setFromCamera(screenPoint, camera);
+    if (sceneReady) {
 
-        const intersects = raycaster.intersectObjects(scene.children, true);
-
-        if(intersects.length === 0) {
-            point.element.classList.add('visible');
-        } else {
-            const intersectDistance = intersects[0].distance;
-            const pointDistance = point.position.distanceTo(camera.position);
-
-            if(pointDistance >= intersectDistance) {
-
-                point.element.classList.remove('visible');
+        for(const point of points) {
+            const screenPoint = point.position.clone();
+            screenPoint.project(camera);
+            // console.log(screenPoint.x)            // Normalized coordinates
+            raycaster.setFromCamera(screenPoint, camera);
+    
+            const intersects = raycaster.intersectObjects(scene.children, true);
+    
+            if(intersects.length === 0) {
+                point.element.classList.add('visible');
+            } else {
+                const intersectDistance = intersects[0].distance;
+                const pointDistance = point.position.distanceTo(camera.position);
+    
+                if(pointDistance >= intersectDistance) {
+    
+                    point.element.classList.remove('visible');
+                }
+    
             }
-
+    
+            const translateX = screenPoint.x * sizes.width * 0.5;
+            const translateY = -screenPoint.y * sizes.height * 0.5;
+            
+            point.element.style.transform = `translate(${translateX}px, ${translateY}px)`;
         }
-
-        const translateX = screenPoint.x * sizes.width * 0.5;
-        const translateY = -screenPoint.y * sizes.height * 0.5;
-        
-        point.element.style.transform = `translate(${translateX}px, ${translateY}px)`;
     }
-    // console.log(raycaster)
 
     // Render
     renderer.render(scene, camera)
