@@ -128,6 +128,18 @@ gltfLoader.load(
     }
 )
 
+
+/**
+ * Points of interest
+ */
+const points = [
+    {
+        position: new THREE.Vector3(1.55, 0.3, -0.6),
+        element: document.querySelector('.point-0')
+    }
+]
+
+
 /**
  * Lights
  */
@@ -197,6 +209,17 @@ const tick = () =>
 {
     // Update controls
     controls.update()
+
+    // Points
+    for(const point of points) {
+        const screenPoint = point.position.clone();
+        screenPoint.project(camera);
+        // console.log(screenPoint.x)            // Normalized coordinates
+        const translateX = screenPoint.x * sizes.width * 0.5;
+        const translateY = screenPoint.y * sizes.height * 0.5;
+
+        point.element.style.transform = `translateX(${translateX}px) translateY(${translateY}px)`;
+    }
 
     // Render
     renderer.render(scene, camera)
