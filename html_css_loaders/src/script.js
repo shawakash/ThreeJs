@@ -5,16 +5,26 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
 import { gsap } from 'gsap'
 
 /**
+ * Change the bandwidth of the browser by going to devtools -> networks -> online/trothing -> create a new profile with download 100000 kbits/s
+ */
+
+/**
  * Loaders
  */
+
+const loading_bar = document.querySelector('.loading-bar');
 
 const loadingManager = new THREE.LoadingManager(
     () => {
         console.log('Loaders Loaded');
         gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0.0 })
+        // loading_bar.classList.add('ended');
+        // loading_bar.style.transform = ``;
     },
-    () => {
-        console.log('Loaders Progressed');
+    (itemUrl, itemsLoaded, itemsTotal) => {
+        // console.log('Loaders Progressed');
+        const progressRatio = itemsLoaded / itemsTotal;
+        loading_bar.style.transform = `scaleX(${(1 - progressRatio)})`;
     },
     (e) => {
         console.log(e)
