@@ -26,6 +26,7 @@ body
     width: 100%;
     height: 2px;
     background-color: beige;
+    /* background: linear-gradient(to middle, blue, rgb(237, 95, 119)); */
     transform: scaleX(1);
     /* transform-origin: top left; */
     transition: transform 0.7s;
