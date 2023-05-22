@@ -2,12 +2,26 @@ import './style.css'
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { gsap } from 'gsap'
 
 /**
  * Loaders
  */
-const gltfLoader = new GLTFLoader()
-const cubeTextureLoader = new THREE.CubeTextureLoader()
+
+const loadingManager = new THREE.LoadingManager(
+    () => {
+        console.log('Loaders Loaded');
+        gsap.to(overlayMaterial.uniforms.uAlpha, { duration: 3, value: 0.0 })
+    },
+    () => {
+        console.log('Loaders Progressed');
+    },
+    (e) => {
+        console.log(e)
+    }
+);
+const gltfLoader = new GLTFLoader(loadingManager)
+const cubeTextureLoader = new THREE.CubeTextureLoader(loadingManager)
 
 /**
  * Base
@@ -35,12 +49,17 @@ const overlayMaterial = new THREE.ShaderMaterial({
 
     `,
     fragmentShader: `
-    
+
+        uniform float uAlpha;
+        
         void main() {
-            gl_FragColor = vec4(0.0, 0.0, 0.0, 0.5);
+            gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
         }
 
     `,
+    uniforms: {
+        uAlpha: { value: 1.0 }
+    },
 
     side: THREE.DoubleSide,
     // wireframe: true,
