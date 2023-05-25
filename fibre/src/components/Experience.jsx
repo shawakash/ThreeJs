@@ -1,6 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import React, { useRef } from 'react'
-import { Clock, DoubleSide } from 'three'
+import { Clock, DoubleSide, Euler, Vector3 } from 'three'
 
 
 // Args are used to send initial arguments to geometry
@@ -19,17 +19,24 @@ import { Clock, DoubleSide } from 'three'
 const Experience = () => {
 
     const cubeRef = useRef();
+    const torusRef = useRef();
 
-    const clock = new Clock;
+    // const clock = new Clock;
     // clock.start();
 
-    const tick = useFrame(() => {
-        
-        const elapsedTime = clock.getElapsedTime();
+    const tick = useFrame((state, delta, frame) => {
 
-        if(cubeRef.current) {
-            
-            cubeRef.current.rotation.y = elapsedTime * 0.75;
+        // const elapsedTime = clock.getElapsedTime();
+        // const deltaTime = clock.getDelta();
+
+        if (cubeRef.current && torusRef.current) {
+
+            cubeRef.current.rotation.y += delta;
+            torusRef.current.rotation.x += delta;
+            torusRef.current.rotation.y += delta;
+            torusRef.current.rotation.z += delta;
+
+
         }
 
     });
@@ -39,38 +46,44 @@ const Experience = () => {
     return (
         <>
             <group position={[0, 0, 0]} >
-                    {/* <mesh rotation-x={ Math.PI * -0.25 } rotation-y={ Math.PI * 0.25 }>
+                {/* <mesh rotation-x={ Math.PI * -0.25 } rotation-y={ Math.PI * 0.25 }>
                         <torusGeometry />
                         <meshNormalMaterial />
                     </mesh> */}
-                    {/* <mesh position={[ 4, 0, 0 ]}  scale={[ 0.5, 0.5, 0.5 ]}> */}
-                    {/* <mesh position-x={ 4 }  scale={ 0.5 }> */}
-                        {/* <sphereGeometry args={[ 2, 60, 60 ]}/> */}
-                        {/* <meshBasicMaterial args={[{ color: 'red', wireframe: true }]}/>   */ } 
-                        {/* <meshBasicMaterial color='cyan' wireframe={ true }/> */}
-                    {/* </mesh> */}
-                    {/* <mesh position={[8, 0, 0]} rotation-y={0.1}>
+                {/* <mesh position={[ 4, 0, 0 ]}  scale={[ 0.5, 0.5, 0.5 ]}> */}
+                {/* <mesh position-x={ 4 }  scale={ 0.5 }> */}
+                {/* <sphereGeometry args={[ 2, 60, 60 ]}/> */}
+                {/* <meshBasicMaterial args={[{ color: 'red', wireframe: true }]}/>   */}
+                {/* <meshBasicMaterial color='cyan' wireframe={ true }/> */}
+                {/* </mesh> */}
+                {/* <mesh position={[8, 0, 0]} rotation-y={0.1}>
                         <torusKnotGeometry />
                         <meshNormalMaterial />
                     </mesh> */}
 
 
-                    <mesh position-x={-4}>
-                        <sphereGeometry />
-                        <meshBasicMaterial color={'#ff7321'} wireframe/>
-                    </mesh>
+                <mesh position-x={-4}>
+                    <sphereGeometry />
+                    <meshNormalMaterial wireframe />
+                </mesh>
 
-                    <mesh ref={cubeRef} position-x={4}>
-                        <boxGeometry />
-                        <meshBasicMaterial color={'mediumpurple'}/>
-                    </mesh>
+                <mesh ref={cubeRef} position-x={4} scale={2}>
+                    <boxGeometry args={[1, 1, 1, 5, 5, 5]} />
+                    <meshNormalMaterial wireframe />
+                </mesh>
 
-                    <mesh rotation-x={ -Math.PI * 0.5 } position-y={-10}>
-                        <planeGeometry args={[ 100, 100, 5, 50, 50, 50 ]}/>
-                        <meshBasicMaterial color={'green'} side={DoubleSide}/>
-                    </mesh>
 
-                </group>
+                <mesh ref={torusRef}>
+                    <torusGeometry />
+                    <meshNormalMaterial wireframe />
+                </mesh>
+
+            </group>
+            
+            <mesh rotation-x={-Math.PI * 0.5} position-y={-10}>
+                <planeGeometry args={[100, 100, 5, 50, 50, 50]} />
+                <meshBasicMaterial color={'green'} side={DoubleSide} />
+            </mesh>
         </>
     )
 }
