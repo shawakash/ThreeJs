@@ -1,7 +1,11 @@
-import { useFrame } from '@react-three/fiber'
-import React, { useRef } from 'react'
+import { extend, useFrame, useThree } from '@react-three/fiber'
+import React, { useRef, useState } from 'react'
 import { Clock, DoubleSide, Euler, Vector3 } from 'three'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
+extend({ OrbitControls });
+
+// extend converts a threejs class to a jsx component
 
 // Args are used to send initial arguments to geometry
 // We provide array in props as some propeties in three js required a vector3
@@ -18,13 +22,25 @@ import { Clock, DoubleSide, Euler, Vector3 } from 'three'
 
 const Experience = () => {
 
+    // const three = useThree();
+    // console.log(three)
+    // three.camera.position.z = 10;
+
+    const { camera, gl } = useThree();
+
+
     const cubeRef = useRef();
     const torusRef = useRef();
+    const groupRef = useRef();
+    // const [camera, setCamera] = useState();
 
     // const clock = new Clock;
     // clock.start();
 
     const tick = useFrame((state, delta, frame) => {
+
+
+        // setCamera(state.camera);
 
         // const elapsedTime = clock.getElapsedTime();
         // const deltaTime = clock.getDelta();
@@ -36,6 +52,10 @@ const Experience = () => {
             torusRef.current.rotation.y += delta;
             torusRef.current.rotation.z += delta;
 
+            // groupRef.current.rotation.x += delta;
+            // groupRef.current.rotation.y += delta;
+            // groupRef.current.rotation.z += delta;
+
 
         }
 
@@ -45,7 +65,9 @@ const Experience = () => {
 
     return (
         <>
-            <group position={[0, 0, 0]} >
+            <orbitControls args={[ camera, gl.domElement ]}/>
+            
+            <group ref={groupRef} position={[0, 0, 0]} >
                 {/* <mesh rotation-x={ Math.PI * -0.25 } rotation-y={ Math.PI * 0.25 }>
                         <torusGeometry />
                         <meshNormalMaterial />
@@ -79,11 +101,12 @@ const Experience = () => {
                 </mesh>
 
             </group>
-            
+
             <mesh rotation-x={-Math.PI * 0.5} position-y={-10}>
                 <planeGeometry args={[100, 100, 5, 50, 50, 50]} />
-                <meshBasicMaterial color={'green'} side={DoubleSide} />
+                <meshNormalMaterial side={DoubleSide}/>
             </mesh>
+            
         </>
     )
 }
