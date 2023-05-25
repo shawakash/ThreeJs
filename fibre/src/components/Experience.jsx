@@ -14,7 +14,8 @@ const Experience = () => {
                     </mesh>
                     <mesh position={[ 4, 0, 0 ]} >
                         <sphereGeometry args={[ 2, 60, 60 ]}/>
-                        <meshBasicMaterial />
+                        {/* <meshBasicMaterial args={[{ color: 'red', wireframe: true }]}/>   */ } 
+                        <meshBasicMaterial color='cyan' wireframe={ true }/>
                     </mesh>
                     <mesh position={[8, 0, 0]} rotation-y={0.1}>
                         <torusKnotGeometry />
