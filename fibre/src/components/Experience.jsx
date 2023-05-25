@@ -1,5 +1,9 @@
 import React from 'react'
 
+
+// Args are used to send initial arguments to geometry
+
+
 const Experience = () => {
     return (
         <>
@@ -8,7 +12,11 @@ const Experience = () => {
                         <torusKnotGeometry />
                         <meshNormalMaterial />
                     </mesh>
-                    <mesh position={[7, 0, 0]} rotation-y={0.1}>
+                    <mesh position={[ 4, 0, 0 ]} >
+                        <sphereGeometry args={[ 2, 60, 60 ]}/>
+                        <meshBasicMaterial />
+                    </mesh>
+                    <mesh position={[8, 0, 0]} rotation-y={0.1}>
                         <torusKnotGeometry />
                         <meshNormalMaterial />
                     </mesh>
