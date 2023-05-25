@@ -31,6 +31,8 @@ const Experience = () => {
     const { camera, gl, scene } = useThree();
 
 
+    // add envs, loaders etc here
+
 
     const cubeRef = useRef();
     const torusRef = useRef();
@@ -46,10 +48,10 @@ const Experience = () => {
         const elapsedTime = clock.getElapsedTime()  || state.clock.elapsedTime;
         const deltaTime = clock.getDelta();
 
-        state.camera.position.x = 8 * Math.cos(elapsedTime * Math.PI * 0.25);
-        state.camera.position.z = 8 * Math.sin(elapsedTime * Math.PI * 0.25);
+        // state.camera.position.x = 8 * Math.cos(elapsedTime * Math.PI * 0.25);
+        // state.camera.position.z = 8 * Math.sin(elapsedTime * Math.PI * 0.25);
 
-        state.camera.lookAt(0, 0, 0)
+        // state.camera.lookAt(0, 0, 0)
 
         if (cubeRef.current && torusRef.current) {
 

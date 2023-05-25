@@ -9,13 +9,13 @@ const CustomObject = () => {
     //     // computeVertexNormal - computes the normal
     //     geometryRef.current.computeVertexNormals();
     // }
-    
+
     const vertexCount = 10 * 3;
-    
+
     const positions = useMemo(() => {
         const positions = new Float32Array(vertexCount * 3);
-        
-        for(let i=0; i<vertexCount * 3; i++) {
+
+        for (let i = 0; i < vertexCount * 3; i++) {
             positions[i] = (Math.random() - 0.5) * 3;
         }
 
@@ -32,17 +32,17 @@ const CustomObject = () => {
     }, [])
 
     return (
-        <> 
-            <mesh>
+        <>
+            <mesh position={[0, -10, -10]}>
                 <bufferGeometry ref={geometryRef}>
-                    <bufferAttribute 
+                    <bufferAttribute
                         attach={'attributes-position'}
                         count={vertexCount}
-                        itemSize={ 3 }
-                        array={ positions }
+                        itemSize={3}
+                        array={positions}
                     />
                 </bufferGeometry>
-                <meshStandardMaterial side={DoubleSide} color={'mediumpurple'}/>
+                <meshStandardMaterial side={DoubleSide} color={'mediumpurple'} />
             </mesh>
         </>
     )

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Canvas } from '@react-three/fiber'
 import Experience from './components/Experience'
+import { ACESFilmicToneMapping, CineonToneMapping, sRGBEncoding } from 'three'
 
 
 const App = () => {
@@ -10,7 +11,15 @@ const App = () => {
     return (
         <>
             <Canvas
+                // dpr={[1,2]} // sets the pixel ratio between this two values
                 // orthographic                   // Just this much to create an orthographic camera
+                // flat   // -- to remove tone maping  -- default is Acs   // for custom tone mapping use gl
+                gl={{
+                    antialias: true,   // for antialias
+                    toneMapping: ACESFilmicToneMapping,           // Default is ACESFilmicToneMapping
+                    outputEncoding: sRGBEncoding                 // Default is sRGBEncoding
+                }}
+
                 camera={{
                     fov: 45,
                     // zoom: 100,
