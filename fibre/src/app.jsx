@@ -1,5 +1,6 @@
 import React from 'react'
 import { Canvas } from '@react-three/fiber'
+import Experience from './components/Experience'
 
 
 const App = () => {
@@ -8,10 +9,10 @@ const App = () => {
     return (
         <>
             <Canvas>
-                <mesh>
-                    <torusKnotGeometry />
-                    <meshNormalMaterial />
-                </mesh>
+
+                {/* Incase of react three fibre hooks it mainly works inside canvas */}
+
+                <Experience />
             </Canvas>
 
         </>
