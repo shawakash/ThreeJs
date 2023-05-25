@@ -2,6 +2,7 @@ import { extend, useFrame, useThree } from '@react-three/fiber'
 import React, { useRef, useState } from 'react'
 import { Clock, DoubleSide, Euler, Vector3 } from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import CustomObject from './CustomObject';
 
 extend({ OrbitControls });
 
@@ -28,7 +29,7 @@ const Experience = () => {
     // three.camera.position.z = 10;
 
     const { camera, gl, scene } = useThree();
-    
+
 
 
     const cubeRef = useRef();
@@ -65,10 +66,10 @@ const Experience = () => {
 
     return (
         <>
-            <orbitControls args={[ camera, gl.domElement ]}/>
+            <orbitControls args={[camera, gl.domElement]} />
 
-        <directionalLight position={[ 7, 2, 0 ]} intensity={2}/>
-        <ambientLight intensity={1.5}/>
+            <directionalLight position={[7, 2, 0]} intensity={2} />
+            <ambientLight intensity={1.5} />
 
 
             <group ref={groupRef} position={[0, 0, 0]} >
@@ -90,7 +91,7 @@ const Experience = () => {
 
                 <mesh position-x={-4}>
                     <sphereGeometry />
-                    <meshStandardMaterial metalness={0.8} roughness={0.6} color={'orange'}/>
+                    <meshStandardMaterial metalness={0.8} roughness={0.6} color={'orange'} />
                 </mesh>
 
                 <mesh ref={cubeRef} position-x={4} scale={2}>
@@ -108,9 +109,11 @@ const Experience = () => {
 
             <mesh rotation-x={-Math.PI * 0.5} position-y={-10}>
                 <planeGeometry args={[100, 100, 5, 50, 50, 50]} />
-                <meshNormalMaterial side={DoubleSide}/>
+                <meshNormalMaterial side={DoubleSide} />
             </mesh>
-            
+
+            <CustomObject />
+
         </>
     )
 }
