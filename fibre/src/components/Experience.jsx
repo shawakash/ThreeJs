@@ -36,15 +36,20 @@ const Experience = () => {
     const torusRef = useRef();
     const groupRef = useRef();
 
-    // const clock = new Clock;
+    const clock = new Clock;
     // clock.start();
+
+    // State also has a clock inside useFrame
 
     const tick = useFrame((state, delta, frame) => {
 
+        const elapsedTime = clock.getElapsedTime()  || state.clock.elapsedTime;
+        const deltaTime = clock.getDelta();
 
+        state.camera.position.x = 8 * Math.cos(elapsedTime * Math.PI * 0.25);
+        state.camera.position.z = 8 * Math.sin(elapsedTime * Math.PI * 0.25);
 
-        // const elapsedTime = clock.getElapsedTime();
-        // const deltaTime = clock.getDelta();
+        state.camera.lookAt(0, 0, 0)
 
         if (cubeRef.current && torusRef.current) {
 
@@ -107,8 +112,8 @@ const Experience = () => {
 
             </group>
 
-            <mesh rotation-x={-Math.PI * 0.5} position-y={-10}>
-                <planeGeometry args={[100, 100, 5, 50, 50, 50]} />
+            <mesh rotation-x={-Math.PI * 0.5} position-y={-10} scale-x={600} scale-y={600}>
+                <planeGeometry args={[1, 1, 5, 50, 50, 50]} />
                 <meshNormalMaterial side={DoubleSide} />
             </mesh>
 
