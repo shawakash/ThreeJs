@@ -5,6 +5,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 extend({ OrbitControls });
 
+
 // extend converts a threejs class to a jsx component
 
 // Args are used to send initial arguments to geometry
@@ -26,13 +27,13 @@ const Experience = () => {
     // console.log(three)
     // three.camera.position.z = 10;
 
-    const { camera, gl } = useThree();
+    const { camera, gl, scene } = useThree();
+    
 
 
     const cubeRef = useRef();
     const torusRef = useRef();
     const groupRef = useRef();
-    // const [camera, setCamera] = useState();
 
     // const clock = new Clock;
     // clock.start();
@@ -40,7 +41,6 @@ const Experience = () => {
     const tick = useFrame((state, delta, frame) => {
 
 
-        // setCamera(state.camera);
 
         // const elapsedTime = clock.getElapsedTime();
         // const deltaTime = clock.getDelta();
@@ -66,7 +66,11 @@ const Experience = () => {
     return (
         <>
             <orbitControls args={[ camera, gl.domElement ]}/>
-            
+
+        <directionalLight position={[ 7, 2, 0 ]} intensity={2}/>
+        <ambientLight intensity={1.5}/>
+
+
             <group ref={groupRef} position={[0, 0, 0]} >
                 {/* <mesh rotation-x={ Math.PI * -0.25 } rotation-y={ Math.PI * 0.25 }>
                         <torusGeometry />
@@ -86,7 +90,7 @@ const Experience = () => {
 
                 <mesh position-x={-4}>
                     <sphereGeometry />
-                    <meshNormalMaterial wireframe />
+                    <meshStandardMaterial metalness={0.8} roughness={0.6} color={'orange'}/>
                 </mesh>
 
                 <mesh ref={cubeRef} position-x={4} scale={2}>
