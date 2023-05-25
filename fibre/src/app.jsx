@@ -4,17 +4,22 @@ import { Canvas } from '@react-three/fiber'
 
 const App = () => {
 
-    
+
     return (
         <>
-        {/* <mesh position={[ 2, 2, 2 ]} rotation-x={ 0.5 }>
+            {/* <mesh position={[ 2, 2, 2 ]} rotation-x={ 0.5 }>
             <boxGeometry />
             <boxMeshBasicMaterial color='red' />
         </mesh> */}
-        {/* <Canvas></Canvas> */}
+            {/* <Canvas></Canvas> */}
             <div>app</div>
-        
-        <Canvas></Canvas>
+
+            <Canvas>
+                <mesh>
+                    <torusKnotGeometry />
+                    <meshNormalMaterial />
+                </mesh>
+            </Canvas>
 
         </>
     )
