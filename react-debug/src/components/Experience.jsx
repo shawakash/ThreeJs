@@ -1,11 +1,11 @@
 import { OrbitControls } from '@react-three/drei'
 import Sphere from './Sphere'
 import Cube from './Cube'
-import { useControls } from 'leva'
+import { button, folder, useControls } from 'leva'
 
 export default function Experience() {
 
-    const { position, color, visible } = useControls({
+    const { position, color, visible } = useControls('Sphere', {
         position: {
             value: { x: -2, y: 0 },
             min: -10,
@@ -20,8 +20,25 @@ export default function Experience() {
             min: 0,
             max: 10,
             value: [4, 5]
-        }
+        },
+
+        Button : button(() => { console.log('Hola') }),
+
+        select: { options: ['1', '2', '3'] }
     });
+
+    const cubeOption = useControls('Cube', {
+        Scale: {
+            value: 2,
+            min: 0,
+            max: 10,
+            step: 0.001,
+            
+        },
+        Nested_Folder: folder({
+            select: { options: ['1', '2', '3'] }
+        })
+    })
 
     return <>
 
@@ -33,12 +50,12 @@ export default function Experience() {
         {/* <Sphere positionX={-2}/>
         <Cube scale={1.5}/> */}
 
-        <mesh position={[position.x, position.y, 0]}>
+        <mesh position={[position.x, position.y, 0]} visible={ visible }>
             <sphereGeometry />
             <meshStandardMaterial color={color} />
         </mesh>
 
-        <mesh position-x={2} scale={1.5} visible={ visible }>
+        <mesh position-x={2} scale={cubeOption.Scale} >
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>
