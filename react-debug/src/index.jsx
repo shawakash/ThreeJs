@@ -10,7 +10,8 @@ const root = ReactDOM.createRoot(document.querySelector('#root'))
 // Collapsed is same as crtl + h
 
 root.render(<>
-    <Leva collapsed/>
+
+    <Leva collapsed />
     <Canvas
         camera={{
             fov: 45,
