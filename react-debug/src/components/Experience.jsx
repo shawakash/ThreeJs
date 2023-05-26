@@ -5,14 +5,15 @@ import { useControls } from 'leva'
 
 export default function Experience() {
 
-    const controls = useControls({ 
-        positionX: {
-            value: -2,
+    const { position, color } = useControls({
+        position: {
+            value: { x: -2, y: 0 },
             min: -10,
             max: 10,
             step: 0.001,
-            
-        } 
+            joystick: 'invertY'
+        }, 
+        color: '#3cc176'
     });
 
     return <>
@@ -25,9 +26,9 @@ export default function Experience() {
         {/* <Sphere positionX={-2}/>
         <Cube scale={1.5}/> */}
 
-        <mesh position-x={ controls.positionX }>
+        <mesh position={[position.x, position.y, 0]}>
             <sphereGeometry />
-            <meshStandardMaterial color="orange" />
+            <meshStandardMaterial color={color} />
         </mesh>
 
         <mesh position-x={2} scale={1.5}>
