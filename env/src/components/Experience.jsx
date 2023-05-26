@@ -1,8 +1,9 @@
 import { useFrame } from '@react-three/fiber'
-import { RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
+import { ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { DirectionalLightHelper, Vector2 } from 'three';
+import { useControls, folder } from 'leva'
 import { useEffect } from 'react';
 
 
@@ -18,12 +19,14 @@ export default function Experience() {
     const cube = useRef();
     const directionalLight = useRef();
 
+
     useEffect(() => {
 
         // directionalLight.current.shadow.mapSize = new Vector2(1024, 1024)
         // console.log(directionalLight.current.shadow.map)
 
     }, [])
+
 
     useHelper(directionalLight, DirectionalLightHelper, 1, 'mediumpurple');
 
@@ -37,10 +40,53 @@ export default function Experience() {
 
     })
 
+    const controls = useControls('Controls', {
+        ContactShadows: folder({
+            color: '#316d39',
+            opacity: {
+                value: 1,
+                min: 0,
+                max: 1,
+                step: 0.001
+            },
+            blur: {
+                value: 6,
+                min: 0,
+                max: 10,
+                step: 0.001
+            },
+            resolution: {
+                value: 128,
+                min: 128,
+                max: 2048,
+                step: 0.001
+            },
+            far: {
+                value: 5,
+                min: 0,
+                max: 20,
+                step: 0.001
+            },
+        }),
+
+        Perf: folder({
+            perfVisible: true,
+        }),
+
+        Background: folder({
+            bg_color: 'ivory'
+        })
+    })
+
     // Accumulator shadow, linear combination of shadow maps generated due to the movement of lights
     /**
      *  Eak Plane hai AccumulatorShadow ka jismme ki hum sare shadow ka linear Combination show karte hai jo eak light(inside the tag) ko 
      *  jiggle(randomizing moving on a circle) karne se hoti hai
+     */
+
+    /**
+     * Contact Shadow --> doesn't require light to create shadows and make the shadow properties off while working on it
+     * and only on plane
      */
 
     return <>
@@ -48,12 +94,12 @@ export default function Experience() {
 
         {/* <BakeShadows /> */}
 
-        <color args={['ivory']} attach={'background'} />
+        <color args={[controls.bg_color]} attach={'background'} />
 
-        <Perf position="top-left" />
+        {controls.perfVisible && <Perf position="top-left" />}
 
         <OrbitControls makeDefault />
-        <AccumulativeShadows
+        {/*<AccumulativeShadows
             position={[0, -0.99, 0]}
             scale={10}
             color='#316d39'       // color of the shadow casting plane 
@@ -74,7 +120,16 @@ export default function Experience() {
 
             />
 
-        </AccumulativeShadows>
+        </AccumulativeShadows> */}
+
+        <ContactShadows
+            position={[0, -0.99, 0]}
+            resolution={controls.resolution}
+            far={controls.far}
+            color={controls.color}
+            opacity={controls.opacity}
+            blur={controls.blur}
+        />
 
         {/* Lights */}
         <directionalLight

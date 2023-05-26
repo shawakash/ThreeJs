@@ -2,6 +2,7 @@ import './style.css'
 import ReactDOM from 'react-dom/client'
 import { Canvas } from '@react-three/fiber'
 import Experience from './components/Experience'
+import { Leva } from 'leva'
 import { Color, PCFSoftShadowMap } from 'three'
 
 const root = ReactDOM.createRoot(document.querySelector('#root'))
@@ -17,9 +18,10 @@ const created = ({ gl, scene }) => {
 
 }
 
-root.render(
+root.render(<>
+    <Leva />
     <Canvas
-        shadows
+        shadows={false}
         camera={{
             fov: 45,
             near: 0.1,
@@ -29,7 +31,8 @@ root.render(
 
         onCreated={created}
     >
-        
+
         <Experience />
     </Canvas>
+</>
 )
