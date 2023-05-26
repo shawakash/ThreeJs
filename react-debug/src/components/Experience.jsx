@@ -2,6 +2,7 @@ import { OrbitControls } from '@react-three/drei'
 import Sphere from './Sphere'
 import Cube from './Cube'
 import { button, folder, useControls } from 'leva'
+import { Perf } from 'r3f-perf'
 
 export default function Experience() {
 
@@ -43,6 +44,8 @@ export default function Experience() {
     })
 
     return <>
+
+        <Perf />
 
         <OrbitControls makeDefault />
 

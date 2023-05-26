@@ -7,8 +7,10 @@ import { Leva } from 'leva'
 
 const root = ReactDOM.createRoot(document.querySelector('#root'))
 
+// Collapsed is same as crtl + h
+
 root.render(<>
-    <Leva />
+    <Leva collapsed/>
     <Canvas
         camera={{
             fov: 45,
