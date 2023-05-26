@@ -51,11 +51,21 @@ export default function Experience() {
         <AccumulativeShadows
             position={[0, -0.99, 0]}
             scale={10}
+            color='#316d39'       // color of the shadow casting plane 
+            opacity={0.8}         
+            frames={100}           // Number of shadow renders   // Muy Muy Muy Performent sensitive
+            temporal              // to reduce the time taken by the renders to complete
         >
 
             <RandomizedLight
+                amount={8}              // Number of lights to create a shadow map
+                radius={1}              // radius of giggle
+                ambient={0.5}           // Not clear
+                intensity={1}
                 position={[1, 2, 3]}
+                bias={0.001}            // offset between receiving shadow intensity and casting shadow intensity
                 castShadow
+
             />
 
         </AccumulativeShadows>
