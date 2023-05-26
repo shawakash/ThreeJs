@@ -2,7 +2,7 @@ import { useFrame } from '@react-three/fiber'
 import { Environment, Sky, ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
-import { DirectionalLight, DirectionalLightHelper, Vector2 } from 'three';
+import { DirectionalLight, DirectionalLightHelper, DoubleSide, Vector2 } from 'three';
 import { useControls, folder } from 'leva'
 import { useEffect } from 'react';
 
@@ -28,7 +28,7 @@ export default function Experience() {
     }, [])
 
 
-    useHelper(directionalLight, DirectionalLightHelper, 1, 'mediumpurple');
+    // useHelper(directionalLight, DirectionalLightHelper, 1, 'mediumpurple');
 
     useFrame((state, delta) => {
 
@@ -124,17 +124,31 @@ export default function Experience() {
 
         {controls.perfVisible && <Perf position="top-left" />}
 
+    {/** Some hdrs from poly heaven can be directly loaded using preset 
+     * To add some thing in environment map just open the auto close tag 
+     * and create some mesh in it and it would contribute to whole scene
+    */}
+
         <Environment 
             background             // Just This much to add a enviornment map to the background
-            files={[
-                './environmentMaps/2/px.jpg',
-                './environmentMaps/2/nx.jpg',
-                './environmentMaps/2/py.jpg',
-                './environmentMaps/2/ny.jpg',
-                './environmentMaps/2/pz.jpg',
-                './environmentMaps/2/nz.jpg',
-            ]}
-        />
+            files={ './environmentMaps/sea.hdr' }           // for hdr env
+            // files={[
+            //     './environmentMaps/1/px.jpg',
+            //     './environmentMaps/1/nx.jpg',
+            //     './environmentMaps/1/py.jpg',
+            //     './environmentMaps/1/ny.jpg',
+            //     './environmentMaps/1/pz.jpg',
+            //     './environmentMaps/1/nz.jpg',
+            // ]}
+            // preset=''
+        >
+
+            <mesh position-z={5} scale={10}>
+                <planeGeometry />
+                <meshBasicMaterial color={'cyan'} side={DoubleSide}/>
+            </mesh>
+
+        </Environment>
 
         <OrbitControls makeDefault />
         {/*<AccumulativeShadows
