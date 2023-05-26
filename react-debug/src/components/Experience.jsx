@@ -5,7 +5,7 @@ import { useControls } from 'leva'
 
 export default function Experience() {
 
-    const { position, color } = useControls({
+    const { position, color, visible } = useControls({
         position: {
             value: { x: -2, y: 0 },
             min: -10,
@@ -13,7 +13,14 @@ export default function Experience() {
             step: 0.001,
             joystick: 'invertY'
         }, 
-        color: '#3cc176'
+        color: '#3cc176',                // for alpha hsla don't forget to add alpha or transparent,
+        visible: true,
+
+        myInterval: {
+            min: 0,
+            max: 10,
+            value: [4, 5]
+        }
     });
 
     return <>
@@ -31,7 +38,7 @@ export default function Experience() {
             <meshStandardMaterial color={color} />
         </mesh>
 
-        <mesh position-x={2} scale={1.5}>
+        <mesh position-x={2} scale={1.5} visible={ visible }>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>
