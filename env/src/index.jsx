@@ -25,6 +25,7 @@ root.render(
 
         onCreated={ created }
     >
+        <color args={['black']}  attach={'background'} />
         <Experience />
     </Canvas>
 )
