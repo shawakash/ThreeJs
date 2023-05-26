@@ -1,8 +1,24 @@
 import { useFrame } from '@react-three/fiber'
-import { Environment, Sky, ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
+import { 
+    Lightformer,
+    Environment, 
+    Sky, 
+    ContactShadows, 
+    RandomizedLight, 
+    AccumulativeShadows, 
+    softShadows, 
+    useHelper, 
+    OrbitControls, 
+    BakeShadows 
+} from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
-import { DirectionalLight, DirectionalLightHelper, DoubleSide, Vector2 } from 'three';
+import { 
+    DirectionalLight, 
+    DirectionalLightHelper, 
+    DoubleSide, 
+    Vector2 
+} from 'three';
 import { useControls, folder } from 'leva'
 import { useEffect } from 'react';
 
@@ -99,7 +115,8 @@ export default function Experience() {
                 min: 0,
                 max: 12,
                 step: 0.001
-            }
+            },
+            envBg: 'black',
         })
     })
 
@@ -131,7 +148,7 @@ export default function Experience() {
 
         <Environment 
             background             // Just This much to add a enviornment map to the background
-            files={ './environmentMaps/sea.hdr' }           // for hdr env
+            // files={ './environmentMaps/sea.hdr' }           // for hdr env
             // files={[
             //     './environmentMaps/1/px.jpg',
             //     './environmentMaps/1/nx.jpg',
@@ -142,11 +159,22 @@ export default function Experience() {
             // ]}
             // preset=''
         >
+            <color args={[controls.envBg]} attach={'background'}/>
 
-            <mesh position-z={5} scale={10}>
-                <planeGeometry />
-                <meshBasicMaterial color={'cyan'} side={DoubleSide}/>
-            </mesh>
+            {/* For Incase of Creating a light source in enviornment use LightFormer */}
+
+            <Lightformer 
+                position-z={5}
+                scale={10}
+                color={'red'}
+                intensity={10}
+            />
+
+            {/* <mesh position-z={5} scale={10}> */}
+                {/* <planeGeometry /> */}
+                {/* Provide color value to the material in rgb array so to increase the value beyond a level for realistic color burn(hot metal) */}
+                {/* <meshBasicMaterial color={[10, 0, 0]} side={DoubleSide}/> */}
+            {/* </mesh> */}
 
         </Environment>
 
