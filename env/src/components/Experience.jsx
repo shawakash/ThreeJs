@@ -1,9 +1,18 @@
 import { useFrame } from '@react-three/fiber'
-import { useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
+import { softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { DirectionalLightHelper, Vector2 } from 'three';
 import { useEffect } from 'react';
+
+
+softShadows({
+    frustum: 3.75,
+    size: 0.005,
+    near: 9.5,
+    samples: 17,
+    rings: 11
+})
 
 export default function Experience() {
     const cube = useRef();
