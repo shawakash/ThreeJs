@@ -1,23 +1,24 @@
 import { useFrame } from '@react-three/fiber'
-import { 
+import {
+    Stage,
     Lightformer,
-    Environment, 
-    Sky, 
-    ContactShadows, 
-    RandomizedLight, 
-    AccumulativeShadows, 
-    softShadows, 
-    useHelper, 
-    OrbitControls, 
-    BakeShadows 
+    Environment,
+    Sky,
+    ContactShadows,
+    RandomizedLight,
+    AccumulativeShadows,
+    softShadows,
+    useHelper,
+    OrbitControls,
+    BakeShadows
 } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
-import { 
-    DirectionalLight, 
-    DirectionalLightHelper, 
-    DoubleSide, 
-    Vector2 
+import {
+    DirectionalLight,
+    DirectionalLightHelper,
+    DoubleSide,
+    Vector2
 } from 'three';
 import { useControls, folder } from 'leva'
 import { useEffect } from 'react';
@@ -52,12 +53,12 @@ export default function Experience() {
 
         cube.current.rotation.y += delta * 0.2;
 
-        
+
         // if(state.scene.children.find((value) => value.type == 'DirectionalLight').position.y < -1) {
-        if(directionalLight.current.position.y < -1  && directionalLight.current.intensity > 0) {
+        if (directionalLight.current.position.y < -1 && directionalLight.current.intensity > 0) {
             directionalLight.current.intensity += 0.001 * directionalLight.current.position.y;
-        } 
-        if(directionalLight.current.position.y > -1 && directionalLight.current.intensity < 1.5) {
+        }
+        if (directionalLight.current.position.y > -1 && directionalLight.current.intensity < 1.5) {
             directionalLight.current.intensity += 0.001 * directionalLight.current.position.y;
         }
 
@@ -104,7 +105,7 @@ export default function Experience() {
 
         Sky: folder({
             sunPos: {
-                value: [1,-0.11,3],
+                value: [1, -0.11, 3],
                 step: 0.01
             }
         }),
@@ -165,12 +166,12 @@ export default function Experience() {
 
         {controls.perfVisible && <Perf position="top-left" />}
 
-    {/** Some hdrs from poly heaven can be directly loaded using preset 
+        {/** Some hdrs from poly heaven can be directly loaded using preset 
      * To add some thing in environment map just open the auto close tag 
      * and create some mesh in it and it would contribute to whole scene
     */}
 
-        <Environment 
+        <Environment
             // background             // Just This much to add a enviornment map to the background
 
             // Makes the mesh to stick on the ground, like if it was the part of the env making the plane containing origin with normal towards y axis
@@ -180,7 +181,7 @@ export default function Experience() {
                 radius: controls.envMapRadius,
                 scale: controls.envMapScale,
             }}
-            files={ './environmentMaps/sea.hdr' }           // for hdr env
+            files={'./environmentMaps/sea.hdr'}           // for hdr env
             // files={[
             //     './environmentMaps/1/px.jpg',
             //     './environmentMaps/1/nx.jpg',
@@ -192,11 +193,11 @@ export default function Experience() {
             // preset=''
             resolution={controls.envResolution}
         >
-            <color args={[controls.envBg]} attach={'background'}/>
+            {/* <color args={[controls.envBg]} attach={'background'}/> */}
 
             {/* For Incase of Creating a light source in enviornment use LightFormer */}
 
-            <Lightformer 
+            <Lightformer
                 position-z={5}
                 scale={10}
                 color={'red'}
@@ -205,9 +206,9 @@ export default function Experience() {
             />
 
             {/* <mesh position-z={5} scale={10}> */}
-                {/* <planeGeometry /> */}
-                {/* Provide color value to the material in rgb array so to increase the value beyond a level for realistic color burn(hot metal) */}
-                {/* <meshBasicMaterial color={[10, 0, 0]} side={DoubleSide}/> */}
+            {/* <planeGeometry /> */}
+            {/* Provide color value to the material in rgb array so to increase the value beyond a level for realistic color burn(hot metal) */}
+            {/* <meshBasicMaterial color={[10, 0, 0]} side={DoubleSide}/> */}
             {/* </mesh> */}
 
         </Environment>
@@ -243,7 +244,7 @@ export default function Experience() {
             color={controls.color}
             opacity={controls.opacity}
             blur={controls.blur}
-            // frames={1}                     // to bake the shadows
+        // frames={1}                     // to bake the shadows
         />
 
         {/* Lights */}
@@ -259,20 +260,20 @@ export default function Experience() {
             shadow-camera-right={5}
             shadow-camera-bottom={-5}
             shadow-camera-left={-5}
-            visible = {false}
+            visible={false}
         />
 
-        <ambientLight intensity={0.5} visible={false}/>
+        <ambientLight intensity={0.5} visible={false} />
 
-        <Sky sunPosition={controls.sunPos} visible ={false}/>
+        <Sky sunPosition={controls.sunPos} visible={false} />
 
 
         <mesh position-x={- 2} position-y={1} castShadow>
             <sphereGeometry />
-            <meshStandardMaterial color="orange"  envMapIntensity={controls.envMapIntensity} />
+            <meshStandardMaterial color="orange" envMapIntensity={controls.envMapIntensity} />
         </mesh>
 
-        <mesh ref={cube} position-x={2} position-y={1}  scale={1.5} castShadow>
+        <mesh ref={cube} position-x={2} position-y={1} scale={1.5} castShadow>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" envMapIntensity={controls.envMapIntensity} />
         </mesh>
@@ -281,6 +282,27 @@ export default function Experience() {
             <planeGeometry />
             <meshStandardMaterial color="greenyellow" envMapIntensity={controls.envMapIntensity} />
         </mesh>
+
+        {/*
+            //Stage is super fast solution to create a scene with prebuilt light envs, shadows etc
+            <Stage
+                contactShadow={{ opacity: 0.2, blur: 3 }}
+                enviornment="sunset"   // Preset
+                preset="potrait"
+                intensity={2}
+            >
+                <mesh position-x={- 2} position-y={1} castShadow>
+                    <sphereGeometry />
+                    <meshStandardMaterial color="orange"  envMapIntensity={controls.envMapIntensity} />
+                </mesh>
+
+                <mesh ref={cube} position-x={2} position-y={1}  scale={1.5} castShadow>
+                    <boxGeometry />
+                    <meshStandardMaterial color="mediumpurple" envMapIntensity={controls.envMapIntensity} />
+                </mesh>
+
+            </Stage>
+        */}
 
     </>
 }
