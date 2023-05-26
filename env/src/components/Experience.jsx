@@ -28,7 +28,12 @@ export default function Experience() {
     useHelper(directionalLight, DirectionalLightHelper, 1, 'mediumpurple');
 
     useFrame((state, delta) => {
+
+        const elaspsedTime = state.clock.getElapsedTime();
+
         cube.current.rotation.y += delta * 0.2;
+
+        // cube.current.position.x = Math.sin(elaspsedTime)
 
     })
 
@@ -53,8 +58,9 @@ export default function Experience() {
             scale={10}
             color='#316d39'       // color of the shadow casting plane 
             opacity={0.8}         
-            frames={100}           // Number of shadow renders   // Muy Muy Muy Performent sensitive
+            frames={100}           // Number of shadow renders   // Muy Muy Muy Performent sensitive  // Make it infinity for animated object
             temporal              // to reduce the time taken by the renders to complete
+            // blend={100}           // Not good for performance
         >
 
             <RandomizedLight
