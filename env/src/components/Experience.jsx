@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { Sky, ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
+import { Environment, Sky, ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { DirectionalLight, DirectionalLightHelper, Vector2 } from 'three';
@@ -91,6 +91,15 @@ export default function Experience() {
                 value: [1,-0.11,3],
                 step: 0.01
             }
+        }),
+
+        Enviornment: folder({
+            envMapIntensity: {
+                value: 3.5,
+                min: 0,
+                max: 12,
+                step: 0.001
+            }
         })
     })
 
@@ -114,6 +123,18 @@ export default function Experience() {
         <color args={[controls.bg_color]} attach={'background'} />
 
         {controls.perfVisible && <Perf position="top-left" />}
+
+        <Environment 
+            background             // Just This much to add a enviornment map to the background
+            files={[
+                './environmentMaps/2/px.jpg',
+                './environmentMaps/2/nx.jpg',
+                './environmentMaps/2/py.jpg',
+                './environmentMaps/2/ny.jpg',
+                './environmentMaps/2/pz.jpg',
+                './environmentMaps/2/nz.jpg',
+            ]}
+        />
 
         <OrbitControls makeDefault />
         {/*<AccumulativeShadows
@@ -162,26 +183,27 @@ export default function Experience() {
             shadow-camera-right={5}
             shadow-camera-bottom={-5}
             shadow-camera-left={-5}
+            visible = {false}
         />
 
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.5} visible={false}/>
 
-        <Sky sunPosition={controls.sunPos} />
+        <Sky sunPosition={controls.sunPos} visible ={false}/>
 
 
         <mesh position-x={- 2} castShadow>
             <sphereGeometry />
-            <meshStandardMaterial color="orange" />
+            <meshStandardMaterial color="orange"  envMapIntensity={controls.envMapIntensity}/>
         </mesh>
 
         <mesh ref={cube} position-x={2} scale={1.5} castShadow>
             <boxGeometry />
-            <meshStandardMaterial color="mediumpurple" />
+            <meshStandardMaterial color="mediumpurple" envMapIntensity={controls.envMapIntensity} />
         </mesh>
 
         <mesh position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
             <planeGeometry />
-            <meshStandardMaterial color="greenyellow" />
+            <meshStandardMaterial color="greenyellow" envMapIntensity={controls.envMapIntensity} />
         </mesh>
 
     </>
