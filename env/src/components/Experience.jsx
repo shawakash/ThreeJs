@@ -74,7 +74,7 @@ export default function Experience() {
         }),
 
         Background: folder({
-            bg_color: 'ivory'
+            bg_color: '#468186'
         })
     })
 
@@ -129,6 +129,7 @@ export default function Experience() {
             color={controls.color}
             opacity={controls.opacity}
             blur={controls.blur}
+            // frames={1}                     // to bake the shadows
         />
 
         {/* Lights */}
