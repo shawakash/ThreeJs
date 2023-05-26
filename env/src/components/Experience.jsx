@@ -1,8 +1,8 @@
 import { useFrame } from '@react-three/fiber'
-import { ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
+import { Sky, ContactShadows, RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
-import { DirectionalLightHelper, Vector2 } from 'three';
+import { DirectionalLight, DirectionalLightHelper, Vector2 } from 'three';
 import { useControls, folder } from 'leva'
 import { useEffect } from 'react';
 
@@ -35,6 +35,15 @@ export default function Experience() {
         const elaspsedTime = state.clock.getElapsedTime();
 
         cube.current.rotation.y += delta * 0.2;
+
+        
+        // if(state.scene.children.find((value) => value.type == 'DirectionalLight').position.y < -1) {
+        if(directionalLight.current.position.y < -1  && directionalLight.current.intensity > 0) {
+            directionalLight.current.intensity += 0.001 * directionalLight.current.position.y;
+        } 
+        if(directionalLight.current.position.y > -1 && directionalLight.current.intensity < 1.5) {
+            directionalLight.current.intensity += 0.001 * directionalLight.current.position.y;
+        }
 
         // cube.current.position.x = Math.sin(elaspsedTime)
 
@@ -75,8 +84,16 @@ export default function Experience() {
 
         Background: folder({
             bg_color: '#468186'
+        }),
+
+        Sky: folder({
+            sunPos: {
+                value: [1,-0.11,3],
+                step: 0.01
+            }
         })
     })
+
 
     // Accumulator shadow, linear combination of shadow maps generated due to the movement of lights
     /**
@@ -135,7 +152,7 @@ export default function Experience() {
         {/* Lights */}
         <directionalLight
             ref={directionalLight}
-            position={[1, 2, 3]}
+            position={controls.sunPos}
             intensity={1.5}
             castShadow
             shadow-mapSize={[1024, 1024]}
@@ -148,6 +165,8 @@ export default function Experience() {
         />
 
         <ambientLight intensity={0.5} />
+
+        <Sky sunPosition={controls.sunPos} />
 
 
         <mesh position-x={- 2} castShadow>
