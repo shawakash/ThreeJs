@@ -67,7 +67,7 @@ export default function Experience() {
 
     const controls = useControls('Controls', {
         ContactShadows: folder({
-            color: '#316d39',
+            color: '#5b88be',
             opacity: {
                 value: 1,
                 min: 0,
@@ -117,6 +117,30 @@ export default function Experience() {
                 step: 0.001
             },
             envBg: 'black',
+            envResolution: {
+                value: 128,
+                min: 128,
+                max: 2048,
+                step: 0.001
+            },
+            envMapHeight: {
+                value: 7,
+                min: 1,
+                max: 2048,
+                step: 0.001
+            },
+            envMapRadius: {
+                value: 28,
+                min: 1,
+                max: 2048,
+                step: 0.001
+            },
+            envMapScale: {
+                value: 100,
+                min: 10,
+                max: 2048,
+                step: 0.001
+            },
         })
     })
 
@@ -147,8 +171,16 @@ export default function Experience() {
     */}
 
         <Environment 
-            background             // Just This much to add a enviornment map to the background
-            // files={ './environmentMaps/sea.hdr' }           // for hdr env
+            // background             // Just This much to add a enviornment map to the background
+
+            // Makes the mesh to stick on the ground, like if it was the part of the env making the plane containing origin with normal towards y axis
+            // Make your mesh accordingly
+            ground={{
+                height: controls.envMapHeight,
+                radius: controls.envMapRadius,
+                scale: controls.envMapScale,
+            }}
+            files={ './environmentMaps/sea.hdr' }           // for hdr env
             // files={[
             //     './environmentMaps/1/px.jpg',
             //     './environmentMaps/1/nx.jpg',
@@ -158,6 +190,7 @@ export default function Experience() {
             //     './environmentMaps/1/nz.jpg',
             // ]}
             // preset=''
+            resolution={controls.envResolution}
         >
             <color args={[controls.envBg]} attach={'background'}/>
 
@@ -168,6 +201,7 @@ export default function Experience() {
                 scale={10}
                 color={'red'}
                 intensity={10}
+                form={'ring'}
             />
 
             {/* <mesh position-z={5} scale={10}> */}
@@ -233,17 +267,17 @@ export default function Experience() {
         <Sky sunPosition={controls.sunPos} visible ={false}/>
 
 
-        <mesh position-x={- 2} castShadow>
+        <mesh position-x={- 2} position-y={1} castShadow>
             <sphereGeometry />
-            <meshStandardMaterial color="orange"  envMapIntensity={controls.envMapIntensity}/>
+            <meshStandardMaterial color="orange"  envMapIntensity={controls.envMapIntensity} />
         </mesh>
 
-        <mesh ref={cube} position-x={2} scale={1.5} castShadow>
+        <mesh ref={cube} position-x={2} position-y={1}  scale={1.5} castShadow>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" envMapIntensity={controls.envMapIntensity} />
         </mesh>
 
-        <mesh position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
+        <mesh position-y={0} rotation-x={- Math.PI * 0.5} scale={10} visible={false}>
             <planeGeometry />
             <meshStandardMaterial color="greenyellow" envMapIntensity={controls.envMapIntensity} />
         </mesh>
