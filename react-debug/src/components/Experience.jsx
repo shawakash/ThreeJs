@@ -5,6 +5,8 @@ import { button, folder, useControls } from 'leva'
 
 export default function Experience() {
 
+    // leva is added only inside canvas but import outside by Leva component in case of any error
+
     const { position, color, visible } = useControls('Sphere', {
         position: {
             value: { x: -2, y: 0 },
