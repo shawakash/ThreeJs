@@ -1,18 +1,18 @@
 import { useFrame } from '@react-three/fiber'
-import { softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
+import { RandomizedLight, AccumulativeShadows, softShadows, useHelper, OrbitControls, BakeShadows } from '@react-three/drei'
 import { useRef } from 'react'
 import { Perf } from 'r3f-perf'
 import { DirectionalLightHelper, Vector2 } from 'three';
 import { useEffect } from 'react';
 
 
-softShadows({
-    frustum: 3.75,
-    size: 0.005,
-    near: 9.5,
-    samples: 17,
-    rings: 11
-})
+// softShadows({
+//     frustum: 3.75,
+//     size: 0.005,
+//     near: 9.5,
+//     samples: 17,
+//     rings: 11
+// })
 
 export default function Experience() {
     const cube = useRef();
@@ -32,16 +32,33 @@ export default function Experience() {
 
     })
 
+    // Accumulator shadow, linear combination of shadow maps generated due to the movement of lights
+    /**
+     *  Eak Plane hai AccumulatorShadow ka jismme ki hum sare shadow ka linear Combination show karte hai jo eak light(inside the tag) ko 
+     *  jiggle(randomizing moving on a circle) karne se hoti hai
+     */
 
     return <>
 
-        <BakeShadows />
+
+        {/* <BakeShadows /> */}
 
         <color args={['ivory']} attach={'background'} />
 
         <Perf position="top-left" />
 
         <OrbitControls makeDefault />
+        <AccumulativeShadows
+            position={[0, -0.99, 0]}
+            scale={10}
+        >
+
+            <RandomizedLight
+                position={[1, 2, 3]}
+                castShadow
+            />
+
+        </AccumulativeShadows>
 
         {/* Lights */}
         <directionalLight
@@ -60,6 +77,7 @@ export default function Experience() {
 
         <ambientLight intensity={0.5} />
 
+
         <mesh position-x={- 2} castShadow>
             <sphereGeometry />
             <meshStandardMaterial color="orange" />
@@ -70,7 +88,7 @@ export default function Experience() {
             <meshStandardMaterial color="mediumpurple" />
         </mesh>
 
-        <mesh position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10} receiveShadow>
+        <mesh position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
             <planeGeometry />
             <meshStandardMaterial color="greenyellow" />
         </mesh>
