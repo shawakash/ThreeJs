@@ -76,7 +76,7 @@ export default function Experience() {
                 <PlaceHolder position={[-3, 0, 0]} scale={ 1 } />
             }
         >
-            <Fox scale={0.02} position={[-3, -0.991, 0]}/>
+            <Fox scale={0.02} position={[-3, -0.991, 1.5]}/>
         </Suspense>
 
 

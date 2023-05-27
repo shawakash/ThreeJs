@@ -15,7 +15,7 @@ export default function Hamburger(props) {
   const bottomBun = useRef();
 
   useEffect(() => {
-    console.log('Bottom', bottomBun.current.position)
+    // console.log('Bottom', bottomBun.current.position)
   }, [])
 
   const burger = useControls('Hamburger', {
