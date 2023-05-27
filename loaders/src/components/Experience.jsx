@@ -9,17 +9,17 @@ import { Vector3 } from 'three/src/three';
 export default function Experience()
 {
 
-    const { scene } = useThree();
+    // const { scene } = useThree();
 
     const others = useControls('Others', {
         nothing: false,
     });
 
     const model = useLoader(GLTFLoader, './hamburger.glb');
-    model.scene.scale.x = 0.1
-    model.scene.scale.y = 0.1
-    model.scene.scale.z = 0.1
-    scene.add(model.scene)
+    // model.scene.scale.x = 0.1
+    // model.scene.scale.y = 0.1
+    // model.scene.scale.z = 0.1
+    // scene.add(model.scene)
 
     return <>
 
@@ -44,6 +44,8 @@ export default function Experience()
             <planeGeometry />
             <meshStandardMaterial color="greenyellow" />
         </mesh>
+
+        <primitive object={model.scene} scale={0.35} />
 
     </>
 }
