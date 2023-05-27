@@ -6,6 +6,7 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import FilghtHelmet from './FilghtHelmet';
 import { Suspense } from 'react';
+import PlaceHolder from './PlaceHolder';
 
 export default function Experience() {
 
@@ -46,12 +47,11 @@ export default function Experience() {
         </mesh>
 
         <Suspense
-            fallback={ <mesh position={[0, 0.5, 0]} scale={[2, 3, 2]} >
-                <boxGeometry args={[1,1,1]} />
-                <meshBasicMaterial color='red' wireframe />
-            </mesh> }
+            fallback={
+                <PlaceHolder position={[0, 0.5, 0]} scale={ [2, 3, 2] } />
+            }
         >
-            <FilghtHelmet />
+            {/* <FilghtHelmet /> */}
         </Suspense>
 
 
