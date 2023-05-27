@@ -7,7 +7,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
 const Model = () => {
 
-    const model = useGLTF('./hamburger.glb', true)
+    // const model = useGLTF('./hamburger.glb', true)   // Second parameter is for draco to applied or not
+    const model = useGLTF('./hamburger-draco.glb')      // alternative way of applying draco
 
     // const model = useLoader(
     //     GLTFLoader,
