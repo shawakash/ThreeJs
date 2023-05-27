@@ -1,4 +1,4 @@
-import { useGLTF } from '@react-three/drei';
+import { Clone, useGLTF } from '@react-three/drei';
 import { useLoader } from '@react-three/fiber';
 import React from 'react'
 import { Suspense } from 'react';
@@ -22,8 +22,18 @@ const Model = () => {
     // );
 
     return (
-            <primitive object={model.scene} scale={0.35} />
+        <>
+            {/* <primitive object={model.scene} scale={0.35} /> */}
+            <Clone object={model.scene} scale={0.35} />
+            <Clone object={model.scene} scale={0.35} position={[6, 0, 6]} />
+            <Clone object={model.scene} scale={0.35} position={[-6, 0, -6]} />
+            <Clone object={model.scene} scale={0.35} position={[6, 0, -6]} />
+            <Clone object={model.scene} scale={0.35} position={[-6, 0, 6]} />
+
+        </>
     )
 }
+
+useGLTF.preload('./hamburger.glb');
 
 export default Model
