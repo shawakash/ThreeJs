@@ -4,7 +4,7 @@ import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import FilghtHelmet from './FilghtHelmet';
+import Model from './Model';
 import { Suspense } from 'react';
 import PlaceHolder from './PlaceHolder';
 
@@ -48,10 +48,10 @@ export default function Experience() {
 
         <Suspense
             fallback={
-                <PlaceHolder position={[0, 0.5, 0]} scale={ [2, 3, 2] } />
+                <PlaceHolder position={[0, 1, 0]} scale={ 2 } />
             }
         >
-            {/* <FilghtHelmet /> */}
+            <Model />
         </Suspense>
 
 
