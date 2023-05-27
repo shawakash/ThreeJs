@@ -1,8 +1,26 @@
 import { OrbitControls } from '@react-three/drei'
+import { useLoader, useThree } from '@react-three/fiber';
+import { useControls } from 'leva'
+
 import { Perf } from 'r3f-perf'
+import { GLTFLoader } from 'three/examples/jsm/loaders/gltfloader';
+import { Vector3 } from 'three/src/three';
 
 export default function Experience()
 {
+
+    const { scene } = useThree();
+
+    const others = useControls('Others', {
+        nothing: false,
+    });
+
+    const model = useLoader(GLTFLoader, './hamburger.glb');
+    model.scene.scale.x = 0.1
+    model.scene.scale.y = 0.1
+    model.scene.scale.z = 0.1
+    scene.add(model.scene)
+
     return <>
 
         <Perf position="top-left" />
