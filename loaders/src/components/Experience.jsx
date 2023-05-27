@@ -7,6 +7,8 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import Model from './Model';
 import { Suspense } from 'react';
 import PlaceHolder from './PlaceHolder';
+import Hamburger from './Hamburger';
+import { Hamburger_Draco } from './Hamburger-draco';
 
 export default function Experience() {
 
@@ -51,7 +53,9 @@ export default function Experience() {
                 <PlaceHolder position={[0, 1, 0]} scale={ 2 } />
             }
         >
-            <Model />
+            {/* <Model /> */}
+            <Hamburger scale={ 0.35 } />
+            {/* <Hamburger_Draco scale={ 0.35 } /> */}
         </Suspense>
 
 
