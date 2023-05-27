@@ -1,4 +1,4 @@
-import { OrbitControls } from '@react-three/drei'
+import { ContactShadows, OrbitControls } from '@react-three/drei'
 import { useLoader, useThree } from '@react-three/fiber';
 import { useControls } from 'leva'
 import { Perf } from 'r3f-perf'
@@ -30,8 +30,19 @@ export default function Experience() {
 
         <OrbitControls makeDefault />
 
-        <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} />
+        {/* By default model created by gltfjsx creates shadow acne so use shadow-normalBias */}
+
+        <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} shadow-normalBias={ 0.04 } />
         <ambientLight intensity={0.5} />
+
+        {/* <ContactShadows 
+            opacity={0.5}
+            blur={1.9}
+            resolution={128}
+            position={[0, -0.99, 0]}
+            color={'#316d39'}
+        /> */}
+
 
         {/* <mesh castShadow position-x={- 2}>
             <sphereGeometry />
@@ -42,6 +53,7 @@ export default function Experience() {
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh> */}
+
 
         <mesh receiveShadow position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
             <planeGeometry />
