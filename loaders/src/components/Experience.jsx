@@ -3,11 +3,10 @@ import { useLoader, useThree } from '@react-three/fiber';
 import { useControls } from 'leva'
 
 import { Perf } from 'r3f-perf'
-import { GLTFLoader } from 'three/examples/jsm/loaders/gltfloader';
-import { Vector3 } from 'three/src/three';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 
-export default function Experience()
-{
+export default function Experience() {
 
     // const { scene } = useThree();
 
@@ -15,7 +14,16 @@ export default function Experience()
         nothing: false,
     });
 
-    const model = useLoader(GLTFLoader, './hamburger.glb');
+    const model = useLoader(
+        GLTFLoader,
+        './FlightHelmet/glTF/FlightHelmet.gltf',
+        (loader) => {
+            console.log('loaded')
+            const dracoLoader = new DRACOLoader();
+            dracoLoader.setDecoderPath('./draco/');
+            // loader.setDRACOLoader(dracoLoader);
+        }
+    );
     // model.scene.scale.x = 0.1
     // model.scene.scale.y = 0.1
     // model.scene.scale.z = 0.1
@@ -27,25 +35,25 @@ export default function Experience()
 
         <OrbitControls makeDefault />
 
-        <directionalLight castShadow position={ [ 1, 2, 3 ] } intensity={ 1.5 } />
-        <ambientLight intensity={ 0.5 } />
+        <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} />
+        <ambientLight intensity={0.5} />
 
-        <mesh castShadow position-x={ - 2 }>
+        {/* <mesh castShadow position-x={- 2}>
             <sphereGeometry />
             <meshStandardMaterial color="orange" />
         </mesh>
 
-        <mesh castShadow position-x={ 2 } scale={ 1.5 }>
+        <mesh castShadow position-x={2} scale={1.5}>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
-        </mesh>
+        </mesh> */}
 
-        <mesh receiveShadow position-y={ - 1 } rotation-x={ - Math.PI * 0.5 } scale={ 10 }>
+        <mesh receiveShadow position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
             <planeGeometry />
             <meshStandardMaterial color="greenyellow" />
         </mesh>
 
-        <primitive object={model.scene} scale={0.35} />
+        <primitive object={model.scene} scale={5} />
 
     </>
 }
