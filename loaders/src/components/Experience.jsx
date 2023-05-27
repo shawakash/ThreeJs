@@ -9,6 +9,7 @@ import { Suspense } from 'react';
 import PlaceHolder from './PlaceHolder';
 import Hamburger from './Hamburger';
 import { Hamburger_Draco } from './Hamburger-draco';
+import Fox from './Fox';
 
 export default function Experience() {
 
@@ -68,6 +69,14 @@ export default function Experience() {
             {/* <Model /> */}
             <Hamburger scale={ 0.35 } />
             {/* <Hamburger_Draco scale={ 0.35 } /> */}
+        </Suspense>
+
+        <Suspense
+            fallback={
+                <PlaceHolder position={[-3, 0, 0]} scale={ 1 } />
+            }
+        >
+            <Fox scale={0.02} position={[-3, -0.991, 0]}/>
         </Suspense>
 
 
