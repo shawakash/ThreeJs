@@ -1,10 +1,11 @@
 import { OrbitControls } from '@react-three/drei'
 import { useLoader, useThree } from '@react-three/fiber';
 import { useControls } from 'leva'
-
 import { Perf } from 'r3f-perf'
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import FilghtHelmet from './FilghtHelmet';
+import { Suspense } from 'react';
 
 export default function Experience() {
 
@@ -14,16 +15,7 @@ export default function Experience() {
         nothing: false,
     });
 
-    const model = useLoader(
-        GLTFLoader,
-        './FlightHelmet/glTF/FlightHelmet.gltf',
-        (loader) => {
-            console.log('loaded')
-            const dracoLoader = new DRACOLoader();
-            dracoLoader.setDecoderPath('./draco/');
-            // loader.setDRACOLoader(dracoLoader);
-        }
-    );
+
     // model.scene.scale.x = 0.1
     // model.scene.scale.y = 0.1
     // model.scene.scale.z = 0.1
@@ -53,7 +45,15 @@ export default function Experience() {
             <meshStandardMaterial color="greenyellow" />
         </mesh>
 
-        <primitive object={model.scene} scale={5} />
+        <Suspense
+            fallback={ <mesh position={[0, 0.5, 0]} scale={[2, 3, 2]} >
+                <boxGeometry args={[1,1,1]} />
+                <meshBasicMaterial color='red' wireframe />
+            </mesh> }
+        >
+            <FilghtHelmet />
+        </Suspense>
+
 
     </>
 }
