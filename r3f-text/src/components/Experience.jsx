@@ -1,27 +1,48 @@
 import { Center, Environment, OrbitControls, Text3D, useMatcapTexture } from '@react-three/drei'
+import { useFrame } from '@react-three/fiber';
 import { Perf } from 'r3f-perf'
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three'
 
-const dognutGeometry = new THREE.TorusGeometry(1, 0.6, 16, 32);
+const dougnutGeometry = new THREE.TorusGeometry(1, 0.6, 16, 32);
 const torusMaterial = new THREE.MeshMatcapMaterial();
+
+// Implementing from native make the encoding from react three fiber null so we need to enable it first
 
 export default function Experience() {
 
     // const matcapTexture = useMatcapTexture('3E2335_D36A1B_8E4A2E_2842A5', 256).find(value => value.isTexture);
     // const matcapTexture = useMatcapTexture('3E2335_D36A1B_8E4A2E_2842A5', 256)[0];
     const [textMatcapTexture] = useMatcapTexture('3E2335_D36A1B_8E4A2E_2842A5', 256);
-    const [dognutMatcapTexture] = useMatcapTexture('5E5855_C6C4CD_C89B67_8F8E98', 256);
-
+    const [dougnutMatcapTexture] = useMatcapTexture('5E5855_C6C4CD_C89B67_8F8E98', 256);
+    
     // const [torusGeometry, setTorusGeometry] = useState();
     // const [torusMaterial, setTorusMaterial] = useState();
+    
+
+    const dougnuts = useRef();
 
     useEffect(() => {
-        torusMaterial.matcap = dognutMatcapTexture;
+
+        dougnutMatcapTexture.encoding = THREE.sRGBEncoding;
+        dougnutMatcapTexture.needsUpdate = true;
+
+        torusMaterial.matcap = dougnutMatcapTexture;
         torusMaterial.needsUpdate = true;
     }, [])
 
-    const tempArray = [...Array(100)];
+    useFrame((state, delta) => {
+
+
+        dougnuts.current.children.map(mesh => {
+
+
+            mesh.rotation.x += delta * 0.5 ;
+            mesh.rotation.y += delta * 0.5 ;
+            mesh.rotation.z += delta * 0.5 ;
+        })
+    })
+
 
     return <>
 
@@ -50,24 +71,27 @@ export default function Experience() {
 
         </Center>
 
-        {[...Array(200)].map((value, index) =>
-            <mesh
-                key={index}
-                geometry={dognutGeometry}
-                material={torusMaterial}
-                position={[
-                    (Math.random() - 0.5) * 100,
-                    (Math.random() - 0.5) * 100,
-                    (Math.random() - 0.5) * 100
-                ]}
-                rotation={[
-                    (Math.random() - 0.5) * Math.PI,
-                    (Math.random() - 0.5) * Math.PI,
-                    (Math.random() - 0.5) * Math.PI
-                ]}
-                scale={Math.random() * 0.6 + 0.3}
-            />
-        )}
+        <group ref={dougnuts}>
+            {[...Array(200)].map((value, index) =>
+                <mesh
+                    key={index}
+                    geometry={dougnutGeometry}
+                    material={torusMaterial}
+                    position={[
+                        (Math.random() - 0.5) * 100,
+                        (Math.random() - 0.5) * 100,
+                        (Math.random() - 0.5) * 100
+                    ]}
+                    rotation={[
+                        (Math.random() - 0.5) * Math.PI,
+                        (Math.random() - 0.5) * Math.PI,
+                        (Math.random() - 0.5) * Math.PI
+                    ]}
+                    scale={Math.random() * 0.6 + 0.3}
+                />
+            )}
+        </group>
+
 
 
 
