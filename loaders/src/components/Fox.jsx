@@ -23,7 +23,7 @@ const Fox = (props) => {
     useEffect(() => {
 
         const action = animations.actions[fox.animation];
-        action.fadeIn(0.5).play();
+        action.reset().fadeIn(0.5).play();
         
 
         // window.setTimeout(() => {
@@ -32,6 +32,8 @@ const Fox = (props) => {
 
         // }, 2000)
 
+
+        // CleanUp Space
         return () => {
             action.fadeOut(0.5)
         }
