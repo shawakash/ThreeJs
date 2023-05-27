@@ -14,7 +14,7 @@ const Fox = (props) => {
 
     const fox = useControls('Fox', {
         animation: {
-            options: ['Survey', 'Walk', 'Run'],
+            options: animations.names,
         }
     })
     
@@ -22,15 +22,19 @@ const Fox = (props) => {
 
     useEffect(() => {
 
-        const action = animations.actions.Run;
-        action.play();
+        const action = animations.actions[fox.animation];
+        action.fadeIn(0.5).play();
         
 
-        window.setTimeout(() => {
-            animations.actions.Walk.play();
-            animations.actions.Walk.crossFadeFrom(animations.actions.Run, 1);
+        // window.setTimeout(() => {
+        //     animations.actions.Walk.play();
+        //     animations.actions.Walk.crossFadeFrom(animations.actions.Run, 1);
 
-        }, 2000)
+        // }, 2000)
+
+        return () => {
+            action.fadeOut(0.5)
+        }
 
     }, [fox.animation])
 
