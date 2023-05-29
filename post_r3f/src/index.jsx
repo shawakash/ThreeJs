@@ -14,7 +14,7 @@ root.render(
             position: [ 4, 2, 6 ]
         } }
     >
-        <color args={['white']} attach={'background'} />
+        <color args={['black']} attach={'background'} />
         <Experience />
     </Canvas>
 )
