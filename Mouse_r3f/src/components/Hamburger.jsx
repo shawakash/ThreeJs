@@ -7,7 +7,10 @@ const Hamburger = () => {
 
     const eventHandler = (event) => {
         model.scene.scale.set(0.35, 0.35, 0.35)
-        console.log('CLick')
+        console.log(event.object.name)
+        console.log(event.eventObject)             // gets the parent mesh
+        event.stopPropagation();
+        console.log(event.object.name)
     }
 
     return (
