@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
-import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, Vignette } from '@react-three/postprocessing'
+import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, SSR, Vignette } from '@react-three/postprocessing'
 import { GlitchMode, BlendFunction } from 'postprocessing'
 
 export default function Experience() {
@@ -33,11 +33,13 @@ export default function Experience() {
                 intensity={0.5}
                 luminanceThreshold={0}
             /> */}
-            <DepthOfField 
+            {/* <DepthOfField 
                 focusDistance={0.025}
                 focusRange={0.025}
                 bokehScale={6}
-            />
+            /> */}
+
+            <SSR />
         </EffectComposer>
 
         <Perf position="top-left" />
