@@ -1,8 +1,9 @@
-import { Center, OrbitControls, Sparkles, useGLTF, useTexture } from '@react-three/drei'
+import { Center, OrbitControls, Sparkles, shaderMaterial, useGLTF, useTexture } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { Color, DoubleSide } from 'three';
 import portalVextexShader from '../shaders/portal/vertex.js'
 import portalFragmentShader from '../shaders/portal/fragment.js'
+import { extend } from '@react-three/fiber';
 
 export default function Experience() {
 
@@ -12,7 +13,17 @@ export default function Experience() {
     const bakedTexture = useTexture('./model/baked.jpg');
     bakedTexture.flipY = false;
 
-    // const { scene }
+    const PortalMaterial = shaderMaterial(
+        {
+            uTime: 0,
+            uColorStart: new Color('#ffffff'),
+            uColorEnd: new Color("#000000"),
+        },
+        portalVextexShader,
+        portalFragmentShader
+    );
+
+    extend({PortalMaterial})
 
     return <>
 
@@ -55,26 +66,18 @@ export default function Experience() {
                 geometry={nodes.portalLight.geometry}
                 position={nodes.portalLight.position}
                 rotation={nodes.portalLight.rotation}
-            >   
-                <shaderMaterial 
-                    vertexShader={portalVextexShader}
-                    fragmentShader={portalFragmentShader}
-                    uniforms={{
-                        uTime: { value: 0 },
-                        uColorStart: { value: new Color('#ffffff') },
-                        uColorEnd: { value: new Color('#000000') }
-                    }}
-                />
+            >
+                <portalMaterial />
             </mesh>
 
             {/* SPARKLES */}
-            <Sparkles 
+            <Sparkles
                 position={[0, 1, 0]}
-                size={ 6 }
+                size={6}
                 scale={[4, 2, 4]}
-                speed={ 0.2 }
-                count={ 40 }
-            /> 
+                speed={0.2}
+                count={40}
+            />
 
         </Center>
 
