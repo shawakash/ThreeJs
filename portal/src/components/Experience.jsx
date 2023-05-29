@@ -1,5 +1,6 @@
-import { Center, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
+import { Center, OrbitControls, Sparkles, useGLTF, useTexture } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
+import { DoubleSide } from 'three';
 
 export default function Experience() {
 
@@ -23,25 +24,46 @@ export default function Experience() {
         </mesh> */}
 
         <Center>
+
+            {/* Basic Structure */}
             <mesh
                 geometry={nodes.baked.geometry}
             >
                 <meshBasicMaterial map={bakedTexture} />   {/* map-flipY={false} */}
             </mesh>
 
+            {/* Pole Lights */}
             <mesh
                 geometry={nodes.poleLightA.geometry}
                 position={nodes.poleLightA.position}
             >
-                <meshBasicMaterial color={'#ffffe5'}/>
+                <meshBasicMaterial color={'#ffffe5'} />
             </mesh>
 
             <mesh
                 geometry={nodes.poleLightB.geometry}
                 position={nodes.poleLightB.position}
             >
-                <meshBasicMaterial color={'#ffffe5'}/>
+                <meshBasicMaterial color={'#ffffe5'} />
             </mesh>
+
+            {/* Portal */}
+
+            <mesh
+                geometry={nodes.portalLight.geometry}
+                position={nodes.portalLight.position}
+                rotation={nodes.portalLight.rotation}
+            />
+
+            {/* SPARKLES */}
+            <Sparkles 
+                position={[0, 1, 0]}
+                size={ 6 }
+                scale={[4, 2, 4]}
+                speed={ 0.2 }
+                count={ 40 }
+            /> 
+
         </Center>
 
     </>
