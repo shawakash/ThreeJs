@@ -1,7 +1,7 @@
-import { OrbitControls, useGLTF, useTexture } from '@react-three/drei'
+import { Center, OrbitControls, useGLTF, useTexture } from '@react-three/drei'
+import { Perf } from 'r3f-perf'
 
-export default function Experience()
-{
+export default function Experience() {
 
     const { nodes } = useGLTF('./model/portal.glb', true);
     // console.log(nodes);
@@ -13,6 +13,7 @@ export default function Experience()
 
     return <>
 
+        <Perf position='top-left' />
         <OrbitControls makeDefault />
 
         {/* Test Cube */}
@@ -21,11 +22,27 @@ export default function Experience()
             <meshNormalMaterial />
         </mesh> */}
 
-        <mesh 
-            geometry={nodes.baked.geometry}
-        >
-            <meshBasicMaterial map={bakedTexture} />
-        </mesh>
+        <Center>
+            <mesh
+                geometry={nodes.baked.geometry}
+            >
+                <meshBasicMaterial map={bakedTexture} />   {/* map-flipY={false} */}
+            </mesh>
+
+            <mesh
+                geometry={nodes.poleLightA.geometry}
+                position={nodes.poleLightA.position}
+            >
+                <meshBasicMaterial color={'#ffffe5'}/>
+            </mesh>
+
+            <mesh
+                geometry={nodes.poleLightB.geometry}
+                position={nodes.poleLightB.position}
+            >
+                <meshBasicMaterial color={'#ffffe5'}/>
+            </mesh>
+        </Center>
 
     </>
 }
