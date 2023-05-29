@@ -1,10 +1,13 @@
-import { OrbitControls, useGLTF } from '@react-three/drei'
+import { OrbitControls, useGLTF, useTexture } from '@react-three/drei'
 
 export default function Experience()
 {
 
     const { nodes } = useGLTF('./model/portal.glb', true);
-    console.log(nodes)
+    // console.log(nodes);
+
+    const bakedTexture = useTexture('./model/baked.jpg');
+    bakedTexture.flipY = false;
 
     // const { scene }
 
@@ -20,8 +23,9 @@ export default function Experience()
 
         <mesh 
             geometry={nodes.baked.geometry}
-            material={nodes.baked.material}
-        />
+        >
+            <meshBasicMaterial map={bakedTexture} />
+        </mesh>
 
     </>
 }
