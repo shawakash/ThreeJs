@@ -1,6 +1,8 @@
 import { Center, OrbitControls, Sparkles, useGLTF, useTexture } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { DoubleSide } from 'three';
+import portalVextexShader from '../shaders/portal/vertex.js'
+import portalFragmentShader from '../shaders/portal/fragment.js'
 
 export default function Experience() {
 
@@ -53,7 +55,9 @@ export default function Experience() {
                 geometry={nodes.portalLight.geometry}
                 position={nodes.portalLight.position}
                 rotation={nodes.portalLight.rotation}
-            />
+            >
+                <shaderMaterial />
+            </mesh>
 
             {/* SPARKLES */}
             <Sparkles 
