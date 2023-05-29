@@ -3,9 +3,12 @@ import { Perf } from 'r3f-perf'
 import { Color, DoubleSide } from 'three';
 import portalVextexShader from '../shaders/portal/vertex.js'
 import portalFragmentShader from '../shaders/portal/fragment.js'
-import { extend } from '@react-three/fiber';
+import { extend, useFrame } from '@react-three/fiber';
+import { useRef } from 'react';
 
 export default function Experience() {
+
+    const portalMaterialRef = useRef();
 
     const { nodes } = useGLTF('./model/portal.glb', true);
     // console.log(nodes);
@@ -23,7 +26,11 @@ export default function Experience() {
         portalFragmentShader
     );
 
-    extend({PortalMaterial})
+    extend({PortalMaterial});
+
+    useFrame((state, delta) => {
+        portalMaterialRef.current.uTime += delta;
+    })
 
     return <>
 
@@ -67,7 +74,7 @@ export default function Experience() {
                 position={nodes.portalLight.position}
                 rotation={nodes.portalLight.rotation}
             >
-                <portalMaterial />
+                <portalMaterial ref={portalMaterialRef}/>
             </mesh>
 
             {/* SPARKLES */}
