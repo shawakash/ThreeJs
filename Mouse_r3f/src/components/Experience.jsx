@@ -1,5 +1,6 @@
 import { useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
+import { Perf } from 'r3f-perf'
 import { useRef } from 'react'
 
 export default function Experience()
@@ -13,6 +14,7 @@ export default function Experience()
 
     return <>
 
+        <Perf position={'top-left'} />
         <OrbitControls makeDefault />
 
         <directionalLight position={ [ 1, 2, 3 ] } intensity={ 1.5 } />
