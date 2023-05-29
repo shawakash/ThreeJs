@@ -25,7 +25,9 @@ export default function Experience() {
         <directionalLight position={[1, 2, 3]} intensity={1.5} />
         <ambientLight intensity={0.5} />
 
-        <mesh position-x={- 2}>
+        <mesh position-x={- 2} onClick={(e) => {
+            e.stopPropagation();
+        }}>
             <sphereGeometry />
             <meshStandardMaterial color="orange" />
         </mesh>
