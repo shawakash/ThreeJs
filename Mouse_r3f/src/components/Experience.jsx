@@ -45,6 +45,12 @@ export default function Experience() {
             // onPointerEnter={eventHandler}    // When the cursor or finger just went above or enter or touched the object
             // onPointerMove={eventHandler}    // When the cursor or finger moves over the object
             // onPointerMissed={eventHandler}    // When the cursor or finger misses over the object
+            onPointerEnter={ (e) => {
+                document.body.style.cursor = 'pointer';
+            }}
+            onPointerLeave={(e) => {
+                document.body.style.cursor = 'default';
+            }}
         >
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
