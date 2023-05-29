@@ -12,6 +12,10 @@ export default function Experience()
         cube.current.rotation.y += delta * 0.2
     })
 
+    const eventHandler = () => {
+        console.log('Hola')
+    }
+
     return <>
 
         <Perf position={'top-left'} />
@@ -25,7 +29,7 @@ export default function Experience()
             <meshStandardMaterial color="orange" />
         </mesh>
 
-        <mesh ref={ cube } position-x={ 2 } scale={ 1.5 }>
+        <mesh ref={ cube } position-x={ 2 } scale={ 1.5 } onClick={eventHandler}>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>
