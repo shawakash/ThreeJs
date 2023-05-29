@@ -1,5 +1,5 @@
 import { useFrame } from '@react-three/fiber'
-import { useCursor, OrbitControls } from '@react-three/drei'
+import { meshBounds, useCursor, OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { useRef } from 'react'
 import { Color } from 'three'
@@ -15,7 +15,7 @@ export default function Experience() {
     const eventHandler = (event) => {
         // cube.current.material.color = new Color(Math.random(), Math.random(), Math.random())
         cube.current.material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`)
-        console.log(event)
+        // console.log(event)
     }
 
 
@@ -36,6 +36,7 @@ export default function Experience() {
 
         <mesh
             ref={cube}
+            raycast={meshBounds}
             position-x={2}
             scale={1.5}
             onClick={eventHandler}
