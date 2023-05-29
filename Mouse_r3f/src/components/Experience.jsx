@@ -13,8 +13,10 @@ export default function Experience()
         cube.current.rotation.y += delta * 0.2
     })
 
-    const eventHandler = () => {
-        cube.current.material.color = new Color(Math.random(), Math.random(), Math.random())
+    const eventHandler = (event) => {
+        // cube.current.material.color = new Color(Math.random(), Math.random(), Math.random())
+        cube.current.material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`)
+        console.log(event)
     }
 
     return <>
@@ -30,7 +32,7 @@ export default function Experience()
             <meshStandardMaterial color="orange" />
         </mesh>
 
-        <mesh ref={ cube } position-x={ 2 } scale={ 1.5 } onClick={eventHandler}>
+        <mesh ref={ cube } position-x={ 2 } scale={ 1.5 } onContextMenu={eventHandler}>
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>
