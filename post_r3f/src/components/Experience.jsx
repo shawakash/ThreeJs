@@ -1,9 +1,14 @@
 import { OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
+import { EffectComposer } from '@react-three/postprocessing'
 
 export default function Experience()
 {
     return <>
+
+        <EffectComposer>
+            
+        </EffectComposer>
 
         <Perf position="top-left" />
 
@@ -11,6 +16,7 @@ export default function Experience()
 
         <directionalLight castShadow position={ [ 1, 2, 3 ] } intensity={ 1.5 } />
         <ambientLight intensity={ 0.5 } />
+
 
         <mesh castShadow position-x={ - 2 }>
             <sphereGeometry />
