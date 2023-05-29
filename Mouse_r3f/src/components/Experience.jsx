@@ -1,8 +1,9 @@
 import { useFrame } from '@react-three/fiber'
-import { OrbitControls } from '@react-three/drei'
+import { useCursor, OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { useRef } from 'react'
 import { Color } from 'three'
+import Hamburger from './Hamburger'
 
 export default function Experience() {
     const cube = useRef()
@@ -16,6 +17,7 @@ export default function Experience() {
         cube.current.material.color.set(`hsl(${Math.random() * 360}, 100%, 75%)`)
         console.log(event)
     }
+
 
     return <>
 
@@ -46,12 +48,14 @@ export default function Experience() {
             // onPointerMove={eventHandler}    // When the cursor or finger moves over the object
             // onPointerMissed={eventHandler}    // When the cursor or finger misses over the object
             onPointerEnter={ (e) => {
-                document.body.style.cursor = 'pointer';
+                document.body.style.cursor = 'pointer';   
+                // Incase of multiple objects in the webpage get the element from useThree => state => gl => canvas
             }}
             onPointerLeave={(e) => {
                 document.body.style.cursor = 'default';
             }}
-        >
+            
+            >
             <boxGeometry />
             <meshStandardMaterial color="mediumpurple" />
         </mesh>
@@ -60,6 +64,8 @@ export default function Experience() {
             <planeGeometry />
             <meshStandardMaterial color="greenyellow" />
         </mesh>
+
+            <Hamburger />
 
     </>
 }
