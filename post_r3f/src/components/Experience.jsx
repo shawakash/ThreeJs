@@ -1,16 +1,20 @@
 import { OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { EffectComposer, Vignette } from '@react-three/postprocessing'
+import { BlendFunction } from 'postprocessing'
 
 export default function Experience() {
     return <>
+
+        {/* In r3f post processing occurs in blending i.e. effects are blended using some principle */}
 
         <EffectComposer
         // multisampling={0}
         >
             <Vignette 
                 offset={0.3}
-                darkness={0.7}
+                darkness={0.75}
+                blendFunction={BlendFunction.NORMAL}
             /> 
         </EffectComposer>
 
