@@ -2,6 +2,7 @@ import { useFrame } from '@react-three/fiber'
 import { OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { useRef } from 'react'
+import { Color } from 'three'
 
 export default function Experience()
 {
@@ -13,7 +14,7 @@ export default function Experience()
     })
 
     const eventHandler = () => {
-        console.log('Hola')
+        cube.current.material.color = new Color(Math.random(), Math.random(), Math.random())
     }
 
     return <>
