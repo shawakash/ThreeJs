@@ -1,6 +1,6 @@
 import { OrbitControls } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
-import { Bloom, EffectComposer, Glitch, Noise, Vignette } from '@react-three/postprocessing'
+import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, Vignette } from '@react-three/postprocessing'
 import { GlitchMode, BlendFunction } from 'postprocessing'
 
 export default function Experience() {
@@ -28,9 +28,15 @@ export default function Experience() {
                 blendFunction={BlendFunction.SOFT_LIGHT}
                 opacity={1}
             /> */}
-            <Bloom
+            {/* <Bloom
                 mipmapBlur
                 intensity={0.5}
+                luminanceThreshold={0}
+            /> */}
+            <DepthOfField 
+                focusDistance={0.025}
+                focusRange={0.025}
+                bokehScale={6}
             />
         </EffectComposer>
 
@@ -51,7 +57,7 @@ export default function Experience() {
             <boxGeometry />
             {/* Emissive works only on Standard material */}
             {/* <meshStandardMaterial color={"white"} emissive={"orange"} emissiveIntensity={ 2 } toneMapped={ false } /> */}
-            <meshBasicMaterial color={[1.5, 1, 4]} toneMapped={false} />
+            <meshStandardMaterial color={'mediumpurple'} />
         </mesh>
 
         <mesh receiveShadow position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
