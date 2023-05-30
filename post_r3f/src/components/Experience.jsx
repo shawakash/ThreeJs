@@ -3,6 +3,7 @@ import { Perf } from 'r3f-perf'
 import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, SSR, Vignette } from '@react-three/postprocessing'
 import { GlitchMode, BlendFunction } from 'postprocessing'
 import { useControls } from 'leva'
+import Drunk from './Drunk'
 
 export default function Experience() {
 
@@ -74,7 +75,8 @@ export default function Experience() {
                 bokehScale={6}
             /> */}
 
-            <SSR {...ssr} />
+            {/* <SSR {...ssr} /> */}
+            <Drunk />
         </EffectComposer>
 
         <Perf position="top-left" />
@@ -99,7 +101,11 @@ export default function Experience() {
 
         <mesh receiveShadow position-y={- 1} rotation-x={- Math.PI * 0.5} scale={10}>
             <planeGeometry />
-            <meshStandardMaterial color="black" metalness={0} roughness={0} />
+            <meshStandardMaterial
+                color="black"
+                // metalness={0}
+                // roughness={0}
+            />
         </mesh>
 
     </>
