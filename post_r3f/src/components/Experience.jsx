@@ -5,6 +5,7 @@ import { GlitchMode, BlendFunction } from 'postprocessing'
 import { useControls } from 'leva'
 import Drunk from './Drunk'
 import { useEffect, useRef } from 'react'
+import { Color, Vector3 } from 'three'
 
 export default function Experience() {
 
@@ -47,6 +48,8 @@ export default function Experience() {
 
     console.log(Object.keys(BlendFunction))
 
+    const c = new Color();
+    c.setRGB(0.8, 1.0, 0.5);
 
     const drunk = useControls('Drunk Effect', {
         frequency: {
@@ -63,8 +66,21 @@ export default function Experience() {
         },
         BlendFunction: {
             options: Object.keys(BlendFunction),
+        },
+        color: {
+            value: new Color(0.8, 1.0, 0.5)
+        },
+        speed: {
+            value: 0.1,
+            min: 0,
+            max: 10, 
+            step: 0.01
         }
+        
     })
+
+
+
 
     return <>
 
@@ -107,6 +123,8 @@ export default function Experience() {
                 frequency={drunk.frequency}
                 amplitude={drunk.amplitude}
                 blendFunction={BlendFunction[drunk.BlendFunction]}
+                color={drunk.color}
+                speed={drunk.speed}
             />
         </EffectComposer>
 

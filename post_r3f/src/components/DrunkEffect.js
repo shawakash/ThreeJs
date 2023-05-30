@@ -12,9 +12,11 @@ const fragmentShaders = /* glsl */`
     
     uniform float frequency;
     uniform float amplitude;
+    uniform float offset;
+    uniform vec3 color;
 
     void mainUv(inout vec2 uv) {
-        uv.y += sin(uv.x * frequency) * amplitude;
+        uv.y += sin(uv.x * frequency + offset) * amplitude;
     }
 
     void mainImage(const in vec4 inputColor, const in vec2 uv, out vec4 outputColor) {
@@ -26,17 +28,25 @@ const fragmentShaders = /* glsl */`
 
 export default class DrunkEffect extends Effect {
 
-    constructor({ frequency = 2, amplitude = 0.1, blendFunction = BlendFunction.DARKEN }) {
+    constructor({ frequency = 2, amplitude = 0.1, blendFunction = BlendFunction.DARKEN, color, speed = 0.1 }) {
         super('DrunkEffect', fragmentShaders, {
             blendFunction,
             uniforms: new Map([
                 // ['frequency', new Uniform(frequency)],
                 ['frequency', { value: frequency }],
                 ['amplitude', { value: amplitude }],
+                ['offset', new Uniform(0)],
+                ['speed', { value: speed }],
+                ['color', { value: color }],
             ])
 
         })
-        // console.log(blendFunction)
+        console.log(this.uniforms.get('color').value)
+    }
+
+    update(renderer, inputBuffer, deltaTime) {
+        this.uniforms.get('offset').value += deltaTime * this.uniforms.get('speed').value;
+        console.log('Hola')
     }
 
 }
