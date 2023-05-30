@@ -1,4 +1,4 @@
-import { Center, ContactShadows, Environment, Float, PresentationControls, useGLTF } from '@react-three/drei'
+import { Center, ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei'
 
 export default function Experience() {
 
@@ -32,7 +32,17 @@ export default function Experience() {
                 <primitive
                     object={macBook.scene}
                     position-y={-1.2}
-                />
+                >
+                    <Html
+                        transform
+                        wrapperClass='htmlScreen'
+                        distanceFactor={1.17}
+                        position={[0, 1.56, -1.4]}
+                        rotation-x={-0.256}
+                    >   
+                        <iframe src='https://static-portfolio-omega.vercel.app/' />
+                    </Html>
+                </primitive>
             </Float>
         </PresentationControls>
 
