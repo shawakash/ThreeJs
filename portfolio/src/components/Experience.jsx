@@ -1,4 +1,4 @@
-import { Center, ContactShadows, Environment, Float, Html, PresentationControls, useGLTF } from '@react-three/drei'
+import { Center, ContactShadows, Environment, Float, Html, PresentationControls, Text, useGLTF } from '@react-three/drei'
 
 export default function Experience() {
 
@@ -29,6 +29,14 @@ export default function Experience() {
             snap={{ mass: 4, tension: 400 }}
         >
             <Float rotationIntensity={0.4}>
+                <rectAreaLight
+                    width={2.5}
+                    height={1.65}
+                    intensity={65}
+                    color={'#ff6900'}
+                    rotation={[0.1, Math.PI, 0]}
+                    position={[0, 0.55, -1.15]}
+                />
                 <primitive
                     object={macBook.scene}
                     position-y={-1.2}
@@ -39,12 +47,26 @@ export default function Experience() {
                         distanceFactor={1.17}
                         position={[0, 1.56, -1.4]}
                         rotation-x={-0.256}
-                    >   
+                    >
                         <iframe src='https://static-portfolio-omega.vercel.app/' />
                     </Html>
                 </primitive>
+
+                <Text
+                    font='./bangers-v20-latin-regular.woff'
+                    fontSize={1}
+                    position={[2, 0.75, 0.75]}
+                    rotation-y={-1.25}
+                    // children={'AKASH\nSHAW'}
+                    maxWidth={2}
+                    textAlign='center'
+                >
+                    AKASH SHAW
+                </Text>
             </Float>
         </PresentationControls>
+
+
 
     </>
 }
