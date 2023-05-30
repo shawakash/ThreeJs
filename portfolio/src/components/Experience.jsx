@@ -9,8 +9,7 @@ const Experience = () => {
     // const progress = useProgress()
     // console.log(progress)
 
-    const macBook = useGLTF(`https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf`, true, (gltf) => { console.log('H') });
-    const headPhone = useGLTF(`https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/headphones/model.gltf`, true);
+    const macBook = useGLTF(`./model.gltf`, true);
 
     return <>
 
@@ -27,27 +26,7 @@ const Experience = () => {
             scale={5}
         />
 
-        {/* <mesh>
-            <planeGeometry args={[2, 2, 1, 1]} />
-            <shaderMaterial
-                transparent={true}
-                vertexShader={`
-                    void main() {
-                        gl_Position =  vec4(position, 1.0);
-                    }
-                `}
-                fragmentShader={`
-                uniform float uAlpha;
-        
-                void main() {
-                    gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
-                }
-                `}
-                uniforms={{
-                    uAlpha: { value: 1.0 }
-                }}
-            />
-        </mesh> */}
+
 
 
         <PresentationControls
@@ -68,13 +47,10 @@ const Experience = () => {
                     position={[0, 0.55, -1.15]}
                 />
 
-                <Suspense fallback={<Loader />}>
 
                     <primitive
                         object={macBook.scene}
                         position-y={-1.2}
-                        onPointerEnter={(state) => {state.camera.scale.set(2)}}
-                        onPointerLeave={(state) => { state.camera.scale.set(2) }}
                     >
                         <Html
                             transform
@@ -99,13 +75,7 @@ const Experience = () => {
                         AKASH SHAW
                     </Text>
 
-                    <primitive
-                        object={headPhone.scene}
-                        scale={0.35}
-                        position={[-2.5, -1.2, 0.25]}
-                        rotation-x={-Math.PI * 0.43}
-                    />
-                </Suspense>
+                    
             </Float>
         </PresentationControls>
 
@@ -114,7 +84,5 @@ const Experience = () => {
     </>
 }
 
-useGLTF.preload(`https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf`, true)
-useGLTF.preload(`https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/headphones/model.gltf`, true)
 
 export default Experience
