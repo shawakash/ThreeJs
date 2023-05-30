@@ -4,6 +4,7 @@ import { Bloom, DepthOfField, EffectComposer, Glitch, Noise, SSR, Vignette } fro
 import { GlitchMode, BlendFunction } from 'postprocessing'
 import { useControls } from 'leva'
 import Drunk from './Drunk'
+import { useEffect, useRef } from 'react'
 
 export default function Experience() {
 
@@ -38,6 +39,11 @@ export default function Experience() {
         thickness: { value: 10, min: 0, max: 10 },
         ior: { value: 1.45, min: 0, max: 2 }
     })
+
+    const drunkRef = useRef()
+    useEffect(() => {
+        console.log(drunkRef.current)
+    },[])
 
 
     return <>
@@ -76,7 +82,11 @@ export default function Experience() {
             /> */}
 
             {/* <SSR {...ssr} /> */}
-            <Drunk />
+            <Drunk 
+                ref={drunkRef}
+                frequency={2}
+                amplitude={0.5}
+            />
         </EffectComposer>
 
         <Perf position="top-left" />
