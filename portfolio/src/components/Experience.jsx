@@ -1,4 +1,4 @@
-import { Center, OrbitControls, useGLTF } from '@react-three/drei'
+import { Center, Environment, Float, OrbitControls, useGLTF } from '@react-three/drei'
 
 export default function Experience() {
 
@@ -7,16 +7,20 @@ export default function Experience() {
 
     return <>
 
+        <Environment
+            preset='city'
+        >
+
+        </Environment>
+
         <OrbitControls makeDefault />
 
-        <mesh>
-            <boxGeometry />
-            <meshNormalMaterial />
-        </mesh>
-
-        <Center>
-            <primitive object={macBook.scene} />
-        </Center>
+        <Float rotationIntensity={0.4}>
+            <primitive
+                object={macBook.scene}
+                position-y={-1.2}
+            />
+        </Float>
 
     </>
 }
