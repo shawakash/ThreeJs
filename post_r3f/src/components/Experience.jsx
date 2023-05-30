@@ -45,6 +45,8 @@ export default function Experience() {
     //     console.log(drunkRef.current)
     // },[])
 
+    console.log(Object.keys(BlendFunction))
+
 
     const drunk = useControls('Drunk Effect', {
         frequency: {
@@ -58,9 +60,11 @@ export default function Experience() {
             min: 0,
             max: 5,
             step: 0.001
+        },
+        BlendFunction: {
+            options: Object.keys(BlendFunction),
         }
     })
-
 
     return <>
 
@@ -102,7 +106,7 @@ export default function Experience() {
                 ref={drunkRef}
                 frequency={drunk.frequency}
                 amplitude={drunk.amplitude}
-                blendFunction={BlendFunction.DARKEN}
+                blendFunction={BlendFunction[drunk.BlendFunction]}
             />
         </EffectComposer>
 
