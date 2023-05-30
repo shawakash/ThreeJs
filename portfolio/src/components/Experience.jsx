@@ -1,8 +1,16 @@
-import { Center, ContactShadows, Environment, Float, Html, PresentationControls, Text, useGLTF } from '@react-three/drei'
+import { Center, ContactShadows, Environment, Float, Html, PresentationControls, Text, useGLTF, useProgress } from '@react-three/drei'
+import { useLoader } from '@react-three/fiber';
+import { Suspense } from 'react';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import Loader from './Loader';
 
-export default function Experience() {
+const Experience = () => {
 
-    const macBook = useGLTF(`https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf`, true);
+    // const progress = useProgress()
+    // console.log(progress)
+
+    const macBook = useGLTF(`https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf`, true, (gltf) => { console.log('H') });
+    const headPhone = useGLTF(`https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/headphones/model.gltf`, true);
 
     return <>
 
@@ -18,6 +26,28 @@ export default function Experience() {
             blur={2.4}
             scale={5}
         />
+
+        {/* <mesh>
+            <planeGeometry args={[2, 2, 1, 1]} />
+            <shaderMaterial
+                transparent={true}
+                vertexShader={`
+                    void main() {
+                        gl_Position =  vec4(position, 1.0);
+                    }
+                `}
+                fragmentShader={`
+                uniform float uAlpha;
+        
+                void main() {
+                    gl_FragColor = vec4(0.0, 0.0, 0.0, uAlpha);
+                }
+                `}
+                uniforms={{
+                    uAlpha: { value: 1.0 }
+                }}
+            />
+        </mesh> */}
 
 
         <PresentationControls
@@ -37,32 +67,45 @@ export default function Experience() {
                     rotation={[0.1, Math.PI, 0]}
                     position={[0, 0.55, -1.15]}
                 />
-                <primitive
-                    object={macBook.scene}
-                    position-y={-1.2}
-                >
-                    <Html
-                        transform
-                        wrapperClass='htmlScreen'
-                        distanceFactor={1.17}
-                        position={[0, 1.56, -1.4]}
-                        rotation-x={-0.256}
-                    >
-                        <iframe src='https://static-portfolio-omega.vercel.app/' />
-                    </Html>
-                </primitive>
 
-                <Text
-                    font='./bangers-v20-latin-regular.woff'
-                    fontSize={1}
-                    position={[2, 0.75, 0.75]}
-                    rotation-y={-1.25}
-                    // children={'AKASH\nSHAW'}
-                    maxWidth={2}
-                    textAlign='center'
-                >
-                    AKASH SHAW
-                </Text>
+                <Suspense fallback={<Loader />}>
+
+                    <primitive
+                        object={macBook.scene}
+                        position-y={-1.2}
+                        onPointerEnter={(state) => {state.camera.scale.set(2)}}
+                        onPointerLeave={(state) => { state.camera.scale.set(2) }}
+                    >
+                        <Html
+                            transform
+                            wrapperClass='htmlScreen'
+                            distanceFactor={1.17}
+                            position={[0, 1.56, -1.4]}
+                            rotation-x={-0.256}
+                        >
+                            <iframe src='https://static-portfolio-omega.vercel.app/' />
+                        </Html>
+                    </primitive>
+
+                    <Text
+                        font='./bangers-v20-latin-regular.woff'
+                        fontSize={1}
+                        position={[2, 0.75, 0.75]}
+                        rotation-y={-1.25}
+                        // children={'AKASH\nSHAW'}
+                        maxWidth={2}
+                        textAlign='center'
+                    >
+                        AKASH SHAW
+                    </Text>
+
+                    <primitive
+                        object={headPhone.scene}
+                        scale={0.35}
+                        position={[-2.5, -1.2, 0.25]}
+                        rotation-x={-Math.PI * 0.43}
+                    />
+                </Suspense>
             </Float>
         </PresentationControls>
 
@@ -70,3 +113,8 @@ export default function Experience() {
 
     </>
 }
+
+useGLTF.preload(`https://vazxmixjsiawhamofees.supabase.co/storage/v1/object/public/models/macbook/model.gltf`, true)
+useGLTF.preload(`https://market-assets.fra1.cdn.digitaloceanspaces.com/market-assets/models/headphones/model.gltf`, true)
+
+export default Experience
