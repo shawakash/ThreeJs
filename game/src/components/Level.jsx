@@ -45,7 +45,7 @@ const SpinnerTrap = ({ position = [0, 0, 0] }) => {
 
     const obstacle = useRef();
 
-    const { speedMultipler, scale } = useControls('First Obstacle', {
+    const { speedMultipler, scale } = useControls('Spinner Obstacle', {
 
         speedMultipler: {
             value: 0.8,
@@ -116,17 +116,96 @@ const SpinnerTrap = ({ position = [0, 0, 0] }) => {
 }
 
 
+
+// Limo Trap
+const LimboTrap = ({ position = [0, 0, 0] }) => {
+
+    const obstacle = useRef();
+
+    const { speedMultipler, scale } = useControls('Limbo Trap', {
+
+        speedMultipler: {
+            value: 0.15,
+            min: 0.01,
+            max: 5,
+            step: 0.001
+        },
+
+        scale: {
+            value: [3.25, 1.5, 0.25],
+            step: 0.01
+        }
+    })
+
+    const [randomOffset] = useState(() => (Math.random() + 0.2) * (Math.random() < 0.5 ? -1 : 1));
+
+    useFrame((state, delta) => {
+
+        const time = state.clock.getElapsedTime();
+
+        if (obstacle.current) {
+            const euler = new Euler(0 + position[0], 2 * Math.abs(Math.sin(time * speedMultipler * Math.PI * 2 + randomOffset )) + 0.75 + position[1], 0 + position[2]);
+
+            obstacle.current.setNextKinematicTranslation(euler);  // Takes absolute value
+
+        }
+
+    })
+
+    return (
+        <group
+            position={position}
+        >
+
+            {/* Floor */}
+                <mesh
+                    position-y={-0.1}
+                    geometry={boxGeometry}
+                    material={floorMaterial1}
+                    receiveShadow
+                    scale={[4, 0.2, 4]}
+                />
+
+            {/* Limbo */}
+            <RigidBody
+                ref={obstacle}
+                position={[0, .1, 0]}
+                type='kinematicPosition'
+                restitution={0.2}
+                friction={0}
+            >
+                <mesh
+                    geometry={boxGeometry}
+                    material={obstacleMaterial}
+                    receiveShadow
+                    castShadow
+                    scale={scale}
+                >
+
+                </mesh>
+            </RigidBody>
+
+        </group>
+    );
+
+}
+
+
+
 const Level = (props) => {
     return (
         <group {...props}>
 
             {/* Block Start */}
             <BlockStart
-                position={[0, 0, 4]}
+                position={[0, 0, 8]}
             />
 
             {/* First Trap */}
-            <SpinnerTrap position={[0, 0, 0]} />
+            <SpinnerTrap position={[0, 0, 4]} />
+
+            {/* Limbo Trap */}
+            <LimboTrap position={[0, 0, 0]} />
 
         </group>
     )
