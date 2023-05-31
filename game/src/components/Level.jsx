@@ -1,6 +1,16 @@
-import React, { useRef, useState } from 'react'
-import { BoxGeometry, MeshStandardMaterial, Euler, Quaternion } from 'three'
+import React, {
+    Suspense,
+    useRef,
+    useState
+} from 'react'
+import {
+    BoxGeometry,
+    MeshStandardMaterial,
+    Euler,
+    Quaternion
+} from 'three'
 import { useFrame } from '@react-three/fiber'
+import { useGLTF } from '@react-three/drei'
 import { RigidBody } from '@react-three/rapier'
 import * as THREE from 'three'
 import { useControls } from 'leva'
@@ -43,17 +53,41 @@ const BlockStart = ({ position = [0, 0, 0] }) => {
 {/* End Block */ }
 const BlockEnd = ({ position = [0, 0, 0] }) => {
 
+    const model = useGLTF('./hamburger.glb', true);
+
+    model.scene.children.forEach(mesh => {
+        mesh.castShadow = true;
+    })
+
     return (
         <group
             position={position}
         >
             <mesh
-                position-y={-0.1}
+                position-y={-0}
                 receiveShadow
                 geometry={boxGeometry}
                 scale={[4, 0.2, 4]}
                 material={floorMaterial1}
             />
+
+            {/* Hamburger */}
+            <Suspense
+                fallback={null}
+            >
+                <RigidBody
+                    type='fixed'
+                    colliders='hull'
+                    restitution={0.2}
+                    friction={0}
+                    position={[0, 0.25, 0]}
+                >
+                    <primitive
+                        object={model.scene}
+                        scale={0.25} /
+                    >
+                </RigidBody>
+            </Suspense>
         </group>
     );
 }
@@ -309,7 +343,7 @@ const Level = (props) => {
             <AxeTrap position={[0, 0, 4]} />
 
             {/* BlockEnd */}
-            <BlockEnd position={[0,0,0]} />
+            <BlockEnd position={[0, 0, 0]} />
 
         </group>
     )
