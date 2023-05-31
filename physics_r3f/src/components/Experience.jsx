@@ -1,15 +1,20 @@
-import { OrbitControls } from '@react-three/drei'
+import { OrbitControls, useGLTF } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
 import { BallCollider, CapsuleCollider, ConeCollider, CuboidCollider, Physics, RigidBody, RoundCuboidCollider, TrimeshCollider } from '@react-three/rapier'
-import { useRef } from 'react';
-import { useFrame } from '@react-three/fiber';
+import { Suspense, useRef, useState } from 'react';
+import { useFrame, useThree } from '@react-three/fiber';
 import { Euler, Quaternion } from 'three';
 
-export default function Experience() {
+const Experience = () => {
 
     const cube = useRef();
-
     const twister = useRef();
+    const [hitsound] = useState(() => new Audio('./hit.mp3'))
+
+    const { camera } = useThree();
+    camera.position.y = 5;
+
+    const model = useGLTF('./hamburger.glb', true);
 
     useFrame((state, delta) => {
         const elapsedTime = state.clock.getElapsedTime();
@@ -17,9 +22,26 @@ export default function Experience() {
         const quaterion = new Quaternion();
         quaterion.setFromEuler(euler);
 
-        twister.current.setNextKinematicRotation(quaterion);
-        twister.current.setNextKinematicTranslation({ x: Math.cos(elapsedTime * Math.PI), y: -0.8, z: Math.sin(elapsedTime * Math.PI) })
+        if (twister.current) {
+            twister.current.setNextKinematicTranslation({
+                x: 2 * Math.cos(elapsedTime * Math.PI * 0.25),
+                y: -0.8,
+                z: 2 * Math.sin(elapsedTime * Math.PI * 0.25)
+            })
+            twister.current.setNextKinematicRotation(quaterion);
+        }
     })
+
+    const collisionEnter = (e) => {
+        // console.log('Collision!')
+        // hitsound.currentTime = 0;
+        // hitsound.volume = Math.random();
+        // hitsound.play();
+    }
+
+    const collisionExit = () => {
+        // console.log('Uff!')
+    }
 
     return <>
 
@@ -31,8 +53,9 @@ export default function Experience() {
         <ambientLight intensity={0.5} />
 
         <Physics debug gravity={[0, -9.81, 0]}>
-            <RigidBody colliders='ball' gravityScale={1} restitution={0.95}>
-                <mesh castShadow position={[-2, 2, 0]}>
+            <RigidBody colliders={false} gravityScale={1} restitution={0.95} position={[-2, 2, 0]}>
+                <BallCollider mass={1} args={[1]} />
+                <mesh castShadow>
                     <sphereGeometry />
                     <meshStandardMaterial color="orange" />
                 </mesh>
@@ -61,7 +84,7 @@ export default function Experience() {
                 restitution={0.7}                   // apply the same value of 1 to the floor to have ideal effect
                 friction={0.7}
                 colliders={false}           // Needed for mass
-                position={[4, 0, 0]}
+                position={[2, 0, 0]}
                 type='dynamic'
             >
                 {/* For mass Custom Coliders are needed */}
@@ -88,6 +111,10 @@ export default function Experience() {
                 position={[0, -0.8, 0]}
                 friction={0}
                 type='kinematicPosition'
+                onCollisionEnter={collisionEnter}
+                onCollisionExit={collisionExit}
+            // onSleep={() => console.log('Sleep')}
+            // onWake={() => console.log('Wake')}
             >
                 <mesh
                     scale={[0.4, 0.4, 3]}
@@ -96,6 +123,19 @@ export default function Experience() {
                     <boxGeometry />
                     <meshStandardMaterial color="red" />
                 </mesh>
+            </RigidBody>
+
+
+            <RigidBody
+                type='dynamic'
+                colliders='trimesh'
+            >
+                <Suspense fallback={null}>
+                    <primitive
+                        object={model.scene}
+                        scale={0.25}
+                    />
+                </Suspense>
             </RigidBody>
 
 
@@ -113,3 +153,7 @@ export default function Experience() {
 
     </>
 }
+
+useGLTF.preload('./hamburger.glb', true)
+
+export default Experience
