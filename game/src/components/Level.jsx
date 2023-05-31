@@ -1,5 +1,6 @@
 import React, {
     Suspense,
+    useMemo,
     useRef,
     useState
 } from 'react'
@@ -50,7 +51,7 @@ const BlockStart = ({ position = [0, 0, 0] }) => {
 }
 
 
-{/* End Block */ }
+// {/* End Block */ }
 const BlockEnd = ({ position = [0, 0, 0] }) => {
 
     const model = useGLTF('./hamburger.glb', true);
@@ -59,7 +60,7 @@ const BlockEnd = ({ position = [0, 0, 0] }) => {
         mesh.castShadow = true;
     })
 
-    return (
+    return (<>
         <group
             position={position}
         >
@@ -89,11 +90,15 @@ const BlockEnd = ({ position = [0, 0, 0] }) => {
                 </RigidBody>
             </Suspense>
         </group>
-    );
+    </>);
 }
 
 
-// Spinner Trap
+
+
+
+
+{/* // Spinner Trap */ }
 const SpinnerTrap = ({ position = [0, 0, 0] }) => {
 
     const obstacle = useRef();
@@ -324,29 +329,55 @@ const AxeTrap = ({ position = [0, 0, 0] }) => {
 
 
 
-const Level = (props) => {
+const Level = ({ count = 5, types = [SpinnerTrap, LimboTrap, AxeTrap] }) => {
+
+    const traps = useMemo(() => {
+
+        const blocks = [];
+
+        for (let i = 0; i < count; i++) {
+            const type = types[Math.floor(Math.random() * types.length)];
+            blocks.push(type);
+        }
+
+        return blocks;
+
+    }, [count, types])
+
     return (
-        <group {...props}>
+        <group>
 
             {/* Block Start */}
             <BlockStart
-                position={[0, 0, 16]}
+                position={[0, 0, 0]}
             />
 
             {/* First Trap */}
-            <SpinnerTrap position={[0, 0, 12]} />
+            {/* <SpinnerTrap position={[0, 0, 12]} /> */}
 
             {/* Limbo Trap */}
-            <LimboTrap position={[0, 0, 8]} />
+            {/* <LimboTrap position={[0, 0, 8]} /> */}
 
             {/* Axe Trap */}
-            <AxeTrap position={[0, 0, 4]} />
+            {/* <AxeTrap position={[0, 0, 4]} /> */}
+
+            { traps.map((Trap, index) => <Trap key={index} position={[0, 0, -4 * ( index + 1)]} />) }
 
             {/* BlockEnd */}
-            <BlockEnd position={[0, 0, 0]} />
+            <BlockEnd position={[0, 0, -4 * (count + 1)]} />
+
+
 
         </group>
     )
 }
 
 export default Level
+
+export {
+    AxeTrap,
+    BlockStart,
+    BlockEnd,
+    LimboTrap,
+    SpinnerTrap
+}
