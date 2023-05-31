@@ -6,6 +6,7 @@ import { useRef } from 'react';
 export default function Experience() {
 
     const cube = useRef();
+    const cubeMesh = useRef();
 
     return <>
 
@@ -43,12 +44,15 @@ export default function Experience() {
 
             <RigidBody ref={cube}>
                 <mesh
+                    ref={cubeMesh}
                     castShadow
                     position={[1.5, 2, 0]}
                     onClick={(e) => {
                         window.addEventListener('keypress', (ev) => {
-                            if(ev.code == 'Space') {
-                                cube.current.applyImpulse({x: 0, y: 7, z: 0})
+                            if (ev.code == 'Space') {
+                                // cube.current.applyImpulse({x: 0, y: 7, z: 0})
+                                cube.current.applyTorqueImpulse({ x: 0, y: 2, z: 2 })
+                                // cube.current.applyImpulseAtPoint({ x: 0, y: 2, z: 0 }, { x: 1, y: 1.5, z: 0.5 })
                             }
                         })
                     }}
