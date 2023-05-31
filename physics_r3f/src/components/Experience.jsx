@@ -137,8 +137,26 @@ const Experience = () => {
                         scale={0.25}
                     />
                 </Suspense>
-                {/* <CylinderCollider args={[0.5, 1.25]} /> */}
+                <CylinderCollider args={[0.5, 1.25]} />
             </RigidBody>
+
+
+            <RigidBody colliders={false} type='fixed' position={[4.75, 1.5, 0]}>
+                <CuboidCollider args={[0.25, 2.5, 5]} />
+            </RigidBody>
+
+            <RigidBody colliders={false} type='fixed' position={[-4.75, 1.5, 0]}>
+                <CuboidCollider args={[0.25, 2.5, 5]} />
+            </RigidBody>
+
+            <RigidBody colliders={false} type='fixed' position={[0, 1.5, 4.75]}>
+                <CuboidCollider args={[5, 2.5, 0.25]} />
+            </RigidBody>
+
+            <RigidBody colliders={false} type='fixed' position={[0, 1.5, -4.75]}>
+                <CuboidCollider args={[5, 2.5, 0.25]} />
+            </RigidBody>
+
 
 
             <RigidBody
