@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { BoxGeometry, MeshStandardMaterial, Euler, Quaternion } from 'three'
 import { useFrame } from '@react-three/fiber'
 import { RigidBody } from '@react-three/rapier'
@@ -55,18 +55,19 @@ const SpinnerTrap = ({ position = [0, 0, 0] }) => {
         },
 
         scale: {
-            value: [2, 0.25, 0.25],
+            value: [3, 0.25, 0.25],
             step: 0.01
         }
     })
 
+    const [randomOffset] = useState(() => (Math.random() + 0.2) * (Math.random() < 0.5 ? -1 : 1));
 
     useFrame((state, delta) => {
 
         const time = state.clock.getElapsedTime();
 
         if (obstacle.current) {
-            const euler = new Euler(0, time * speedMultipler, 0);
+            const euler = new Euler(0, time * speedMultipler * randomOffset, 0);
             const quaterion = new Quaternion();
             quaterion.setFromEuler(euler);
 
@@ -95,6 +96,8 @@ const SpinnerTrap = ({ position = [0, 0, 0] }) => {
                 ref={obstacle}
                 position={[0, .1, 0]}
                 type='kinematicPosition'
+                restitution={0.2}
+                friction={0}
             >
                 <mesh
                     geometry={boxGeometry}
@@ -106,7 +109,7 @@ const SpinnerTrap = ({ position = [0, 0, 0] }) => {
 
                 </mesh>
             </RigidBody>
-            
+
         </group>
     );
 
