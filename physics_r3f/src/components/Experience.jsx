@@ -1,18 +1,63 @@
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
-import { BallCollider, CapsuleCollider, ConeCollider, ConvexHullCollider, CuboidCollider, CylinderCollider, Physics, RigidBody, RoundCuboidCollider, TrimeshCollider } from '@react-three/rapier'
-import { Suspense, useRef, useState } from 'react';
+import { BallCollider, CapsuleCollider, ConeCollider, ConvexHullCollider, CuboidCollider, CylinderCollider, InstancedRigidBodies, Physics, RigidBody, RoundCuboidCollider, TrimeshCollider } from '@react-three/rapier'
+import { Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
-import { Euler, Quaternion } from 'three';
+import { Euler, Matrix4, Quaternion, Vector3 } from 'three';
 
 const Experience = () => {
 
     const cube = useRef();
+    const cubes = useRef();
     const twister = useRef();
     const [hitsound] = useState(() => new Audio('./hit.mp3'))
+    const cubeCount = 100;
 
     const { camera } = useThree();
     camera.position.y = 5;
+
+
+    const cubeTransform = useMemo(() => {
+        const positions = [];
+        const rotations = [];
+        const scales = [];
+
+
+        for (let i = 0; i < cubeCount; i++) {
+
+            positions.push([
+                (Math.random() - 0.5) * 8,
+                6 + i * 0.2,
+                (Math.random() - 0.5) * 8
+            ]);
+            rotations.push([
+                Math.random(),
+                Math.random(),
+                Math.random()
+            ]);
+            scales.push([
+                Math.random() + 0.51,
+                Math.random() + 0.51,
+                Math.random() + 0.51
+            ]);
+        }
+
+        return { positions, rotations, scales }
+    }, [])
+
+    // useEffect(() => {
+
+    //     for (let i = 0; i < cubeCount; i++) {
+    //         const matrix = new Matrix4();
+    //         matrix.compose(
+    //             new Vector3(i * 2, 0, 0),
+    //             new Quaternion(),
+    //             new Vector3(1, 1, 1)
+    //         )
+
+    //         cubes.current.setMatrixAt(i, matrix);
+    //     }
+    // }, [])
 
     const model = useGLTF('./hamburger.glb', true);
 
@@ -42,6 +87,7 @@ const Experience = () => {
     const collisionExit = () => {
         // console.log('Uff!')
     }
+
 
     return <>
 
@@ -125,7 +171,7 @@ const Experience = () => {
                 </mesh>
             </RigidBody>
 
-
+            {/* Rotater */}
             <RigidBody
                 // type='dynamic'
                 position={[0, 4, 0]}
@@ -140,21 +186,24 @@ const Experience = () => {
                 <CylinderCollider args={[0.5, 1.25]} />
             </RigidBody>
 
+            <InstancedRigidBodies
+                positions={cubeTransform.positions}
+                rotations={cubeTransform.rotations}
+                scales={cubeTransform.scales}
+            >
+                <instancedMesh ref={cubes} args={[null, null, cubeCount]} castShadow receiveShadow>
+                    <boxGeometry />
+                    <meshStandardMaterial color={'tomato'} />
+                </instancedMesh>
+            </InstancedRigidBodies>
 
-            <RigidBody colliders={false} type='fixed' position={[4.75, 1.5, 0]}>
-                <CuboidCollider args={[0.25, 2.5, 5]} />
-            </RigidBody>
 
-            <RigidBody colliders={false} type='fixed' position={[-4.75, 1.5, 0]}>
-                <CuboidCollider args={[0.25, 2.5, 5]} />
-            </RigidBody>
-
-            <RigidBody colliders={false} type='fixed' position={[0, 1.5, 4.75]}>
-                <CuboidCollider args={[5, 2.5, 0.25]} />
-            </RigidBody>
-
-            <RigidBody colliders={false} type='fixed' position={[0, 1.5, -4.75]}>
-                <CuboidCollider args={[5, 2.5, 0.25]} />
+            {/* Walls */}
+            <RigidBody colliders={false} type='fixed' >
+                <CuboidCollider args={[0.25, 2.5, 5]} position={[4.75, 1.5, 0]} />
+                <CuboidCollider args={[0.25, 2.5, 5]} position={[-4.75, 1.5, 0]} />
+                <CuboidCollider args={[5, 2.5, 0.25]} position={[0, 1.5, 4.75]} />
+                <CuboidCollider args={[5, 2.5, 0.25]} position={[0, 1.5, -4.75]} />
             </RigidBody>
 
 
