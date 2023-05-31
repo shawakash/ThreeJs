@@ -12,7 +12,7 @@ export default function Experience() {
         <directionalLight castShadow position={[1, 2, 3]} intensity={1.5} />
         <ambientLight intensity={0.5} />
 
-        <Physics>
+        <Physics debug>
             <RigidBody colliders='ball'>
                 <mesh castShadow position={[0, 6, 0]}>
                     <sphereGeometry />
