@@ -40,6 +40,25 @@ const BlockStart = ({ position = [0, 0, 0] }) => {
 }
 
 
+{/* End Block */ }
+const BlockEnd = ({ position = [0, 0, 0] }) => {
+
+    return (
+        <group
+            position={position}
+        >
+            <mesh
+                position-y={-0.1}
+                receiveShadow
+                geometry={boxGeometry}
+                scale={[4, 0.2, 4]}
+                material={floorMaterial1}
+            />
+        </group>
+    );
+}
+
+
 // Spinner Trap
 const SpinnerTrap = ({ position = [0, 0, 0] }) => {
 
@@ -144,7 +163,7 @@ const LimboTrap = ({ position = [0, 0, 0] }) => {
         const time = state.clock.getElapsedTime();
 
         if (obstacle.current) {
-            const euler = new Euler(0 + position[0], 2 * Math.abs(Math.sin(time * speedMultipler * Math.PI * 2 + randomOffset )) + 0.75 + position[1], 0 + position[2]);
+            const euler = new Euler(0 + position[0], 2 * Math.abs(Math.sin(time * speedMultipler * Math.PI * 2 + randomOffset)) + 0.75 + position[1], 0 + position[2]);
 
             obstacle.current.setNextKinematicTranslation(euler);  // Takes absolute value
 
@@ -158,13 +177,92 @@ const LimboTrap = ({ position = [0, 0, 0] }) => {
         >
 
             {/* Floor */}
+            <mesh
+                position-y={-0.1}
+                geometry={boxGeometry}
+                material={floorMaterial2}
+                receiveShadow
+                scale={[4, 0.2, 4]}
+            />
+
+            {/* Limbo */}
+            <RigidBody
+                ref={obstacle}
+                position={[0, .1, 0]}
+                type='kinematicPosition'
+                restitution={0.2}
+                friction={0}
+            >
                 <mesh
-                    position-y={-0.1}
                     geometry={boxGeometry}
-                    material={floorMaterial1}
+                    material={obstacleMaterial}
                     receiveShadow
-                    scale={[4, 0.2, 4]}
-                />
+                    castShadow
+                    scale={scale}
+                >
+
+                </mesh>
+            </RigidBody>
+
+        </group>
+    );
+
+}
+
+
+
+// Axe Trap
+const AxeTrap = ({ position = [0, 0, 0] }) => {
+
+    const obstacle = useRef();
+
+    const { speedMultipler, scale } = useControls('Axe Trap', {
+
+        speedMultipler: {
+            value: 0.15,
+            min: 0.01,
+            max: 5,
+            step: 0.001
+        },
+
+        scale: {
+            value: [2.25, 1.5, 0.25],
+            step: 0.01
+        }
+    })
+
+    const [randomOffset] = useState(() => (Math.random() + 0.5) * (Math.random() < 0.5 ? -1 : 1));
+
+    useFrame((state, delta) => {
+
+        const time = state.clock.getElapsedTime();
+
+        if (obstacle.current) {
+            const euler = new Euler(
+                Math.sin(time * Math.PI * 2 * speedMultipler + randomOffset) * 0.8725 + position[0],
+                0.75 + position[1],
+                0 + position[2]
+            );
+
+            obstacle.current.setNextKinematicTranslation(euler);  // Takes absolute value
+
+        }
+
+    })
+
+    return (
+        <group
+            position={position}
+        >
+
+            {/* Floor */}
+            <mesh
+                position-y={-0.1}
+                geometry={boxGeometry}
+                material={floorMaterial2}
+                receiveShadow
+                scale={[4, 0.2, 4]}
+            />
 
             {/* Limbo */}
             <RigidBody
@@ -198,14 +296,20 @@ const Level = (props) => {
 
             {/* Block Start */}
             <BlockStart
-                position={[0, 0, 8]}
+                position={[0, 0, 16]}
             />
 
             {/* First Trap */}
-            <SpinnerTrap position={[0, 0, 4]} />
+            <SpinnerTrap position={[0, 0, 12]} />
 
             {/* Limbo Trap */}
-            <LimboTrap position={[0, 0, 0]} />
+            <LimboTrap position={[0, 0, 8]} />
+
+            {/* Axe Trap */}
+            <AxeTrap position={[0, 0, 4]} />
+
+            {/* BlockEnd */}
+            <BlockEnd position={[0,0,0]} />
 
         </group>
     )
