@@ -1,6 +1,6 @@
 import { OrbitControls, useGLTF } from '@react-three/drei'
 import { Perf } from 'r3f-perf'
-import { BallCollider, CapsuleCollider, ConeCollider, CuboidCollider, Physics, RigidBody, RoundCuboidCollider, TrimeshCollider } from '@react-three/rapier'
+import { BallCollider, CapsuleCollider, ConeCollider, ConvexHullCollider, CuboidCollider, CylinderCollider, Physics, RigidBody, RoundCuboidCollider, TrimeshCollider } from '@react-three/rapier'
 import { Suspense, useRef, useState } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import { Euler, Quaternion } from 'three';
@@ -127,8 +127,9 @@ const Experience = () => {
 
 
             <RigidBody
-                type='dynamic'
-                colliders='trimesh'
+                // type='dynamic'
+                position={[0, 4, 0]}
+                colliders={false}
             >
                 <Suspense fallback={null}>
                     <primitive
@@ -136,6 +137,7 @@ const Experience = () => {
                         scale={0.25}
                     />
                 </Suspense>
+                {/* <CylinderCollider args={[0.5, 1.25]} /> */}
             </RigidBody>
 
 
