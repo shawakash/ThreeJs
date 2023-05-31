@@ -18,7 +18,7 @@ export default function Experience() {
         <ambientLight intensity={0.5} />
 
         <Physics debug gravity={[0, -9.81, 0]}>
-            <RigidBody colliders='ball' gravityScale={1}>
+            <RigidBody colliders='ball' gravityScale={1} restitution={0.95}>
                 <mesh castShadow position={[-2, 2, 0]}>
                     <sphereGeometry />
                     <meshStandardMaterial color="orange" />
@@ -42,26 +42,29 @@ export default function Experience() {
                 </mesh>
             </RigidBody> */}
 
-            <RigidBody ref={cube} gravityScale={1}>
+            <RigidBody
+                ref={cube}
+                gravityScale={1}
+                restitution={0.8}                   // apply the same value of 1 to the floor to have ideal effect
+            >
                 <mesh
-                    ref={cubeMesh}
                     castShadow
                     position={[1.5, 2, 0]}
                     onClick={(e) => {
-                        window.addEventListener('keypress', (ev) => {
-                            if (ev.code == 'Space') {
                                 // cube.current.applyImpulse({x: 0, y: 7, z: 0})
                                 cube.current.applyTorqueImpulse({ x: 0, y: 2, z: 2 })
                                 // cube.current.applyImpulseAtPoint({ x: 0, y: 2, z: 0 }, { x: 1, y: 1.5, z: 0.5 })
-                            }
-                        })
+    
                     }}
                 >
                     <boxGeometry />
                     <meshStandardMaterial color="mediumpurple" />
                 </mesh>
             </RigidBody>
-            <RigidBody type='fixed'>
+            <RigidBody
+                type='fixed'
+                // restitution={0.7}
+            >
                 <mesh receiveShadow position-y={- 1.25}>
                     <boxGeometry args={[10, 0.5, 10]} />
                     <meshStandardMaterial color="greenyellow" />
