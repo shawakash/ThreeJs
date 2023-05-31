@@ -1,11 +1,13 @@
 import './style.css'
 import ReactDOM from 'react-dom/client'
 import { Canvas } from '@react-three/fiber'
-import Experience from './Experience.jsx'
+import Experience from './components/Experience'
+import { Leva } from 'leva'
 
 const root = ReactDOM.createRoot(document.querySelector('#root'))
 
-root.render(
+root.render(<>
+    <Leva />
     <Canvas
         shadows
         camera={ {
@@ -17,4 +19,5 @@ root.render(
     >
         <Experience />
     </Canvas>
+</>
 )
