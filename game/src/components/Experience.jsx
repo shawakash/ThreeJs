@@ -17,11 +17,12 @@ const Experience = () => {
 
         <OrbitControls makeDefault />
 
-        <Lights />
-
         <Physics debug>
+
+            <Lights />
+
             <Level />
-            <Level position-z={-10} />
+            
         </Physics>
 
     </>
