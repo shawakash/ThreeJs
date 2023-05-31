@@ -45,16 +45,22 @@ export default function Experience() {
             <RigidBody
                 ref={cube}
                 gravityScale={1}
-                restitution={0.8}                   // apply the same value of 1 to the floor to have ideal effect
+                restitution={0.7}                   // apply the same value of 1 to the floor to have ideal effect
+                friction={0.7}
+                colliders={false}           // Needed for mass
+                position={[1.5, 2, 0]}
             >
+                {/* For mass Custom Coliders are needed */}
+                <CuboidCollider args={[0.5, 0.5, 0.5]} mass={1} />
                 <mesh
                     castShadow
-                    position={[1.5, 2, 0]}
                     onClick={(e) => {
-                                // cube.current.applyImpulse({x: 0, y: 7, z: 0})
-                                cube.current.applyTorqueImpulse({ x: 0, y: 2, z: 2 })
-                                // cube.current.applyImpulseAtPoint({ x: 0, y: 2, z: 0 }, { x: 1, y: 1.5, z: 0.5 })
-    
+                        const mass = cube.current.mass();
+
+                        cube.current.applyImpulse({x: 0, y: 7 * mass, z: 0})
+                        // cube.current.applyTorqueImpulse({ x: 0, y: 2 * mass, z: 2 * mass })
+                        // cube.current.applyImpulseAtPoint({ x: 0, y: 2, z: 0 }, { x: 1, y: 1.5, z: 0.5 })
+
                     }}
                 >
                     <boxGeometry />
@@ -64,6 +70,7 @@ export default function Experience() {
             <RigidBody
                 type='fixed'
                 // restitution={0.7}
+                friction={0.7}
             >
                 <mesh receiveShadow position-y={- 1.25}>
                     <boxGeometry args={[10, 0.5, 10]} />
