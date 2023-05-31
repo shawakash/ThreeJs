@@ -12,7 +12,7 @@ import {
 } from 'three'
 import { useFrame } from '@react-three/fiber'
 import { useGLTF } from '@react-three/drei'
-import { RigidBody } from '@react-three/rapier'
+import { RigidBody, CuboidCollider } from '@react-three/rapier'
 import * as THREE from 'three'
 import { useControls } from 'leva'
 
@@ -329,6 +329,76 @@ const AxeTrap = ({ position = [0, 0, 0] }) => {
 
 
 
+{/* Walls */ }
+const Walls = ({ length = 1 }) => {
+
+    console.log(length)
+
+    return (<group>
+
+        <RigidBody
+            colliders={false}
+            type='fixed'
+            position={[2.15, 0.75, -length * 2 + 2]}
+        >
+            {/* Right Wall */}
+            <CuboidCollider
+                args={[0.3 / 2 , 1.5 / 2, 4 * length / 2]}
+
+            />
+            <mesh 
+                geometry={boxGeometry}
+                material={wallsMaterial}
+                scale={[0.3, 1.5, 4 * length]}
+                castShadow
+            />
+        </RigidBody>
+
+
+        {/* Left Wall */}
+        <RigidBody
+            colliders={false}
+            type='fixed'
+            position={[-2.15, 0.75, -length * 2 + 2]}
+        >
+            <CuboidCollider
+                args={[0.3 / 2 , 1.5 / 2, 4 * length / 2]}
+            />
+            <mesh 
+                geometry={boxGeometry}
+                material={wallsMaterial}
+                scale={[0.3, 1.5, 4 * length]}
+                receiveShadow
+            />
+        </RigidBody>
+
+
+        {/* Back Wall */}
+        <RigidBody
+            colliders={false}
+            type='fixed'
+            position={[0, 0.75, -length * 4 + 2]}
+        >
+            <CuboidCollider
+                args={[(4 + 0.5) / 2 , 1.5 / 2, 0.3 / 2]}
+            />
+            <mesh 
+                geometry={boxGeometry}
+                material={wallsMaterial}
+                scale={[4 + 0.5, 1.5, 0.3]}
+                receiveShadow
+                castShadow
+            />
+        </RigidBody>
+    </group>
+
+
+    );
+
+}
+
+
+
 const Level = ({ count = 5, types = [SpinnerTrap, LimboTrap, AxeTrap] }) => {
 
     const traps = useMemo(() => {
@@ -361,12 +431,13 @@ const Level = ({ count = 5, types = [SpinnerTrap, LimboTrap, AxeTrap] }) => {
             {/* Axe Trap */}
             {/* <AxeTrap position={[0, 0, 4]} /> */}
 
-            { traps.map((Trap, index) => <Trap key={index} position={[0, 0, -4 * ( index + 1)]} />) }
+            {traps.map((Trap, index) => <Trap key={index} position={[0, 0, -4 * (index + 1)]} />)}
 
             {/* BlockEnd */}
             <BlockEnd position={[0, 0, -4 * (count + 1)]} />
 
-
+            {/* Walls */}
+            <Walls length={count + 2} />
 
         </group>
     )
