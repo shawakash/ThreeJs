@@ -10,7 +10,15 @@ const root = ReactDOM.createRoot(document.querySelector('#root'))
 root.render(<>
     <Leva />
     <KeyboardControls
-        map={[]}
+
+    // KeyW is the second key of first row irrespective of QWERTY ASERTY etc
+        map={[
+            { name: 'forward', keys: ['ArrowUp', 'W'] },
+            { name: 'backward', keys: ['ArrowDown', 'S'] },
+            { name: 'leftward', keys: ['ArrowLeft', 'A'] },
+            { name: 'rightward', keys: ['ArrowRight', 'D'] },
+            { name: 'jump', keys: ['Space'] }
+        ]}
     >
 
         <Canvas
