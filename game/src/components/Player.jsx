@@ -64,7 +64,7 @@ const Player = () => {
 
     useEffect(() => {
 
-        subscribeKeys(
+        const i=unsubscribed = subscribeKeys(
             (state) => state.jump,            // Selector
 
             (value) => {
@@ -74,7 +74,11 @@ const Player = () => {
             }
         )
 
-    }, [subscribeKeys])
+        return () => {
+            unsubscribed()
+        }
+
+    }, [])
 
     return (<>
         <RigidBody
