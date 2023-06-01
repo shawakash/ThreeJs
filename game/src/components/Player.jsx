@@ -1,6 +1,6 @@
 import { KeyboardControls, useKeyboardControls } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
-import { RigidBody } from '@react-three/rapier'
+import { RigidBody, useRapier } from '@react-three/rapier'
 import React, { useEffect, useRef } from 'react'
 import { Vector3 } from 'three';
 
@@ -9,6 +9,7 @@ const Player = () => {
     const player = useRef();
     const playerMesh = useRef();
     const [subscribeKeys, getKeys] = useKeyboardControls()
+    const { rapier, world } = useRapier();
 
     useFrame((state, delta) => {
 
@@ -39,10 +40,7 @@ const Player = () => {
             torque.z -= torqueStrength;
         }
 
-        if (jump) {
-            // impulse.y += impulseStrength;
-            // torque.z -= torqueStrength;
-        }
+        
 
         if (player.current) {
             player.current.applyImpulse(impulse);
@@ -50,14 +48,28 @@ const Player = () => {
         }
     })
 
+    const jump = () => {
+
+        const origin = player.current.translation();
+        origin.y -= 0.31;
+        const direction = { x: 0, y: -1, z: 0 };
+
+        const ray = new rapier.Ray(origin, direction);
+        const hit = world.castRay(ray, 10, true);
+
+        if(hit.toi < 0.25) {
+            player.current.applyImpulse({ x: 0, y: 0.6, z: 0 })
+        }
+    }
+
     useEffect(() => {
 
         subscribeKeys(
             (state) => state.jump,            // Selector
-            
+
             (value) => {
-                if(value) {
-                    player.current.applyImpulse({x: 0, y: 0.6, z: 0})
+                if (value) {
+                    jump();
                 }
             }
         )
