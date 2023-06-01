@@ -4,6 +4,7 @@ import { Perf } from 'r3f-perf'
 import { useControls } from 'leva'
 import Level from './Level.jsx'
 import { Physics } from '@react-three/rapier'
+import Player from './Player.jsx'
 
 const Experience = () => {
 
@@ -22,6 +23,8 @@ const Experience = () => {
             <Lights />
 
             <Level />
+
+            <Player />
             
         </Physics>
 
